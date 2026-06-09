@@ -60,7 +60,76 @@ def wrap_text(text, font, max_width):
         
     return lines
 
-def render_slide(title, content_bullets, output_path):
+import math
+import random
+
+def draw_geometric_art(draw, width, height, prompt):
+    """
+    Draws abstract geometric art on the right side of the slide based on keywords.
+    """
+    # Define a bounding box for the art (right 40% of the screen)
+    art_x_start = int(width * 0.6)
+    art_y_start = int(height * 0.2)
+    art_w = int(width * 0.35)
+    art_h = int(height * 0.6)
+    center_x = art_x_start + (art_w // 2)
+    center_y = art_y_start + (art_h // 2)
+
+    prompt = str(prompt).lower()
+    
+    # Base styling
+    colors = ["#38BDF8", "#818CF8", "#C084FC", "#F472B6", "#94A3B8"]
+    
+    if "network" in prompt or "node" in prompt or "graph" in prompt:
+        # Draw a network graph
+        nodes = []
+        for _ in range(12):
+            nx = random.randint(art_x_start, art_x_start + art_w)
+            ny = random.randint(art_y_start, art_y_start + art_h)
+            nodes.append((nx, ny))
+            
+        # Draw edges
+        for i in range(len(nodes)):
+            for j in range(i+1, len(nodes)):
+                if random.random() > 0.6: # 40% chance of connection
+                    draw.line([nodes[i], nodes[j]], fill="#1E293B", width=2)
+                    
+        # Draw nodes
+        for nx, ny in nodes:
+            r = random.randint(8, 20)
+            draw.ellipse([nx-r, ny-r, nx+r, ny+r], fill=random.choice(colors), outline="#F8FAFC", width=2)
+            
+    elif "database" in prompt or "cylinder" in prompt or "store" in prompt:
+        # Draw floating database cylinders
+        for i in range(3):
+            dx = center_x - 100 + (i * 80)
+            dy = center_y - 150 + (i * 50)
+            cw, ch = 120, 160
+            color = random.choice(colors[:3])
+            # Draw cylinder body
+            draw.rectangle([dx, dy, dx+cw, dy+ch], fill=color)
+            # Draw bottom ellipse
+            draw.ellipse([dx, dy+ch-20, dx+cw, dy+ch+20], fill=color)
+            # Draw top ellipse (lid)
+            draw.ellipse([dx, dy-20, dx+cw, dy+20], fill="#F8FAFC", outline=color, width=3)
+            
+    else:
+        # Default abstract geometric composition
+        for _ in range(8):
+            shape_type = random.choice(["circle", "rect", "line"])
+            color = random.choice(colors)
+            sx = random.randint(art_x_start, art_x_start + art_w - 100)
+            sy = random.randint(art_y_start, art_y_start + art_h - 100)
+            sr = random.randint(40, 120)
+            
+            if shape_type == "circle":
+                draw.ellipse([sx, sy, sx+sr, sy+sr], outline=color, width=6)
+            elif shape_type == "rect":
+                draw.rectangle([sx, sy, sx+sr, sy+sr], outline=color, width=4)
+            else:
+                draw.line([(sx, sy), (sx+sr, sy+sr)], fill=color, width=8)
+
+def render_slide(title, content_bullets, image_prompt, output_path):
     """
     Renders a landscape slide frame (1920x1080) using the specified color palette.
     - Background: Slate (#0F172A)
@@ -89,11 +158,15 @@ def render_slide(title, content_bullets, output_path):
     draw.text((title_x, title_y), title, font=title_font, fill="#38BDF8")
     
     # Draw horizontal divider line under title
-    draw.line([(title_x, title_y + 90), (width - title_x, title_y + 90)], fill="#38BDF8", width=3)
+    draw.line([(title_x, title_y + 90), (width * 0.55, title_y + 90)], fill="#38BDF8", width=3)
     
-    # Draw bullet points
+    # Draw Geometric Art on the right 40%
+    if image_prompt:
+        draw_geometric_art(draw, width, height, image_prompt)
+    
+    # Draw bullet points (Constrain width to 55%)
     content_y = 280
-    max_text_width = width - (title_x * 2) - 40 # padding
+    max_text_width = (width * 0.55) - title_x
     
     for bullet in content_bullets:
         wrapped_lines = wrap_text(bullet, bullet_font, max_text_width)

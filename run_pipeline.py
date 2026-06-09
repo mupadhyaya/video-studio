@@ -41,10 +41,11 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
 
             # Extract language-specific fields, falling back to bare keys
             title = slide.get(f"title_{lang}", slide.get("title", f"Slide {i + 1}"))
-            bullets = slide.get(f"bullets_{lang}", slide.get("content", []))
+            bullets = slide.get(f"bullets_{lang}", slide.get("bullets", slide.get("content", [])))
+            image_prompt = slide.get("image_prompt", "")
 
             print(f"  Rendering frame for slide {i + 1}: '{title}'...")
-            render_slide(title, bullets, img_path)
+            render_slide(title, bullets, image_prompt, img_path)
 
         # --- Step 2: Synthesize narrations ---
         print(f"\nStep 2: Synthesizing [{lang.upper()}] narrations with edge-tts...")
