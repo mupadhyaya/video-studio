@@ -9,7 +9,8 @@ curriculum lesson script and saves it as a dated JSON file in scripts/.
 import os
 import json
 import datetime
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 # ── Configuration ────────────────────────────────────────────────────────────
 GEMINI_MODEL = "gemini-1.5-pro-latest"
@@ -73,15 +74,15 @@ def main():
             "GEMINI_API_KEY environment variable is not set. "
             "Export it or pass it via GitHub Actions secrets."
         )
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
 
     # ── Call Gemini ──────────────────────────────────────────────────────────
-    model = genai.GenerativeModel(GEMINI_MODEL)
     print(f"Calling {GEMINI_MODEL} for today's lesson script...")
 
-    response = model.generate_content(
-        prompt,
-        generation_config=genai.GenerationConfig(
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(
             temperature=0.7,
             response_mime_type="application/json",
         ),
