@@ -14,13 +14,14 @@ import google.generativeai as genai
 # ── Configuration ────────────────────────────────────────────────────────────
 GEMINI_MODEL = "gemini-1.5-pro"
 OUTPUT_DIR = "scripts"
+CURRICULUM_FILE = "curriculum.txt"
 
-SYSTEM_PROMPT = """\
+SYSTEM_PROMPT_TEMPLATE = """\
 You are a Curriculum Director specialising in AI & Machine Learning education.
 Your task is to write a concise, 2-minute introductory lesson suitable for a
 narrated slide-deck video.
 
-Today's topic: **Retrieval-Augmented Generation (RAG) — Day 1: Knowledge Cutoff**
+Today's topic: **{topic}**
 
 Requirements:
 - Produce exactly 3 slides.
@@ -36,8 +37,35 @@ The JSON must be an array of objects with exactly these keys per object:
   "narration_en" (string), "narration_hi" (string)
 """
 
+def get_next_topic():
+    if not os.path.exists(CURRICULUM_FILE):
+        return None
+    
+    with open(CURRICULUM_FILE, "r") as f:
+        lines = [line.strip() for line in f.readlines() if line.strip()]
+        
+    if not lines:
+        return None
+        
+    topic = lines.pop(0)
+    
+    with open(CURRICULUM_FILE, "w") as f:
+        for line in lines:
+            f.write(f"{line}\n")
+            
+    return topic
+
 
 def main():
+    # ── Get Topic ────────────────────────────────────────────────────────────
+    topic = get_next_topic()
+    if not topic:
+        print("Error: No more topics found in curriculum.txt!")
+        return
+
+    print(f"Today's topic is: {topic}")
+    prompt = SYSTEM_PROMPT_TEMPLATE.format(topic=topic)
+
     # ── Authenticate ─────────────────────────────────────────────────────────
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
@@ -52,7 +80,7 @@ def main():
     print(f"Calling {GEMINI_MODEL} for today's lesson script...")
 
     response = model.generate_content(
-        SYSTEM_PROMPT,
+        prompt,
         generation_config=genai.GenerationConfig(
             temperature=0.7,
             response_mime_type="application/json",

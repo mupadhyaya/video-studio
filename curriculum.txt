@@ -1,0 +1,8 @@
+RAG Day 1: What is a Knowledge Cutoff?
+RAG Day 2: Vector Databases and Embeddings
+RAG Day 3: Data Chunking Strategies
+RAG Day 4: The Retrieval Process
+RAG Day 5: Synthesizing the Final Answer
+RAG Expert: Handling Hallucinations in RAG
+Agentic AI Day 1: What are Autonomous Agents?
+Agentic AI Day 2: Tool Calling and APIs
