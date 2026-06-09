@@ -1,0 +1,26 @@
+{
+  "video_id": "rag_lesson_001",
+  "meta_title": "RAG Lesson 1: Escaping the Knowledge Cutoff",
+  "storyboard": [
+    {
+      "slide_index": 1,
+      "title": "Welcome to AIML Foundations",
+      "bullets": [
+        "Breaking the limits of static AI data",
+        "The physics of a knowledge cutoff date",
+        "Introducing Retrieval-Augmented Generation"
+      ],
+      "narration_text": "Welcome to our daily Artificial Intelligence series. Today, we are looking at the foundational problem with Large Language Models. When a model finishes training, its memory is permanently frozen. If you ask it about recent data, it doesn't know the answer, which leads to hallucinations."
+    },
+    {
+      "slide_index": 2,
+      "title": "The Solution: Open-Book AI",
+      "bullets": [
+        "Separating reasoning from memory",
+        "Providing external databases",
+        "Dynamic prompt injection"
+      ],
+      "narration_text": "The solution is Retrieval-Augmented Generation, or RAG. Instead of forcing the AI to memorize everything, RAG acts like an open-book exam. When a user asks a question, the system searches an external database for the exact facts and injects them directly into the AI's prompt before it answers."
+    }
+  ]
+}
