@@ -13,7 +13,7 @@ from google import genai
 from google.genai import types
 
 # ── Configuration ────────────────────────────────────────────────────────────
-GEMINI_MODEL = "gemini-1.5-pro-latest"
+GEMINI_MODEL = "gemini-1.5-flash"
 OUTPUT_DIR = "scripts"
 CURRICULUM_FILE = "curriculum.txt"
 
