@@ -122,6 +122,23 @@ def main():
         print(f"  Hindi   : {hi_path}")
         print(f"{'='*60}")
 
+        # --- Automatic YouTube Upload ---
+        if "YOUTUBE_OAUTH_TOKEN" in os.environ:
+            print("\n  [YOUTUBE] Valid OAuth token found in environment. Initiating upload...")
+            from core.youtube_uploader import upload_video
+            
+            # Extract main title from the first slide
+            base_title_en = lesson_data[0].get("title_en", "Daily Tech Update")
+            base_title_hi = lesson_data[0].get("title_hi", "डेली टेक अपडेट")
+            
+            try:
+                upload_video(en_path, {"meta_title": f"[EN] {base_title_en}"})
+                upload_video(hi_path, {"meta_title": f"[HI] {base_title_hi}"})
+            except Exception as e:
+                print(f"  [ERROR] YouTube upload failed: {e}")
+        else:
+            print("\n  [YOUTUBE] Skipping upload (YOUTUBE_OAUTH_TOKEN not set).")
+
     try:
         asyncio.run(dual_build())
     except Exception as e:

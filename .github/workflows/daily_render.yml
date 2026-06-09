@@ -12,6 +12,7 @@ jobs:
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      YOUTUBE_OAUTH_TOKEN: ${{ secrets.YOUTUBE_OAUTH_TOKEN }}
 
     steps:
       # ── 1. Checkout repository ─────────────────────────────────────────────
