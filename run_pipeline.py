@@ -8,91 +8,125 @@ from core.image_engine import render_slide
 from core.audio_engine import generate_speech
 from core.compiler import compile_video
 
-async def process_slide_audio(slide, index, audio_dir):
+
+async def build_video_for_language(lesson_data, lang, theme, output_path):
     """
-    Asynchronously generates TTS audio file for a slide.
+    Builds a complete video for a single language track.
+
+    Extracts `title_{lang}`, `bullets_{lang}`, and `narration_{lang}` keys from
+    each slide object in the storyboard array.
+
+    Args:
+        lesson_data: List of slide dicts from the JSON storyboard.
+        lang: Language code string ("en" or "hi").
+        theme: Reserved for future theme customisation (unused for now).
+        output_path: Destination path for the compiled MP4.
     """
-    audio_path = os.path.join(audio_dir, f"audio_{index}.mp3")
-    narration = slide.get("narration", "")
-    if not narration.strip():
-        # Fallback if narration is empty to prevent edge-tts from failing
-        narration = "Slide detail."
-    
-    print(f"Generating narration for slide {index + 1}...")
-    await generate_speech(narration, audio_path)
+    print(f"\n{'='*60}")
+    print(f"  Building [{lang.upper()}] video → {output_path}")
+    print(f"{'='*60}")
 
-async def run_async_pipeline(slides_data, images_dir, audio_dir, output_path):
-    # 1. Render slide canvas frames
-    print("Step 1: Rendering slide images with Pillow...")
-    for i, slide in enumerate(slides_data):
-        img_path = os.path.join(images_dir, f"slide_{i}.png")
-        title = slide.get("title", f"Slide {i + 1}")
-        content = slide.get("content", [])
-        print(f"Rendering frame for slide {i + 1}: '{title}'...")
-        render_slide(title, content, img_path)
-
-    # 2. Render speech voiceover files asynchronously
-    print("\nStep 2: Synthesizing slide narrations with edge-tts...")
-    tasks = []
-    for i, slide in enumerate(slides_data):
-        tasks.append(process_slide_audio(slide, i, audio_dir))
-    
-    await asyncio.gather(*tasks)
-
-    # 3. Stitch and compile video
-    print("\nStep 3: Compiling slide sequence into final video output...")
-    compile_video(slides_data, images_dir, audio_dir, output_path)
-
-def main():
-    parser = argparse.ArgumentParser(description="Video Studio Presentation Generation Orchestrator")
-    parser.add_argument(
-        "--input", 
-        required=True, 
-        help="Path to structured JSON configuration file containing slide content and narration."
-    )
-    parser.add_argument(
-        "--output", 
-        default="output.mp4", 
-        help="Output path for the compiled MP4 presentation file."
-    )
-    args = parser.parse_args()
-
-    # Verify input exists
-    if not os.path.exists(args.input):
-        print(f"Error: Input file '{args.input}' does not exist.")
-        return
-
-    # Load slides configuration
-    try:
-        with open(args.input, "r") as f:
-            slides_data = json.load(f)
-    except Exception as e:
-        print(f"Error: Failed to parse input JSON file. Details: {e}")
-        return
-
-    if not isinstance(slides_data, list):
-        print("Error: Input JSON must be a list of slide objects.")
-        return
-
-    # Create temporary directories for intermediate rendering assets
-    temp_dir = os.path.abspath("temp_build")
+    # Create per-language temp directories
+    temp_dir = os.path.abspath(f"temp_build_{lang}")
     images_dir = os.path.join(temp_dir, "images")
     audio_dir = os.path.join(temp_dir, "audio")
-    
     os.makedirs(images_dir, exist_ok=True)
     os.makedirs(audio_dir, exist_ok=True)
 
     try:
-        # Run orchestrator tasks
-        asyncio.run(run_async_pipeline(slides_data, images_dir, audio_dir, args.output))
-        print(f"\nPipeline compilation completed successfully! Video saved to: {args.output}")
+        # --- Step 1: Render slide frames ---
+        print(f"Step 1: Rendering [{lang.upper()}] slide images with Pillow...")
+        for i, slide in enumerate(lesson_data):
+            img_path = os.path.join(images_dir, f"slide_{i}.png")
+
+            # Extract language-specific fields, falling back to bare keys
+            title = slide.get(f"title_{lang}", slide.get("title", f"Slide {i + 1}"))
+            bullets = slide.get(f"bullets_{lang}", slide.get("content", []))
+
+            print(f"  Rendering frame for slide {i + 1}: '{title}'...")
+            render_slide(title, bullets, img_path)
+
+        # --- Step 2: Synthesize narrations ---
+        print(f"\nStep 2: Synthesizing [{lang.upper()}] narrations with edge-tts...")
+        audio_tasks = []
+        for i, slide in enumerate(lesson_data):
+            narration = slide.get(f"narration_{lang}", slide.get("narration", ""))
+            if not narration.strip():
+                narration = "Slide detail."
+
+            audio_path = os.path.join(audio_dir, f"audio_{i}.mp3")
+            print(f"  Generating narration for slide {i + 1}...")
+            audio_tasks.append(generate_speech(narration, audio_path, lang_code=lang))
+
+        await asyncio.gather(*audio_tasks)
+
+        # --- Step 3: Compile video ---
+        print(f"\nStep 3: Compiling [{lang.upper()}] slide sequence into video...")
+        compile_video(lesson_data, images_dir, audio_dir, output_path)
+        print(f"[{lang.upper()}] Video saved to: {output_path}")
+
+    finally:
+        if os.path.exists(temp_dir):
+            print(f"Cleaning up [{lang.upper()}] intermediate build assets...")
+            shutil.rmtree(temp_dir)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Video Studio — Dual-Language Presentation Pipeline"
+    )
+    parser.add_argument(
+        "--input",
+        required=True,
+        help="Path to structured JSON storyboard file.",
+    )
+    parser.add_argument(
+        "--video-id",
+        default="presentation",
+        help="Base name for output files (produces {video_id}_en.mp4, {video_id}_hi.mp4).",
+    )
+    parser.add_argument(
+        "--theme",
+        default="dark",
+        help="Visual theme preset (reserved for future use).",
+    )
+    args = parser.parse_args()
+
+    # --- Validate input ---
+    if not os.path.exists(args.input):
+        print(f"Error: Input file '{args.input}' does not exist.")
+        return
+
+    try:
+        with open(args.input, "r", encoding="utf-8") as f:
+            lesson_data = json.load(f)
+    except Exception as e:
+        print(f"Error: Failed to parse input JSON. Details: {e}")
+        return
+
+    if not isinstance(lesson_data, list):
+        print("Error: Input JSON must be a list of slide objects.")
+        return
+
+    # --- Sequential dual-language build ---
+    async def dual_build():
+        en_path = f"{args.video_id}_en.mp4"
+        hi_path = f"{args.video_id}_hi.mp4"
+
+        await build_video_for_language(lesson_data, "en", args.theme, en_path)
+        await build_video_for_language(lesson_data, "hi", args.theme, hi_path)
+
+        print(f"\n{'='*60}")
+        print("  All builds complete!")
+        print(f"  English : {en_path}")
+        print(f"  Hindi   : {hi_path}")
+        print(f"{'='*60}")
+
+    try:
+        asyncio.run(dual_build())
     except Exception as e:
         print(f"\nError: Pipeline execution failed. Details: {e}")
-    finally:
-        # Cleanup temporary files
-        if os.path.exists(temp_dir):
-            print("Cleaning up intermediate build assets...")
-            shutil.rmtree(temp_dir)
+
 
 if __name__ == "__main__":
     main()

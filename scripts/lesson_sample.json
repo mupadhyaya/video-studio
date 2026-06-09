@@ -1,19 +1,32 @@
 [
   {
-    "title": "Welcome to Video Studio",
-    "content": [
+    "title_en": "Welcome to Video Studio",
+    "title_hi": "वीडियो स्टूडियो में आपका स्वागत है",
+    "bullets_en": [
       "Generates technical presentation slides automatically.",
       "Integrates slide graphics with AI narration tracks."
     ],
-    "narration": "Welcome to the Video Studio automated pipeline demo. This system generates technical slide presentations with AI speech automatically."
+    "bullets_hi": [
+      "तकनीकी प्रस्तुति स्लाइड्स स्वचालित रूप से बनाता है।",
+      "स्लाइड ग्राफ़िक्स को AI नैरेशन ट्रैक्स के साथ जोड़ता है।"
+    ],
+    "narration_en": "Welcome to the Video Studio automated pipeline demo. This system generates technical slide presentations with AI speech automatically.",
+    "narration_hi": "वीडियो स्टूडियो स्वचालित पाइपलाइन डेमो में आपका स्वागत है। यह सिस्टम AI स्पीच के साथ तकनीकी स्लाइड प्रस्तुतियाँ स्वचालित रूप से बनाता है।"
   },
   {
-    "title": "Core Pipeline Engineering",
-    "content": [
+    "title_en": "Core Pipeline Engineering",
+    "title_hi": "कोर पाइपलाइन इंजीनियरिंग",
+    "bullets_en": [
       "Image rendering is powered by Python's Pillow library.",
       "Asynchronous TTS is handled using the edge-tts engine.",
       "Stitching and final compilation is orchestrated by MoviePy."
     ],
-    "narration": "Under the hood, the image rendering is powered by Pillow, the asynchronous text to speech is handled by edge-tts, and final video composition is handled by MoviePy."
+    "bullets_hi": [
+      "इमेज रेंडरिंग Python की Pillow लाइब्रेरी द्वारा संचालित है।",
+      "असिंक्रोनस TTS को edge-tts इंजन द्वारा हैंडल किया जाता है।",
+      "स्टिचिंग और अंतिम संकलन MoviePy द्वारा किया जाता है।"
+    ],
+    "narration_en": "Under the hood, the image rendering is powered by Pillow, the asynchronous text to speech is handled by edge-tts, and final video composition is handled by MoviePy.",
+    "narration_hi": "इसके पीछे, इमेज रेंडरिंग Pillow द्वारा संचालित है, असिंक्रोनस टेक्स्ट टू स्पीच को edge-tts द्वारा हैंडल किया जाता है, और अंतिम वीडियो संकलन MoviePy द्वारा किया जाता है।"
   }
 ]
