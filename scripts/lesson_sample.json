@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Welcome to Video Studio",
+    "content": [
+      "Generates technical presentation slides automatically.",
+      "Integrates slide graphics with AI narration tracks."
+    ],
+    "narration": "Welcome to the Video Studio automated pipeline demo. This system generates technical slide presentations with AI speech automatically."
+  },
+  {
+    "title": "Core Pipeline Engineering",
+    "content": [
+      "Image rendering is powered by Python's Pillow library.",
+      "Asynchronous TTS is handled using the edge-tts engine.",
+      "Stitching and final compilation is orchestrated by MoviePy."
+    ],
+    "narration": "Under the hood, the image rendering is powered by Pillow, the asynchronous text to speech is handled by edge-tts, and final video composition is handled by MoviePy."
+  }
+]
