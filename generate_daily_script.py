@@ -12,7 +12,7 @@ import datetime
 import google.generativeai as genai
 
 # ── Configuration ────────────────────────────────────────────────────────────
-GEMINI_MODEL = "gemini-1.5-pro"
+GEMINI_MODEL = "gemini-1.5-pro-latest"
 OUTPUT_DIR = "scripts"
 CURRICULUM_FILE = "curriculum.txt"
 
