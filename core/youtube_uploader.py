@@ -1,0 +1,31 @@
+import os
+import json
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
+from google.oauth2.credentials import Credentials
+
+def upload_video(video_path, metadata):
+    print("Authenticating with YouTube API...")
+    creds_info = json.loads(os.environ["YOUTUBE_OAUTH_TOKEN"])
+    credentials = Credentials.from_authorized_user_info(creds_info)
+    
+    youtube = build("youtube", "v3", credentials=credentials)
+    
+    body = {
+        "snippet": {
+            "title": metadata.get("meta_title", "New AIML Lesson"),
+            "description": "Daily automated tech curriculum update.",
+            "tags": ["AIML", "RAG", "Engineering", "Tutorial"],
+            "categoryId": "27" # Education Category
+        },
+        "status": {
+            "privacyStatus": "private" # Uploads as a draft for your review
+        }
+    }
+    
+    media = MediaFileUpload(video_path, chunksize=-1, resumable=True, mimetype="video/mp4")
+    
+    print(f"Uploading {video_path} to YouTube as a private draft...")
+    request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
+    response = request.execute()
+    print(f"✅ Success! Video deployed to channel. Video ID: {response['id']}")
