@@ -1,0 +1,56 @@
+name: Daily Video Render
+
+on:
+  schedule:
+    # 00:30 UTC = 06:00 AM IST
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    steps:
+      # ── 1. Checkout repository ─────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── 2. Set up Python ───────────────────────────────────────────────────
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      # ── 3. Install system dependencies ─────────────────────────────────────
+      - name: Install ffmpeg and fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu
+
+      # ── 4. Install Python dependencies ─────────────────────────────────────
+      - name: Install Python packages
+        run: pip install -r requirements.txt
+
+      # ── 5. Generate today's lesson script via Gemini ───────────────────────
+      - name: Generate daily lesson JSON
+        run: python generate_daily_script.py
+
+      # ── 6. Render dual-language videos ─────────────────────────────────────
+      - name: Render presentation videos
+        run: |
+          # Find today's generated lesson file
+          LESSON_FILE=$(ls -t scripts/*_lesson.json | head -n 1)
+          VIDEO_ID=$(basename "$LESSON_FILE" _lesson.json)
+          echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
+          python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
+
+      # ── 7. Upload compiled videos as artifacts ─────────────────────────────
+      - name: Upload rendered videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-videos
+          path: "*.mp4"
+          retention-days: 14
