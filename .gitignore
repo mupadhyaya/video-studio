@@ -219,3 +219,21 @@ __marimo__/
 
 # Local tooling
 .local-auth/
+
+# Local UI/Dev files
+.DS_Store
+align_ui.html
+assets/align_ui.html
+
+# Local Test & Debug Scripts/Outputs
+test_*.py
+check_*.py
+patch_*.py
+align_*.py
+user_align.py
+*.mp4
+temp_build_*/
+base.png
+content.png
+test_mermaid.png
+rag-learning-series-repo/
