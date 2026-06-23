@@ -1,59 +1,129 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import json
 import datetime
 from google import genai
 from google.genai import types
 
+import argparse
+
 def generate_lesson():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--day', type=int, help='Specific day number to generate (1-indexed)')
+    args = parser.parse_args()
+
     print("Waking up Gemini Curriculum Director...")
     # The client automatically picks up the GEMINI_API_KEY from the environment
     client = genai.Client()
     
-    start_date = datetime.date(2026, 6, 10)
-    today = datetime.date.today()
-    day_num = max(1, (today - start_date).days + 1)
+    if args.day:
+        day_num = args.day
+    else:
+        start_date = datetime.date.today() # Resetting to today to start from the beginning
+        today = datetime.date.today()
+        day_num = max(1, (today - start_date).days + 1)
+    
+    topics = []
+    with open("curriculum.txt", "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line: continue
+            if line.endswith(".txt"):
+                try:
+                    with open(line, "r") as sub_f:
+                        topics.extend([sub_line.strip() for sub_line in sub_f if sub_line.strip()])
+                except Exception:
+                    pass
+            else:
+                topics.append(line)
+    
+    # Wrap around if day_num exceeds available topics
+    topic_index = (day_num - 1) % len(topics)
+    current_topic = topics[topic_index]
+    next_topic = topics[(topic_index + 1) % len(topics)]
     
     prompt = f"""
-    You are the Lead Curriculum Director for an educational AI channel. Write Day {day_num} of our Retrieval-Augmented Generation (RAG) series.
+    You are the Lead Curriculum Director for an educational AI channel. 
+    Write a comprehensive, multi-slide lesson for our series. 
+    The topic for today is: "{current_topic}"
+    The next upcoming lecture will be: "{next_topic}"
+    
     The output MUST be valid JSON matching this schema exactly. Do not wrap in markdown blocks.
     
-    Requirements for a 2-minute video lecture:
-    - Create exactly 4 slides in the storyboard array.
-    - Each slide must have 3 to 5 detailed bullet points.
+    Requirements for the video lecture:
+    - Create as many slides as needed to comprehensively cover the topic with high-quality depth. Do NOT restrict the number of slides.
+    - Each slide must have a single `content_text` block instead of bullet points. This should be a concise, engaging paragraph (2-3 sentences) expanding on the slide's title.
     - The narration for each slide should be in-depth and conversational, sounding like a real expert teaching a live class.
+    - IMPORTANT: During the narration of the final slide, you MUST explicitly mention and tease the next upcoming lecture topic: "{next_topic}".
     - The total combined narration text across all slides must be around 300 words (which takes exactly 2 minutes to speak).
+    - You must analyze the topic and decide the best visual aid. You MUST heavily prioritize generating a 'code_snippet', 'architecture_diagram', or 'sequence_diagram' over a generic 'concept_box' whenever the topic allows.
+    - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. It must withstand public scrutiny.
+    - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code (do NOT wrap it in markdown backticks like ```mermaid).
 
     {{
-      "video_id": "rag_lesson_{day_num:03d}",
-      "meta_title": "RAG Lesson {day_num}",
+      "video_id": "lesson_{day_num:03d}",
+      "meta_title": "{current_topic}",
       "storyboard": [
         {{
           "slide_index": 1,
-          "title": "[Engaging Slide Header]",
-          "bullets": [
-            "[Detailed Bullet 1]",
-            "[Detailed Bullet 2]",
-            "[Detailed Bullet 3]"
-          ],
-          "narration_text": "[Comprehensive, engaging conversational explanation for this slide]"
+          "title_en": "[Engaging Slide Header in English]",
+          "title_hi": "[Engaging Slide Header translated to Hindi]",
+          "content_text_en": "[A single paragraph explaining the core concept in English.]",
+          "content_text_hi": "[The exact same paragraph translated perfectly to conversational Hindi.]",
+          "narration_text_en": "[Conversational explanation for this slide in English]",
+          "narration_text_hi": "[The exact same conversational explanation translated to Hindi]",
+          "visual_type": "[Must be exactly 'code_snippet', 'architecture_diagram', 'sequence_diagram', or 'concept_box']",
+          "visual_content": "[If 'code_snippet', you MUST provide actual, working Python code. If 'architecture_diagram', raw Mermaid.js code. If 'concept_box', provide a short analogy. (Leave code/Mermaid/analogy in English)]"
         }}
-      ] # Note: Ensure you generate 4 objects in this array!
+      ]
     }}
     """
     
     response = client.models.generate_content(
-        model='gemini-2.0-flash',
+        model='gemini-2.5-pro',
         contents=prompt,
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
         )
     )
     
-    os.makedirs("scripts", exist_ok=True)
-    filename = f"scripts/{day_num:03d}_lesson.json"
+    out_dir = f"rag-learning-series-repo/lesson_{day_num:03d}"
+    os.makedirs(out_dir, exist_ok=True)
+    filename = f"{out_dir}/lesson_{day_num:03d}.json"
     
-    with open(filename, "w") as f:
-        f.write(response.text)
+    import json
+    import re
+    try:
+        clean_text = re.sub(r'^```json\s*', '', response.text.strip())
+        clean_text = re.sub(r'\s*```$', '', clean_text)
+        data = json.loads(clean_text)
+        storyboard = data.get("storyboard", [])
+        
+        agenda_slide = {
+            "title_en": "Series Curriculum Map",
+            "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
+            "content_text_en": "Tracking our progress through the Learning Series.",
+            "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
+            "visual_type": "curriculum_map",
+            "visual_content": json.dumps({
+                "past": topics[:topic_index],
+                "present": current_topic,
+                "future": topics[topic_index+1:]
+            }),
+            "narration_text_en": f"Welcome back! Today we are covering: {current_topic}. Let's dive in.",
+            "narration_text_hi": f"वापसी पर स्वागत है! आज हम कवर कर रहे हैं: {current_topic}। आइए शुरू करते हैं।"
+        }
+        
+        storyboard.insert(0, agenda_slide)
+        data["storyboard"] = storyboard
+        
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Failed to parse or inject agenda slide: {e}")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(response.text)
         
     print(f"✅ Successfully generated {filename}")
 

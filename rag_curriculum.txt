@@ -1,0 +1,19 @@
+Module 1.1: What is a Knowledge Cutoff?
+Module 1.2: The RAG Paradigm Shift
+Module 2.1: Introduction to Vector Databases
+Module 2.2: Deep Dive into Text Embeddings
+Module 3.1: Data Chunking Strategies
+Module 3.2: Practical Chunking Code Exercise
+Module 3.3: Chunking Exercise Solutions
+Module 4.1: The Retrieval Process
+Module 4.2: Vector Search Algorithms (KNN/ANN)
+Module 5.1: Synthesizing the Final Answer
+Module 5.2: Handling Hallucinations in RAG
+Module 6.1: Evaluating RAG Pipelines (RAGAS)
+Module 6.2: Advanced RAG: Query Transformation
+Module 6.3: Advanced RAG: Re-ranking
+Module 7.1: Model Context Protocol (MCP) Intro
+Module 7.2: Exposing Vector Databases via MCP
+Module 7.3: Connecting Agents to MCP Servers
+Module 8.1: End-to-End RAG Project Setup
+Module 8.2: End-to-End RAG Project Solution

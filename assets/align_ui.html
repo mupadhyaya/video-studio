@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VTuber Avatar Aligner</title>
+    <style>
+        body { font-family: sans-serif; background: #1e1e1e; color: #fff; padding: 20px; }
+        .container { display: flex; gap: 20px; }
+        .canvas-container {
+            position: relative;
+            width: 500px; height: 500px;
+            background: #333;
+            border: 1px solid #555;
+            overflow: hidden;
+        }
+        .layer {
+            position: absolute;
+            top: 0; left: 0;
+            transform-origin: top left;
+        }
+        .controls { flex: 1; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; margin-bottom: 5px; }
+        input[type="range"] { width: 100%; }
+        select { padding: 5px; width: 100%; background: #444; color: white; border: 1px solid #666; }
+        pre { background: #000; padding: 10px; border-radius: 5px; overflow-x: auto; color: #0f0; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h2>VTuber Avatar Facial Feature Aligner</h2>
+    <p>1. Ensure your avatar files are named <b>avatar_idle.png</b>, <b>avatar_bmp.png</b>, etc.</p>
+    <p>2. Select the "idle" image as the reference, then select the others to align their facial features perfectly.</p>
+    
+    <div class="container">
+        <div class="canvas-container">
+            <!-- Reference Layer (Idle) -->
+            <img id="refImg" class="layer" style="opacity: 0.5;" src="avatar_idle.png" onerror="this.style.display='none'">
+            <!-- Target Layer -->
+            <img id="targetImg" class="layer" style="opacity: 0.5;" src="avatar_bmp.png" onerror="this.style.display='none'">
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Target Avatar to Align:</label>
+                <select id="avatarSelect">
+                    <option value="bmp">avatar_bmp.png</option>
+                    <option value="ee">avatar_ee.png</option>
+                    <option value="oh">avatar_oh.png</option>
+                    <option value="aa">avatar_aa.png</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label>Scale: <span id="scaleVal">1.00</span>x</label>
+                <input type="range" id="scale" min="0.5" max="2.0" step="0.01" value="1">
+            </div>
+            
+            <div class="control-group">
+                <label>X Offset (Left/Right): <span id="xVal">0</span>px</label>
+                <input type="range" id="offsetX" min="-200" max="200" step="1" value="0">
+            </div>
+            
+            <div class="control-group">
+                <label>Y Offset (Up/Down): <span id="yVal">0</span>px</label>
+                <input type="range" id="offsetY" min="-200" max="200" step="1" value="0">
+            </div>
+            
+            <button onclick="saveTransform()" style="padding:10px; background:#4CAF50; color:white; border:none; cursor:pointer;">Save Alignment for this Avatar</button>
+            <button onclick="generateScript()" style="padding:10px; background:#2196F3; color:white; border:none; cursor:pointer; margin-top:10px;">Generate Python Crop Script</button>
+            
+            <div id="outputContainer" class="hidden" style="margin-top: 20px;">
+                <label>Copy this script and run it in your terminal:</label>
+                <pre id="outputCode"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const transforms = {
+            bmp: { scale: 1, x: 0, y: 0 },
+            ee: { scale: 1, x: 0, y: 0 },
+            oh: { scale: 1, x: 0, y: 0 },
+            aa: { scale: 1, x: 0, y: 0 }
+        };
+        
+        let currentTarget = "bmp";
+        
+        const targetImg = document.getElementById("targetImg");
+        const select = document.getElementById("avatarSelect");
+        const scale = document.getElementById("scale");
+        const offsetX = document.getElementById("offsetX");
+        const offsetY = document.getElementById("offsetY");
+        
+        function updateTransform() {
+            targetImg.style.transform = `translate(${offsetX.value}px, ${offsetY.value}px) scale(${scale.value})`;
+            document.getElementById("scaleVal").innerText = scale.value;
+            document.getElementById("xVal").innerText = offsetX.value;
+            document.getElementById("yVal").innerText = offsetY.value;
+        }
+        
+        scale.oninput = updateTransform;
+        offsetX.oninput = updateTransform;
+        offsetY.oninput = updateTransform;
+        
+        select.onchange = (e) => {
+            currentTarget = e.target.value;
+            targetImg.src = `avatar_${currentTarget}.png`;
+            targetImg.style.display = 'block';
+            
+            scale.value = transforms[currentTarget].scale;
+            offsetX.value = transforms[currentTarget].x;
+            offsetY.value = transforms[currentTarget].y;
+            updateTransform();
+        };
+        
+        window.saveTransform = () => {
+            transforms[currentTarget] = {
+                scale: parseFloat(scale.value),
+                x: parseInt(offsetX.value),
+                y: parseInt(offsetY.value)
+            };
+            alert(`Saved alignment for ${currentTarget}`);
+        };
+        
+        window.generateScript = () => {
+            let py = `import numpy as np\nfrom PIL import Image\nimport os\n\ntransforms = ${JSON.stringify(transforms, null, 4)}\n\n`;
+            py += `print("Aligning avatars based on visual features...")\n`;
+            py += `ref_img = Image.open("assets/avatar_idle.png").convert("RGBA")\n\n`;
+            py += `for name, t in transforms.items():\n`;
+            py += `    img_path = f"assets/avatar_{name}.png"\n`;
+            py += `    if not os.path.exists(img_path): continue\n\n`;
+            py += `    img = Image.open(img_path).convert("RGBA")\n`;
+            py += `    new_w, new_h = int(img.width * t["scale"]), int(img.height * t["scale"])\n`;
+            py += `    resized = img.resize((new_w, new_h), Image.Resampling.LANCZOS)\n\n`;
+            py += `    final_img = Image.new("RGBA", ref_img.size, (0,0,0,0))\n`;
+            py += `    final_img.paste(resized, (t["x"], t["y"]))\n`;
+            py += `    final_img.save(img_path)\n`;
+            py += `    print(f"Aligned {name} successfully.")\n\n`;
+            py += `print("Done! You can now run the video compilation pipeline.")\n`;
+            
+            document.getElementById("outputCode").innerText = py;
+            document.getElementById("outputContainer").classList.remove("hidden");
+        };
+    </script>
+</body>
+</html>

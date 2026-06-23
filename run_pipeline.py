@@ -37,21 +37,23 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
         # --- Step 1: Render slide frames ---
         print(f"Step 1: Rendering [{lang.upper()}] slide images with Pillow...")
         for i, slide in enumerate(lesson_data):
-            img_path = os.path.join(images_dir, f"slide_{i}.png")
+            img_base_path = os.path.join(images_dir, f"slide_{i}_base.png")
+            img_content_path = os.path.join(images_dir, f"slide_{i}_content.png")
 
             # Extract language-specific fields, falling back to bare keys
             title = slide.get(f"title_{lang}", slide.get("title", f"Slide {i + 1}"))
-            bullets = slide.get(f"bullets_{lang}", slide.get("bullets", slide.get("content", [])))
-            image_prompt = slide.get("image_prompt", "")
+            content_text = slide.get(f"content_text_{lang}", slide.get("content_text", slide.get("content", "")))
+            visual_type = slide.get("visual_type", "")
+            visual_content = slide.get("visual_content", "")
 
             print(f"  Rendering frame for slide {i + 1}: '{title}'...")
-            render_slide(title, bullets, image_prompt, img_path)
+            render_slide(title, content_text, visual_type, visual_content, img_base_path, img_content_path)
 
         # --- Step 2: Synthesize narrations ---
         print(f"\nStep 2: Synthesizing [{lang.upper()}] narrations with edge-tts...")
         audio_tasks = []
         for i, slide in enumerate(lesson_data):
-            narration = slide.get(f"narration_{lang}", slide.get("narration", ""))
+            narration = slide.get(f"narration_text_{lang}", slide.get(f"narration_{lang}", slide.get("narration_text", slide.get("narration", ""))))
             if not narration.strip():
                 narration = "Slide detail."
 
@@ -69,7 +71,7 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
     finally:
         if os.path.exists(temp_dir):
             print(f"Cleaning up [{lang.upper()}] intermediate build assets...")
-            shutil.rmtree(temp_dir)
+            # shutil.rmtree(temp_dir)
 
 
 def main():
@@ -105,14 +107,18 @@ def main():
         print(f"Error: Failed to parse input JSON. Details: {e}")
         return
 
+    if isinstance(lesson_data, dict) and "storyboard" in lesson_data:
+        lesson_data = lesson_data["storyboard"]
+
     if not isinstance(lesson_data, list):
         print("Error: Input JSON must be a list of slide objects.")
         return
 
     # --- Sequential dual-language build ---
     async def dual_build():
-        en_path = f"{args.video_id}_en.mp4"
-        hi_path = f"{args.video_id}_hi.mp4"
+        input_dir = os.path.dirname(os.path.abspath(args.input))
+        en_path = os.path.join(input_dir, f"{args.video_id}_en.mp4")
+        hi_path = os.path.join(input_dir, f"{args.video_id}_hi.mp4")
 
         await build_video_for_language(lesson_data, "en", args.theme, en_path)
         await build_video_for_language(lesson_data, "hi", args.theme, hi_path)

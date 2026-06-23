@@ -1,10 +1,12 @@
-name: Daily Video Render
+name: Generate & Render On Demand
 
 on:
-  schedule:
-    # 00:30 UTC = 06:00 AM IST
-    - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      day_number:
+        description: "Day/Lesson number to generate (e.g., 1 for lesson_001)"
+        required: true
+        default: "1"
 
 jobs:
   render:
@@ -37,16 +39,16 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
 
-      # ── 5. Generate today's lesson script via Gemini ───────────────────────
+      # ── 5. Generate lesson JSON via Gemini ─────────────────────────────────
       - name: Generate daily lesson JSON
-        run: python generate_daily_script.py
+        run: python generate_daily_script.py --day ${{ github.event.inputs.day_number }}
 
       # ── 6. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
-          # Find today's generated lesson file
-          LESSON_FILE=$(ls -t rag-learning-series-repo/lesson_*/lesson_*.json | head -n 1)
-          VIDEO_ID=$(basename "$LESSON_FILE" .json)
+          DAY_PADDED=$(printf "%03d" ${{ github.event.inputs.day_number }})
+          LESSON_FILE="rag-learning-series-repo/lesson_${DAY_PADDED}/lesson_${DAY_PADDED}.json"
+          VIDEO_ID="lesson_${DAY_PADDED}"
           echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
           python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
 
@@ -54,20 +56,11 @@ jobs:
       - name: Upload rendered videos
         uses: actions/upload-artifact@v4
         with:
-          name: rendered-videos
+          name: generated-on-demand-videos
           path: "rag-learning-series-repo/**/*.mp4"
           retention-days: 14
 
-      # ── 8. Commit curriculum progress to main repo ─────────────────────────
-      - name: Commit curriculum progress
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add curriculum.txt rag_curriculum.txt
-          git commit -m "chore: advance curriculum" || echo "No changes to commit"
-          git push
-
-      # ── 9. Push compiled videos to dedicated learning repo ──────────────────
+      # ── 8. Push compiled videos to dedicated learning repo ──────────────────
       - name: Push to Dedicated Repo
         run: |
           # Clone the target repo using PAT
@@ -80,5 +73,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "feat: Add newly generated lesson video and assets" || echo "No changes to commit"
+          git commit -m "feat: Manual RE-GENERATE & render of lesson ${{ github.event.inputs.day_number }}" || echo "No changes to commit"
           git push

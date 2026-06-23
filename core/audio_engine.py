@@ -27,7 +27,8 @@ async def generate_speech(text: str, output_path: str, lang_code: str = "en"):
     voice = EDGE_TTS_VOICES.get(lang_code, EDGE_TTS_VOICES["en"])
 
     try:
-        communicate = edge_tts.Communicate(text, voice)
+        # Slow down the narration rate by 15% for a more lecture-like pace
+        communicate = edge_tts.Communicate(text, voice, rate="-15%")
         await communicate.save(output_path)
     except Exception as e:
         print(f"  [WARN] edge-tts failed ({e}), falling back to gTTS...")

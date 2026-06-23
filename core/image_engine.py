@@ -1,50 +1,39 @@
 import os
+import base64
+import zlib
+import urllib.request
+import io
 from PIL import Image, ImageDraw, ImageFont
 
 def get_font(font_name="Arial.ttf", size=36):
-    """
-    Attempts to load a TrueType font from standard macOS paths, falling back to 
-    ImageFont.load_default() if not found.
-    """
     font_paths = [
         f"/System/Library/Fonts/Supplemental/{font_name}",
         f"/Library/Fonts/{font_name}",
         f"/System/Library/Fonts/{font_name}",
-        # Fallbacks for other platforms just in case
         f"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        f"/usr/share/fonts/TTF/{font_name}"
+        f"/usr/share/fonts/TTF/{font_name}",
+        "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+        "/Library/Fonts/Arial Unicode.ttf"
     ]
-    
     for path in font_paths:
         if os.path.exists(path):
             try:
                 return ImageFont.truetype(path, size)
             except Exception:
                 continue
-    
-    # Fallback to default PIL font
     return ImageFont.load_default()
 
 def wrap_text(text, font, max_width):
-    """
-    Wraps text to fit within a maximum width in pixels.
-    """
     words = text.split()
     lines = []
     current_line = []
-    
     for word in words:
         test_line = " ".join(current_line + [word])
-        
-        # Determine width of test line
         try:
-            # Pillow >= 10.0.0
             bbox = font.getbbox(test_line)
             width = bbox[2] - bbox[0]
         except AttributeError:
-            # Pillow < 10.0.0 fallback
             width, _ = font.getsize(test_line)
-            
         if width <= max_width:
             current_line.append(word)
         else:
@@ -52,139 +41,201 @@ def wrap_text(text, font, max_width):
                 lines.append(" ".join(current_line))
                 current_line = [word]
             else:
-                # Word itself is too long, force wrap
                 lines.append(word)
-                
     if current_line:
         lines.append(" ".join(current_line))
-        
     return lines
 
-import math
-import random
+def draw_code_block(draw, width, height, code_text):
+    box_x = int(width * 0.55)
+    box_y = int(height * 0.2)
+    box_w = int(width * 0.4)
+    box_h = int(height * 0.6)
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=15, fill="#1E293B", outline="#334155", width=3)
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + 40], radius=15, fill="#334155")
+    draw.ellipse([box_x + 15, box_y + 12, box_x + 31, box_y + 28], fill="#EF4444")
+    draw.ellipse([box_x + 40, box_y + 12, box_x + 56, box_y + 28], fill="#F59E0B")
+    draw.ellipse([box_x + 65, box_y + 12, box_x + 81, box_y + 28], fill="#10B981")
+    if code_text:
+        code_font = get_font("Courier New.ttf", 24)
+        if isinstance(code_font, ImageFont.ImageFont):
+            code_font = get_font("Arial.ttf", 24)
+        lines = str(code_text).split('\n')
+        wrapped_lines = []
+        for line in lines:
+            wrapped_lines.extend(wrap_text(line, code_font, box_w - 40))
+        text_y = box_y + 60
+        for line in wrapped_lines:
+            draw.text((box_x + 20, text_y), line, font=code_font, fill="#A78BFA")
+            text_y += 35
+            if text_y > box_y + box_h - 40:
+                break
 
-def draw_geometric_art(draw, width, height, prompt):
-    """
-    Draws abstract geometric art on the right side of the slide based on keywords.
-    """
-    # Define a bounding box for the art (right 40% of the screen)
-    art_x_start = int(width * 0.6)
-    art_y_start = int(height * 0.2)
-    art_w = int(width * 0.35)
-    art_h = int(height * 0.6)
-    center_x = art_x_start + (art_w // 2)
-    center_y = art_y_start + (art_h // 2)
+def draw_concept_box(draw, width, height, concept_text, font):
+    box_x = int(width * 0.55)
+    box_y = int(height * 0.25)
+    box_w = int(width * 0.4)
+    box_h = int(height * 0.5)
+    draw.rounded_rectangle([box_x-4, box_y-4, box_x + box_w+4, box_y + box_h+4], radius=20, fill="#38BDF8")
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=18, fill="#0F172A")
+    draw.text((box_x + 30, box_y + 20), "Concept Analogy", font=font, fill="#38BDF8")
+    draw.line([(box_x + 30, box_y + 70), (box_x + box_w - 30, box_y + 70)], fill="#334155", width=2)
+    if concept_text:
+        wrapped = wrap_text(str(concept_text), font, box_w - 60)
+        text_y = box_y + 100
+        for line in wrapped:
+            draw.text((box_x + 30, text_y), line, font=font, fill="#F8FAFC")
+            text_y += 45
 
-    prompt = str(prompt).lower()
+def draw_mermaid_diagram(img, width, height, diagram_code):
+    diagram_code = str(diagram_code).strip()
+    if diagram_code.startswith("```mermaid"):
+        diagram_code = diagram_code[10:]
+    if diagram_code.endswith("```"):
+        diagram_code = diagram_code[:-3]
+    diagram_code = diagram_code.strip()
+
+    compressed = zlib.compress(diagram_code.encode('utf-8'))
+    encoded = base64.urlsafe_b64encode(compressed).decode('ascii')
+    url = f"https://kroki.io/mermaid/png/{encoded}"
     
-    # Base styling
-    colors = ["#38BDF8", "#818CF8", "#C084FC", "#F472B6", "#94A3B8"]
+    box_x = int(width * 0.55)
+    box_y = int(height * 0.2)
+    box_w = int(width * 0.4)
+    box_h = int(height * 0.6)
     
-    if "network" in prompt or "node" in prompt or "graph" in prompt:
-        # Draw a network graph
-        nodes = []
-        for _ in range(12):
-            nx = random.randint(art_x_start, art_x_start + art_w)
-            ny = random.randint(art_y_start, art_y_start + art_h)
-            nodes.append((nx, ny))
-            
-        # Draw edges
-        for i in range(len(nodes)):
-            for j in range(i+1, len(nodes)):
-                if random.random() > 0.6: # 40% chance of connection
-                    draw.line([nodes[i], nodes[j]], fill="#1E293B", width=2)
-                    
-        # Draw nodes
-        for nx, ny in nodes:
-            r = random.randint(8, 20)
-            draw.ellipse([nx-r, ny-r, nx+r, ny+r], fill=random.choice(colors), outline="#F8FAFC", width=2)
-            
-    elif "database" in prompt or "cylinder" in prompt or "store" in prompt:
-        # Draw floating database cylinders
-        for i in range(3):
-            dx = center_x - 100 + (i * 80)
-            dy = center_y - 150 + (i * 50)
-            cw, ch = 120, 160
-            color = random.choice(colors[:3])
-            # Draw cylinder body
-            draw.rectangle([dx, dy, dx+cw, dy+ch], fill=color)
-            # Draw bottom ellipse
-            draw.ellipse([dx, dy+ch-20, dx+cw, dy+ch+20], fill=color)
-            # Draw top ellipse (lid)
-            draw.ellipse([dx, dy-20, dx+cw, dy+20], fill="#F8FAFC", outline=color, width=3)
-            
-    else:
-        # Default abstract geometric composition
-        for _ in range(8):
-            shape_type = random.choice(["circle", "rect", "line"])
-            color = random.choice(colors)
-            sx = random.randint(art_x_start, art_x_start + art_w - 100)
-            sy = random.randint(art_y_start, art_y_start + art_h - 100)
-            sr = random.randint(40, 120)
-            
-            if shape_type == "circle":
-                draw.ellipse([sx, sy, sx+sr, sy+sr], outline=color, width=6)
-            elif shape_type == "rect":
-                draw.rectangle([sx, sy, sx+sr, sy+sr], outline=color, width=4)
-            else:
-                draw.line([(sx, sy), (sx+sr, sy+sr)], fill=color, width=8)
+    draw = ImageDraw.Draw(img)
+    # Bright white background for the diagram
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=15, fill="#F8FAFC", outline="#38BDF8", width=4)
+    
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            diagram_img = Image.open(io.BytesIO(response.read())).convert("RGBA")
+            diagram_img.thumbnail((box_w - 40, box_h - 40), Image.Resampling.LANCZOS)
+            paste_x = box_x + (box_w - diagram_img.width) // 2
+            paste_y = box_y + (box_h - diagram_img.height) // 2
+            img.paste(diagram_img, (paste_x, paste_y), diagram_img)
+    except Exception as e:
+        print(f"Failed to render mermaid diagram: {e}")
+        font = get_font("Arial Unicode.ttf", 30)
+        draw.text((box_x + 20, box_y + 20), "Diagram Error", fill="red", font=font)
 
-def render_slide(title, content_bullets, image_prompt, output_path):
-    """
-    Renders a landscape slide frame (1920x1080) using the specified color palette.
-    - Background: Slate (#0F172A)
-    - Title: Blue (#38BDF8)
-    - Content: White (#E2E8F0)
-    """
-    # Create canvas
-    width, height = 1920, 1080
-    bg_color = "#0F172A"
-    img = Image.new("RGB", (width, height), color=bg_color)
+def draw_background(draw, width, height):
+    for y in range(height):
+        ratio = y / height
+        r = int(15 - 10 * ratio)
+        g = int(23 - 8 * ratio)
+        b = int(42 - 17 * ratio)
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+    for x in range(0, width, 40):
+        for y in range(0, height, 40):
+            draw.rectangle([x, y, x+1, y+1], fill="#1E293B")
+
+
+def draw_curriculum_map(img, width, height, visual_content):
+    import json
+    try:
+        data = json.loads(visual_content)
+    except Exception:
+        data = {"past": [], "present": str(visual_content), "future": []}
+    
+    past = data.get("past", [])
+    present = data.get("present", "")
+    future = data.get("future", [])
+    
+    display_past = past[-2:]
+    display_future = future[:4]
+    
+    items = []
+    for p in display_past: items.append(("past", p))
+    items.append(("present", present))
+    for f in display_future: items.append(("future", f))
+    
     draw = ImageDraw.Draw(img)
     
-    # Load fonts
-    title_font = get_font("Helvetica.ttc", 60)
-    if isinstance(title_font, ImageFont.ImageFont): # If fallback default font is loaded, size is ignored
-        pass
-    else:
-        # Re-try Arial if Helvetica isn't standard font format
-        title_font = get_font("Arial.ttf", 60)
+    box_x = int(width * 0.55)
+    box_y = int(height * 0.2)
+    box_w = int(width * 0.4)
+    box_h = int(height * 0.6)
+    
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=15, fill="#1E293B", outline="#334155", width=3)
+    
+    header_font = get_font("Arial Unicode.ttf", 30)
+    draw.text((box_x + 30, box_y + 20), "Learning Path Timeline", font=header_font, fill="#A78BFA")
+    draw.line([(box_x + 30, box_y + 70), (box_x + box_w - 30, box_y + 70)], fill="#334155", width=2)
+    
+    item_font = get_font("Arial Unicode.ttf", 28)
+    bold_font = get_font("Arial Unicode.ttf", 32)
+    
+    y_offset = box_y + 100
+    for state, text in items:
+        lines = wrap_text(text, bold_font if state == "present" else item_font, box_w - 100)
         
-    bullet_font = get_font("Arial.ttf", 36)
+        # Highlight background for present
+        if state == "present":
+            draw.rounded_rectangle([box_x + 60, y_offset - 5, box_x + box_w - 20, y_offset + len(lines)*40], radius=8, fill="#0F172A", outline="#38BDF8", width=2)
+            
+        for i, line in enumerate(lines):
+            if i == 0:
+                if state == "past":
+                    draw.text((box_x + 30, y_offset), "✅", font=item_font, fill="#10B981")
+                elif state == "present":
+                    draw.text((box_x + 30, y_offset), "▶", font=bold_font, fill="#38BDF8")
+                else:
+                    draw.text((box_x + 30, y_offset), "○", font=item_font, fill="#64748B")
+            
+            if state == "past":
+                draw.text((box_x + 70, y_offset), line, font=item_font, fill="#64748B")
+            elif state == "present":
+                draw.text((box_x + 70, y_offset), line, font=bold_font, fill="#38BDF8")
+            else:
+                draw.text((box_x + 70, y_offset), line, font=item_font, fill="#94A3B8")
+                
+            y_offset += 40
+            
+        y_offset += 20
+
+def render_slide(title, content_text, visual_type, visual_content, output_base, output_content):
+
+    width, height = 1920, 1080
     
-    # Draw Title
-    title_x = 100
-    title_y = 100
-    draw.text((title_x, title_y), title, font=title_font, fill="#38BDF8")
+    # 1. Base Image (Background + Title)
+    base_img = Image.new("RGBA", (width, height), (0,0,0,255))
+    base_draw = ImageDraw.Draw(base_img)
+    draw_background(base_draw, width, height)
     
-    # Draw horizontal divider line under title
-    draw.line([(title_x, title_y + 90), (width * 0.55, title_y + 90)], fill="#38BDF8", width=3)
+    title_font = get_font("Arial Unicode.ttf", 60)
+    bullet_font = get_font("Arial Unicode.ttf", 36)
     
-    # Draw Geometric Art on the right 40%
-    if image_prompt:
-        draw_geometric_art(draw, width, height, image_prompt)
+    title_x, title_y = 100, 100
+    base_draw.text((title_x, title_y), title, font=title_font, fill="#38BDF8")
+    base_draw.line([(title_x, title_y + 90), (width * 0.55, title_y + 90)], fill="#38BDF8", width=3)
     
-    # Draw bullet points (Constrain width to 55%)
+    base_img.save(output_base)
+    
+    # 2. Content Image (Transparent background + Content Text + Visual Box)
+    content_img = Image.new("RGBA", (width, height), (0,0,0,0))
+    content_draw = ImageDraw.Draw(content_img)
+    
+    # Visuals
+    if visual_type == "code_snippet":
+        draw_code_block(content_draw, width, height, visual_content)
+    elif visual_type == "concept_box":
+        draw_concept_box(content_draw, width, height, visual_content, bullet_font)
+    elif visual_type in ["architecture_diagram", "sequence_diagram"]:
+        draw_mermaid_diagram(content_img, width, height, visual_content)
+    elif visual_type == "curriculum_map":
+        draw_curriculum_map(content_img, width, height, visual_content)
+        
+    # Text
     content_y = 280
     max_text_width = (width * 0.55) - title_x
-    
-    for bullet in content_bullets:
-        wrapped_lines = wrap_text(bullet, bullet_font, max_text_width)
-        
-        for idx, line in enumerate(wrapped_lines):
-            if idx == 0:
-                # Draw the bullet symbol and first line
-                draw.text((title_x + 20, content_y), "•", font=bullet_font, fill="#38BDF8")
-                draw.text((title_x + 60, content_y), line, font=bullet_font, fill="#E2E8F0")
-            else:
-                # Draw subsequent wrapped lines indented
-                draw.text((title_x + 60, content_y), line, font=bullet_font, fill="#E2E8F0")
-            
-            # Line spacing
+    if content_text:
+        wrapped_lines = wrap_text(str(content_text), bullet_font, max_text_width)
+        for line in wrapped_lines:
+            content_draw.text((title_x, content_y), line, font=bullet_font, fill="#E2E8F0")
             content_y += 50
             
-        # Bullet spacing
-        content_y += 30
-        
-    # Save frame
-    img.save(output_path)
+    content_img.save(output_content)
+
