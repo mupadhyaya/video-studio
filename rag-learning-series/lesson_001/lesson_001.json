@@ -1,0 +1,60 @@
+{
+  "video_id": "lesson_001",
+  "meta_title": "RAG Day 1: What is a Knowledge Cutoff?",
+  "storyboard": [
+    {
+      "title_en": "Series Curriculum Map",
+      "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
+      "content_text_en": "Tracking our progress through the Learning Series.",
+      "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
+      "visual_type": "curriculum_map",
+      "visual_content": "{\"past\": [], \"present\": \"Module 1.1: What is a Knowledge Cutoff?\", \"future\": [\"Module 1.2: The RAG Paradigm Shift\", \"Module 2.1: Introduction to Vector Databases\", \"Module 2.2: Deep Dive into Text Embeddings\", \"Module 3.1: Data Chunking Strategies\", \"Module 3.2: Practical Chunking Code Exercise\", \"Module 3.3: Chunking Exercise Solutions\", \"Module 4.1: The Retrieval Process\", \"Module 4.2: Vector Search Algorithms (KNN/ANN)\", \"Module 5.1: Synthesizing the Final Answer\", \"Module 5.2: Handling Hallucinations in RAG\", \"Module 6.1: Evaluating RAG Pipelines (RAGAS)\", \"Module 6.2: Advanced RAG: Query Transformation\", \"Module 6.3: Advanced RAG: Re-ranking\", \"Module 7.1: Model Context Protocol (MCP) Intro\", \"Module 7.2: Exposing Vector Databases via MCP\", \"Module 7.3: Connecting Agents to MCP Servers\", \"Module 8.1: End-to-End RAG Project Setup\", \"Module 8.2: End-to-End RAG Project Solution\", \"Agentic AI Day 1: What are Autonomous Agents?\", \"Agentic AI Day 2: Tool Calling and APIs\"]}",
+      "narration_text_en": "Welcome back! Today we are covering: Module 1.1: What is a Knowledge Cutoff?. Let's dive in.",
+      "narration_text_hi": "वापसी पर स्वागत है! आज हम कवर कर रहे हैं: Module 1.1: What is a Knowledge Cutoff?। आइए शुरू करते हैं।"
+    },
+    {
+      "slide_index": 1,
+      "title_en": "The Static Mind of an AI",
+      "title_hi": "एआई का स्थिर दिमाग",
+      "content_text_en": "Imagine an AI trained like a student cramming for a final exam. It reads billions of web pages, books, and articles, but only up to a specific date. This date is its 'knowledge cutoff,' a hard stop beyond which it knows nothing new.",
+      "content_text_hi": "एक ऐसे एआई की कल्पना करें जिसे अंतिम परीक्षा के लिए रटने वाले छात्र की तरह प्रशिक्षित किया गया हो। यह अरबों वेब पेज, किताबें और लेख पढ़ता है, लेकिन केवल एक विशिष्ट तारीख तक। यह तारीख इसका 'ज्ञान कटऑफ' है, एक ऐसी सीमा जिसके आगे यह कुछ भी नया नहीं जानता।",
+      "narration_text_en": "Hey everyone, and welcome to Day 1 of our RAG series! Today, we're starting with a fundamental concept: the knowledge cutoff. Think of a Large Language Model, or LLM, like a genius who has read an entire library, but the library hasn't received any new books since last year. This means the AI is 'frozen in time.' It can tell you about historical events and scientific principles, but it can't tell you who won last night's game or the latest news. This fixed point in its training data is what we call the knowledge cutoff.",
+      "narration_text_hi": "नमस्ते दोस्तों, और हमारी RAG सीरीज़ के पहले दिन में आपका स्वागत है! आज, हम एक मौलिक अवधारणा के साथ शुरुआत कर रहे हैं: ज्ञान कटऑफ। एक लार्ज लैंग्वेज मॉडल, या एलएलएम के बारे में सोचें, एक ऐसे जीनियस की तरह जिसने पूरी लाइब्रेरी पढ़ ली है, लेकिन उस लाइब्रेरी में पिछले साल के बाद से कोई नई किताब नहीं आई है। इसका मतलब है कि एआई 'समय में जम गया है'। यह आपको ऐतिहासिक घटनाओं और वैज्ञानिक सिद्धांतों के बारे में बता सकता है, लेकिन यह आपको यह नहीं बता सकता कि कल रात का खेल कौन जीता या ताज़ा खबरें क्या हैं। इसके प्रशिक्षण डेटा में यह निश्चित बिंदु ही वह है जिसे हम ज्ञान कटऑफ कहते हैं।",
+      "visual_type": "concept_box",
+      "visual_content": "Analogy: An encyclopedia printed in 2021. It's incredibly knowledgeable about everything up to that point, but completely unaware of events in 2022 and beyond."
+    },
+    {
+      "slide_index": 2,
+      "title_en": "The Problem with 'Stale' Information",
+      "title_hi": "'पुरानी' जानकारी से समस्या",
+      "content_text_en": "This knowledge cutoff creates a major challenge. When we ask an AI about recent events, new product releases, or evolving situations, its answers can be outdated, inaccurate, or simply state that it doesn't know. This limits its usefulness for real-time applications.",
+      "content_text_hi": "यह ज्ञान कटऑफ एक बड़ी चुनौती पैदा करता है। जब हम किसी एआई से हाल की घटनाओं, नए उत्पाद रिलीज, या विकसित हो रही स्थितियों के बारे में पूछते हैं, तो उसके उत्तर पुराने, गलत हो सकते हैं, या वह बस यह कह सकता है कि उसे नहीं पता। यह रीयल-टाइम एप्लिकेशन के लिए इसकी उपयोगिता को सीमित करता है।",
+      "narration_text_en": "So, why is this a big deal? In our fast-paced world, information becomes 'stale' very quickly. If you're building a customer service bot, you need it to know about your latest products, not the ones from two years ago. The knowledge cutoff means the model's core 'brain' can't be updated on the fly. This leads to what we call 'hallucinations' or simply providing outdated information, which can be misleading and unhelpful for users who expect current answers.",
+      "narration_text_hi": "तो, यह इतनी बड़ी बात क्यों है? हमारी तेज़-तर्रार दुनिया में, जानकारी बहुत जल्दी 'पुरानी' हो जाती है। यदि आप एक ग्राहक सेवा बॉट बना रहे हैं, तो आपको उसे अपने नवीनतम उत्पादों के बारे में जानने की ज़रूरत है, न कि दो साल पहले के उत्पादों के बारे में। ज्ञान कटऑफ का मतलब है कि मॉडल के मुख्य 'दिमाग' को तुरंत अपडेट नहीं किया जा सकता है। यह उस चीज़ की ओर ले जाता है जिसे हम 'मतिभ्रम' या बस पुरानी जानकारी प्रदान करना कहते हैं, जो उन उपयोगकर्ताओं के लिए भ्रामक और अनुपयोगी हो सकता है जो वर्तमान उत्तरों की अपेक्षा करते हैं।",
+      "visual_type": "code_snippet",
+      "visual_content": "llm_response = ask_llm(\"Who won the 2024 F1 World Championship?\")\n\n# Potential LLM Output:\n# \"As of my last update in early 2023, the 2024 Formula 1 season has not yet occurred. I do not have information on events after my knowledge cutoff.\""
+    },
+    {
+      "slide_index": 3,
+      "title_en": "The Slow Path: Retraining the Model",
+      "title_hi": "धीमा रास्ता: मॉडल को फिर से प्रशिक्षित करना",
+      "content_text_en": "The most direct way to update an AI's knowledge is to completely retrain it with a new, larger dataset that includes recent information. However, this process is incredibly expensive, time-consuming, and environmentally intensive, making it impractical to do frequently.",
+      "content_text_hi": "किसी एआई के ज्ञान को अपडेट करने का सबसे सीधा तरीका यह है कि इसे एक नए, बड़े डेटासेट के साथ पूरी तरह से फिर से प्रशिक्षित किया जाए जिसमें हाल की जानकारी शामिल हो। हालाँकि, यह प्रक्रिया अविश्वसनीय रूप से महंगी, समय लेने वाली और पर्यावरण की दृष्टि से गहन है, जिससे इसे बार-बार करना अव्यावहारिक हो जाता है।",
+      "narration_text_en": "You might be thinking, 'Why not just update the AI with new data?' That's a great question! The traditional method is called 'retraining.' This involves taking the entire massive dataset the model was originally trained on, adding all the new information, and starting the training process all over again. This is a monumental task that can take weeks or months and cost millions of dollars in computing power. It's like rebuilding an entire skyscraper just to add a new window; simply not feasible for daily changes.",
+      "narration_text_hi": "आप सोच रहे होंगे, 'एआई को नए डेटा के साथ अपडेट क्यों नहीं किया जाता?' यह एक बेहतरीन सवाल है! पारंपरिक विधि को 'पुनर्प्रशिक्षण' कहा जाता है। इसमें उस पूरे विशाल डेटासेट को लेना शामिल है जिस पर मॉडल को मूल रूप से प्रशिक्षित किया गया था, सभी नई जानकारी जोड़ना, और प्रशिक्षण प्रक्रिया को फिर से शुरू करना। यह एक बहुत बड़ा काम है जिसमें हफ्तों या महीनों लग सकते हैं और कंप्यूटिंग शक्ति में लाखों डॉलर खर्च हो सकते हैं। यह एक नई खिड़की जोड़ने के लिए पूरी गगनचुंबी इमारत को फिर से बनाने जैसा है; दैनिक परिवर्तनों के लिए यह संभव नहीं है।",
+      "visual_type": "concept_box",
+      "visual_content": "Analogy: Re-printing and re-distributing an entire 24-volume encyclopedia series every single month just to add a few new articles."
+    },
+    {
+      "slide_index": 4,
+      "title_en": "A Better Way: Retrieval-Augmented Generation (RAG)",
+      "title_hi": "एक बेहतर तरीका: रिट्रीवल-ऑगमेंटेड जेनरेशन (RAG)",
+      "content_text_en": "This is where RAG comes in. Instead of retraining the entire model, RAG allows the AI to access and retrieve fresh, external information in real-time. It's like giving our genius student an open-book test with access to a live internet connection, instantly overcoming the knowledge cutoff.",
+      "content_text_hi": "यहीं पर RAG काम आता है। पूरे मॉडल को फिर से प्रशिक्षित करने के बजाय, RAG एआई को वास्तविक समय में ताज़ा, बाहरी जानकारी तक पहुँचने और पुनः प्राप्त करने की अनुमति देता है। यह हमारे प्रतिभाशाली छात्र को एक लाइव इंटरनेट कनेक्शन के साथ एक ओपन-बुक टेस्ट देने जैसा है, जो तुरंत ज्ञान कटऑफ पर काबू पा लेता है।",
+      "narration_text_en": "So, if retraining is too slow and expensive, what's the solution? This is the central problem that Retrieval-Augmented Generation, or RAG, is designed to solve. RAG is a clever technique that doesn't change the model's core knowledge. Instead, it gives the model a tool to look up relevant, up-to-date information from an external source *before* it generates an answer. It's a game-changer! But how does the AI know *what* to look up and *where* to find it? That's the magic of our next topic. Join me for **RAG Day 2**, where we'll dive deep into **Vector Databases and Embeddings** to see how we make this real-time retrieval possible.",
+      "narration_text_hi": "तो, अगर पुनर्प्रशिक्षण बहुत धीमा और महंगा है, तो समाधान क्या है? यह केंद्रीय समस्या है जिसे रिट्रीवल-ऑगमेंटेड जेनरेशन, या RAG, हल करने के लिए डिज़ाइन किया गया है। RAG एक चतुर तकनीक है जो मॉडल के मूल ज्ञान को नहीं बदलती है। इसके बजाय, यह मॉडल को उत्तर उत्पन्न करने से *पहले* एक बाहरी स्रोत से प्रासंगिक, अप-टू-डेट जानकारी देखने के लिए एक उपकरण देता है। यह एक गेम-चेंजर है! लेकिन एआई को कैसे पता चलता है कि *क्या* देखना है और *कहाँ* खोजना है? यहीं पर हमारे अगले विषय का जादू आता है। **RAG दिवस 2** के लिए मेरे साथ जुड़ें, जहाँ हम यह देखने के लिए **वेक्टर डेटाबेस और एम्बेडिंग** में गहराई से उतरेंगे कि हम इस रीयल-टाइम रिट्रीवल को कैसे संभव बनाते हैं।",
+      "visual_type": "concept_box",
+      "visual_content": "Analogy: Instead of memorizing today's newspaper, the AI is simply given a copy to read from whenever it's asked about current events."
+    }
+  ]
+}

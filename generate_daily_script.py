@@ -88,7 +88,7 @@ def generate_lesson():
         )
     )
     
-    out_dir = f"rag-learning-series-repo/lesson_{day_num:03d}"
+    out_dir = f"rag-learning-series/lesson_{day_num:03d}"
     os.makedirs(out_dir, exist_ok=True)
     filename = f"{out_dir}/lesson_{day_num:03d}.json"
     

@@ -45,7 +45,7 @@ jobs:
       - name: Render presentation videos
         run: |
           # Find today's generated lesson file
-          LESSON_FILE=$(ls -t rag-learning-series-repo/lesson_*/lesson_*.json | head -n 1)
+          LESSON_FILE=$(ls -t rag-learning-series/lesson_*/lesson_*.json | head -n 1)
           VIDEO_ID=$(basename "$LESSON_FILE" .json)
           echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
           python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
@@ -55,30 +55,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: rendered-videos
-          path: "rag-learning-series-repo/**/*.mp4"
+          path: "rag-learning-series/**/*.mp4"
           retention-days: 14
 
-      # ── 8. Commit curriculum progress to main repo ─────────────────────────
-      - name: Commit curriculum progress
+      # ── 8. Commit to current repo ───────────────────────────────────────────
+      - name: Commit curriculum and generated videos
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add curriculum.txt rag_curriculum.txt
-          git commit -m "chore: advance curriculum" || echo "No changes to commit"
-          git push
-
-      # ── 9. Push compiled videos to dedicated learning repo ──────────────────
-      - name: Push to Dedicated Repo
-        run: |
-          # Clone the target repo using PAT
-          git clone https://x-access-token:${{ secrets.SERIES_REPO_PAT }}@github.com/mupadhyaya/rag-learning-series.git external_repo
-          
-          # Copy the generated lesson output (JSON, MP4s, PNGs) into the repo
-          cp -r rag-learning-series-repo/* external_repo/
-          
-          cd external_repo
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "feat: Add newly generated lesson video and assets" || echo "No changes to commit"
+          git add curriculum.txt rag_curriculum.txt rag-learning-series/
+          git commit -m "chore: auto-generate lesson and advance curriculum" || echo "No changes to commit"
           git push

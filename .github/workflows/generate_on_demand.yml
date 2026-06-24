@@ -47,7 +47,7 @@ jobs:
       - name: Render presentation videos
         run: |
           DAY_PADDED=$(printf "%03d" ${{ github.event.inputs.day_number }})
-          LESSON_FILE="rag-learning-series-repo/lesson_${DAY_PADDED}/lesson_${DAY_PADDED}.json"
+          LESSON_FILE="rag-learning-series/lesson_${DAY_PADDED}/lesson_${DAY_PADDED}.json"
           VIDEO_ID="lesson_${DAY_PADDED}"
           echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
           python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
@@ -57,21 +57,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: generated-on-demand-videos
-          path: "rag-learning-series-repo/**/*.mp4"
+          path: "rag-learning-series/**/*.mp4"
           retention-days: 14
 
-      # ── 8. Push compiled videos to dedicated learning repo ──────────────────
-      - name: Push to Dedicated Repo
+      # ── 8. Commit to current repo ───────────────────────────────────────────
+      - name: Commit generated videos to repo
         run: |
-          # Clone the target repo using PAT
-          git clone https://x-access-token:${{ secrets.SERIES_REPO_PAT }}@github.com/mupadhyaya/rag-learning-series.git external_repo
-          
-          # Copy the generated lesson output (JSON, MP4s, PNGs) into the repo
-          cp -r rag-learning-series-repo/* external_repo/
-          
-          cd external_repo
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
+          git add rag-learning-series/
           git commit -m "feat: Manual RE-GENERATE & render of lesson ${{ github.event.inputs.day_number }}" || echo "No changes to commit"
           git push
