@@ -17,3 +17,7 @@ Module 7.2: Exposing Vector Databases via MCP
 Module 7.3: Connecting Agents to MCP Servers
 Module 8.1: End-to-End RAG Project Setup
 Module 8.2: End-to-End RAG Project Solution
+Module 9.1: Productionizing RAG
+Module 9.2: Multi-Modal RAG
+Module 10.1: Introduction to GraphRAG
+Module 10.2: Agentic RAG

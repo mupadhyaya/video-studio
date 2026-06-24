@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       lesson_path:
-        description: "Path to the lesson JSON file (e.g., rag-learning-series-repo/lesson_001/lesson_001.json)"
+        description: 'Path to the lesson JSON (e.g. rag_learning_series/lesson_001/lesson_001.json)'
         required: true
-        default: "rag-learning-series-repo/lesson_001/lesson_001.json"
+        default: 'rag_learning_series/lesson_001/lesson_001.json'
 
 jobs:
   render:
@@ -15,7 +15,6 @@ jobs:
       contents: write
 
     env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       YOUTUBE_OAUTH_TOKEN: ${{ secrets.YOUTUBE_OAUTH_TOKEN }}
 
     steps:
@@ -39,11 +38,13 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements.txt
 
-      # ── 5. Render dual-language videos (Skip generation step) ──────────────
+      # ── 5. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
           LESSON_FILE="${{ github.event.inputs.lesson_path }}"
           VIDEO_ID=$(basename "$LESSON_FILE" .json)
+          SERIES_DIR=$(echo "$LESSON_FILE" | cut -d'/' -f1)
+          echo "SERIES_DIR=$SERIES_DIR" >> $GITHUB_ENV
           echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
           python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
 
@@ -52,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: on-demand-rendered-videos
-          path: "rag-learning-series/**/*.mp4"
+          path: "${{ env.SERIES_DIR }}/**/*.mp4"
           retention-days: 14
 
       # ── 7. Commit to current repo ───────────────────────────────────────────
@@ -60,6 +61,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add rag-learning-series/
+          git add *_learning_series/
           git commit -m "feat: Manual re-render of ${{ github.event.inputs.lesson_path }}" || echo "No changes to commit"
           git push

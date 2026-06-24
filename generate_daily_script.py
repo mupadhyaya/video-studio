@@ -32,16 +32,18 @@ def generate_lesson():
             if line.endswith(".txt"):
                 try:
                     with open(line, "r") as sub_f:
-                        topics.extend([sub_line.strip() for sub_line in sub_f if sub_line.strip()])
+                        topics.extend([{"topic": sub_line.strip(), "source": line} for sub_line in sub_f if sub_line.strip()])
                 except Exception:
                     pass
             else:
-                topics.append(line)
+                topics.append({"topic": line, "source": "rag_curriculum.txt"})
     
     # Wrap around if day_num exceeds available topics
     topic_index = (day_num - 1) % len(topics)
-    current_topic = topics[topic_index]
-    next_topic = topics[(topic_index + 1) % len(topics)]
+    current_topic_info = topics[topic_index]
+    current_topic = current_topic_info["topic"]
+    current_source = current_topic_info["source"]
+    next_topic = topics[(topic_index + 1) % len(topics)]["topic"]
     
     prompt = f"""
     You are the Lead Curriculum Director for an educational AI channel. 
@@ -88,7 +90,9 @@ def generate_lesson():
         )
     )
     
-    out_dir = f"rag-learning-series/lesson_{day_num:03d}"
+    base_name = current_source.replace("_curriculum.txt", "").replace(".txt", "")
+    series_dir = f"{base_name}_learning_series"
+    out_dir = f"{series_dir}/lesson_{day_num:03d}"
     os.makedirs(out_dir, exist_ok=True)
     filename = f"{out_dir}/lesson_{day_num:03d}.json"
     
@@ -107,9 +111,9 @@ def generate_lesson():
             "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
             "visual_type": "curriculum_map",
             "visual_content": json.dumps({
-                "past": topics[:topic_index],
+                "past": [t["topic"] for t in topics[:topic_index]],
                 "present": current_topic,
-                "future": topics[topic_index+1:]
+                "future": [t["topic"] for t in topics[topic_index+1:]]
             }),
             "narration_text_en": f"Welcome back! Today we are covering: {current_topic}. Let's dive in.",
             "narration_text_hi": f"वापसी पर स्वागत है! आज हम कवर कर रहे हैं: {current_topic}। आइए शुरू करते हैं।"
@@ -120,12 +124,32 @@ def generate_lesson():
         
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+            
+        for slide in storyboard:
+            if slide.get("visual_type") == "code_snippet":
+                snippet_code = slide.get("visual_content", "").strip()
+                if snippet_code:
+                    # Strip python markdown if model accidentally included it
+                    snippet_code = re.sub(r'^```python\s*', '', snippet_code)
+                    snippet_code = re.sub(r'\s*```$', '', snippet_code)
+                    snippet_file = f"{out_dir}/snippet_{slide.get('slide_index')}.py"
+                    with open(snippet_file, "w", encoding="utf-8") as sf:
+                        sf.write(snippet_code)
+                    print(f"Extracted python snippet to {snippet_file}")
+                    
     except Exception as e:
         print(f"Failed to parse or inject agenda slide: {e}")
         with open(filename, "w", encoding="utf-8") as f:
             f.write(response.text)
         
     print(f"✅ Successfully generated {filename}")
+
+    github_env = os.environ.get('GITHUB_ENV')
+    if github_env:
+        with open(github_env, 'a') as env_file:
+            env_file.write(f"LESSON_DIR={out_dir}\n")
+            env_file.write(f"VIDEO_ID=lesson_{day_num:03d}\n")
+            env_file.write(f"SERIES_DIR={series_dir}\n")
 
 if __name__ == "__main__":
     generate_lesson()

@@ -46,18 +46,15 @@ jobs:
       # ── 6. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
-          DAY_PADDED=$(printf "%03d" ${{ github.event.inputs.day_number }})
-          LESSON_FILE="rag-learning-series/lesson_${DAY_PADDED}/lesson_${DAY_PADDED}.json"
-          VIDEO_ID="lesson_${DAY_PADDED}"
-          echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
-          python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
+          echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
+          python run_pipeline.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "$VIDEO_ID"
 
       # ── 7. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos
         uses: actions/upload-artifact@v4
         with:
           name: generated-on-demand-videos
-          path: "rag-learning-series/**/*.mp4"
+          path: "${{ env.SERIES_DIR }}/**/*.mp4"
           retention-days: 14
 
       # ── 8. Commit to current repo ───────────────────────────────────────────
@@ -65,6 +62,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add rag-learning-series/
+          git add *_learning_series/
           git commit -m "feat: Manual RE-GENERATE & render of lesson ${{ github.event.inputs.day_number }}" || echo "No changes to commit"
           git push

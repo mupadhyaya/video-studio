@@ -1,3 +1,2 @@
 rag_curriculum.txt
-Agentic AI Day 1: What are Autonomous Agents?
-Agentic AI Day 2: Tool Calling and APIs
+agent_curriculum.txt

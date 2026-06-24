@@ -44,18 +44,15 @@ jobs:
       # ── 6. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
-          # Find today's generated lesson file
-          LESSON_FILE=$(ls -t rag-learning-series/lesson_*/lesson_*.json | head -n 1)
-          VIDEO_ID=$(basename "$LESSON_FILE" .json)
-          echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
-          python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
+          echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
+          python run_pipeline.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "$VIDEO_ID"
 
       # ── 7. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos
         uses: actions/upload-artifact@v4
         with:
           name: rendered-videos
-          path: "rag-learning-series/**/*.mp4"
+          path: "${{ env.SERIES_DIR }}/**/*.mp4"
           retention-days: 14
 
       # ── 8. Commit to current repo ───────────────────────────────────────────
@@ -63,6 +60,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add curriculum.txt rag_curriculum.txt rag-learning-series/
+          git add curriculum.txt rag_curriculum.txt agent_curriculum.txt
+          git add *_learning_series/
           git commit -m "chore: auto-generate lesson and advance curriculum" || echo "No changes to commit"
           git push
