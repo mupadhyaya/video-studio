@@ -102,13 +102,17 @@ def main():
 
     try:
         with open(args.input, "r", encoding="utf-8") as f:
-            lesson_data = json.load(f)
+            raw_data = json.load(f)
     except Exception as e:
         print(f"Error: Failed to parse input JSON. Details: {e}")
         return
 
-    if isinstance(lesson_data, dict) and "storyboard" in lesson_data:
-        lesson_data = lesson_data["storyboard"]
+    meta_title = "Daily Tech Update"
+    if isinstance(raw_data, dict):
+        meta_title = raw_data.get("meta_title", meta_title)
+        lesson_data = raw_data.get("storyboard", raw_data)
+    else:
+        lesson_data = raw_data
 
     if not isinstance(lesson_data, list):
         print("Error: Input JSON must be a list of slide objects.")
@@ -134,13 +138,11 @@ def main():
             print("\n  [YOUTUBE] Valid OAuth token found in environment. Initiating upload...")
             from core.youtube_uploader import upload_video
             
-            # Extract main title from the first slide
-            base_title_en = lesson_data[0].get("title_en", "Daily Tech Update")
-            base_title_hi = lesson_data[0].get("title_hi", "डेली टेक अपडेट")
-            
+            # The Hindi slide title can still be used for the Hindi video if we want a localized title,
+            # but using meta_title guarantees the "Module X" prefix is retained.
             try:
-                upload_video(en_path, {"meta_title": f"[EN] {base_title_en}"})
-                upload_video(hi_path, {"meta_title": f"[HI] {base_title_hi}"})
+                upload_video(en_path, {"meta_title": f"[EN] {meta_title}"})
+                upload_video(hi_path, {"meta_title": f"[HI] {meta_title}"})
             except Exception as e:
                 print(f"  [ERROR] YouTube upload failed: {e}")
         else:
