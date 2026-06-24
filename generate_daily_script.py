@@ -49,7 +49,7 @@ def generate_lesson():
     The topic for today is: "{current_topic}"
     The next upcoming lecture will be: "{next_topic}"
     
-    The output MUST be valid JSON matching this schema exactly. Do not wrap in markdown blocks.
+    The output MUST be valid JSON matching this schema exactly.
     
     Requirements for the video lecture:
     - Create as many slides as needed to comprehensively cover the topic with high-quality depth. Do NOT restrict the number of slides.
@@ -59,7 +59,7 @@ def generate_lesson():
     - The total combined narration text across all slides must be around 300 words (which takes exactly 2 minutes to speak).
     - You must analyze the topic and decide the best visual aid. You MUST heavily prioritize generating a 'code_snippet', 'architecture_diagram', or 'sequence_diagram' over a generic 'concept_box' whenever the topic allows.
     - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. It must withstand public scrutiny.
-    - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code (do NOT wrap it in markdown backticks like ```mermaid).
+    - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code.
 
     {{
       "video_id": "lesson_{day_num:03d}",
