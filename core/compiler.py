@@ -9,25 +9,38 @@ from moviepy.video.fx import CrossFadeIn
 def compile_video(slides_data, images_dir, audio_dir, output_path):
     clips = []
     
-    # Pre-load avatar assets if they exist
+    # 1. Avatar Grid Processing
     avatars = {}
-    expected_avatars = ["idle", "bmp", "ee", "oh", "aa"]
-    all_exist = True
-    for name in expected_avatars:
-        if not os.path.exists(f"assets/avatar_{name}.png"):
-            all_exist = False
-            break
-            
-    if all_exist:
-        # Determine fixed target size based on 'idle'
-        base_img = Image.open("assets/avatar_idle.png")
-        aspect = base_img.width / base_img.height
+    master_grid_path = "assets/MASTER_AVATAR_6VISEME_GRID.png"
+    if os.path.exists(master_grid_path):
+        print("Loading and slicing master avatar grid...")
+        img = Image.open(master_grid_path).convert("RGBA")
+        frame_w = img.width // 3
+        frame_h = img.height // 2
+        
+        # Mapping: Row 1: idle, bmp, aa. Row 2: oh, ee, fv
+        viseme_names = ["idle", "bmp", "aa", "oh", "ee", "fv"]
+        
+        # Calculate target dimensions: height 350px
+        aspect = frame_w / frame_h
         target_w = int(350 * aspect)
         
-        for name in expected_avatars:
-            img = Image.open(f"assets/avatar_{name}.png").convert("RGBA")
-            # Force exactly the same size for ImageSequenceClip
-            avatars[name] = np.array(img.resize((target_w, 350), Image.Resampling.LANCZOS))
+        for idx, name in enumerate(viseme_names):
+            row = idx // 3
+            col = idx % 3
+            left = col * frame_w
+            upper = row * frame_h
+            right = left + frame_w
+            lower = upper + frame_h
+            
+            # Crop the grid
+            cropped = img.crop((left, upper, right, lower))
+            
+            # Resize
+            resized = cropped.resize((target_w, 350), Image.Resampling.LANCZOS)
+            avatars[name] = np.array(resized)
+    else:
+        print("Warning: MASTER_AVATAR_6VISEME_GRID.png not found. Avatar overlay will be disabled.")
         
     try:
         for i, slide in enumerate(slides_data):
@@ -54,10 +67,58 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                             .with_duration(content_duration)
                             .with_effects([CrossFadeIn(1.0)]))
                             
-            # [USER REQUEST: Avatar overlay temporarily disabled for later fixing]
-            # if avatars:
-            #     ...
-            slide_clip = CompositeVideoClip([base_clip, content_clip]).with_duration(duration).with_audio(audio_clip)
+            composite_layers = [base_clip, content_clip]
+            
+            # --- 2. Audio RMS Processing & Lip-sync ---
+            if avatars:
+                print(f"  Generating synchronized lip-sync for slide {i}...")
+                fps = 24
+                
+                try:
+                    audio_array = audio_clip.to_soundarray()
+                except Exception as e:
+                    print(f"Error reading audio array: {e}")
+                    audio_array = np.zeros((int(duration * audio_clip.fps), 2))
+                
+                audio_fps = audio_clip.fps
+                samples_per_video_frame = int(audio_fps / fps)
+                
+                avatar_frames = []
+                total_frames = int(duration * fps)
+                
+                for f_idx in range(total_frames):
+                    start_sample = f_idx * samples_per_video_frame
+                    end_sample = min(start_sample + samples_per_video_frame, len(audio_array))
+                    
+                    if start_sample >= len(audio_array):
+                        rms = 0.0
+                    else:
+                        chunk = audio_array[start_sample:end_sample]
+                        if len(chunk) > 0:
+                            # RMS = sqrt(mean(chunk^2))
+                            rms = np.sqrt(np.mean(chunk**2))
+                        else:
+                            rms = 0.0
+                    
+                    # 3. Tiered Volume-Banded Mapping
+                    if rms < 0.05:
+                        viseme = "idle"
+                    elif rms < 0.12:
+                        viseme = "ee"
+                    elif rms < 0.20:
+                        viseme = "fv"
+                    elif rms < 0.30:
+                        viseme = "oh"
+                    else:
+                        viseme = "aa"
+                        
+                    avatar_frames.append(avatars[viseme])
+                
+                # 4. Video Compositing
+                avatar_clip = ImageSequenceClip(avatar_frames, fps=fps).with_position(("right", "bottom")).with_duration(duration)
+                composite_layers.append(avatar_clip)
+                
+            slide_clip = CompositeVideoClip(composite_layers).with_duration(duration).with_audio(audio_clip)
 
             clips.append(slide_clip)
             
