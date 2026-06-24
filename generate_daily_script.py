@@ -66,6 +66,16 @@ def generate_lesson():
     {{
       "video_id": "lesson_{day_num:03d}",
       "meta_title": "{current_topic}",
+      "youtube_metadata_en": {{
+        "title": "[An engaging, search-optimized English YouTube title for this topic]",
+        "description": "[A detailed YouTube description including a summary, what they will learn, and relevant links or a call to action.]",
+        "tags": ["AI", "Tutorial", "list of 5 to 10 relevant tags"]
+      }},
+      "youtube_metadata_hi": {{
+        "title": "[An engaging, search-optimized Hindi YouTube title for this topic]",
+        "description": "[The exact same detailed YouTube description translated beautifully to Hindi.]",
+        "tags": ["AI in Hindi", "Hindi Tutorial", "list of 5 to 10 relevant tags"]
+      }},
       "storyboard": [
         {{
           "slide_index": 1,

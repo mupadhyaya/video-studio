@@ -7,6 +7,10 @@ from PIL import Image, ImageDraw, ImageFont
 
 def get_font(font_name="Arial.ttf", size=36):
     font_paths = [
+        # Check local assets for bundled fonts (e.g. Hind for Hindi support)
+        f"assets/fonts/{font_name}",
+        "assets/fonts/Hind-Regular.ttf",
+        # Standard system fallbacks
         f"/System/Library/Fonts/Supplemental/{font_name}",
         f"/Library/Fonts/{font_name}",
         f"/System/Library/Fonts/{font_name}",

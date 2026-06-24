@@ -138,11 +138,24 @@ def main():
             print("\n  [YOUTUBE] Valid OAuth token found in environment. Initiating upload...")
             from core.youtube_uploader import upload_video
             
-            # The Hindi slide title can still be used for the Hindi video if we want a localized title,
-            # but using meta_title guarantees the "Module X" prefix is retained.
+            yt_meta_en = raw_data.get("youtube_metadata_en", {})
+            yt_meta_hi = raw_data.get("youtube_metadata_hi", {})
+            
+            en_upload_data = {
+                "title": yt_meta_en.get("title", f"[EN] {meta_title}"),
+                "description": yt_meta_en.get("description", "Daily automated tech curriculum update."),
+                "tags": yt_meta_en.get("tags", ["AIML", "Tutorial", "AI"])
+            }
+            
+            hi_upload_data = {
+                "title": yt_meta_hi.get("title", f"[HI] {meta_title}"),
+                "description": yt_meta_hi.get("description", "डेली ऑटोमेटेड टेक अपडेट।"),
+                "tags": yt_meta_hi.get("tags", ["AIML", "Tutorial", "AI in Hindi"])
+            }
+            
             try:
-                upload_video(en_path, {"meta_title": f"[EN] {meta_title}"})
-                upload_video(hi_path, {"meta_title": f"[HI] {meta_title}"})
+                upload_video(en_path, en_upload_data)
+                upload_video(hi_path, hi_upload_data)
             except Exception as e:
                 print(f"  [ERROR] YouTube upload failed: {e}")
         else:

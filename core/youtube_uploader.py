@@ -13,9 +13,9 @@ def upload_video(video_path, metadata):
     
     body = {
         "snippet": {
-            "title": metadata.get("meta_title", "New AIML Lesson"),
-            "description": "Daily automated tech curriculum update.",
-            "tags": ["AIML", "RAG", "Engineering", "Tutorial"],
+            "title": metadata.get("title", metadata.get("meta_title", "New AIML Lesson")),
+            "description": metadata.get("description", "Daily automated tech curriculum update."),
+            "tags": metadata.get("tags", ["AIML", "RAG", "Engineering", "Tutorial"]),
             "categoryId": "27" # Education Category
         },
         "status": {
