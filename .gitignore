@@ -231,7 +231,8 @@ check_*.py
 patch_*.py
 align_*.py
 user_align.py
-*.mp4
+# We want to track final rendered videos, but ignore intermediate temp files
+*TEMP_MPY*.mp4
 temp_build_*/
 base.png
 content.png
