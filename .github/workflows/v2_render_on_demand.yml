@@ -49,7 +49,9 @@ jobs:
 
       # ── 5. Install Python dependencies ─────────────────────────────────────
       - name: Install Python packages
-        run: pip install -r requirements_v2.txt
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements_v2.txt
 
       # ── 5. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
