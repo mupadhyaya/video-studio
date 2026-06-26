@@ -9,38 +9,69 @@ from moviepy.video.fx import CrossFadeIn
 def compile_video(slides_data, images_dir, audio_dir, output_path):
     clips = []
     
-    # 1. Avatar Grid Processing
+    # 1. Avatar Pre-loading
     avatars = {}
-    master_grid_path = "assets/MASTER_AVATAR_6VISEME_GRID.png"
-    if os.path.exists(master_grid_path):
-        print("Loading and slicing master avatar grid...")
-        img = Image.open(master_grid_path).convert("RGBA")
-        frame_w = img.width // 3
-        frame_h = img.height // 2
+    
+    is_hindi = output_path.endswith("_hi.mp4")
+    
+    if is_hindi:
+        # HINDI LOGIC: Use perfectly stable masked avatars
+        viseme_mapping_hi = [
+            "hindi_rest",
+            "hindi_bmp",
+            "hindi_aa",
+            "hindi_oh",
+            "hindi_ee",
+            "hindi_ai"
+        ]
         
-        # Mapping: Row 1: idle, bmp, aa. Row 2: oh, ee, fv
-        viseme_names = ["idle", "bmp", "aa", "oh", "ee", "fv"]
-        
-        # Calculate target dimensions: height 350px
-        aspect = frame_w / frame_h
-        target_w = int(350 * aspect)
-        
-        for idx, name in enumerate(viseme_names):
-            row = idx // 3
-            col = idx % 3
-            left = col * frame_w
-            upper = row * frame_h
-            right = left + frame_w
-            lower = upper + frame_h
+        all_exist = True
+        for name in viseme_mapping_hi:
+            if not os.path.exists(f"assets/masked_{name}.png"):
+                all_exist = False
+                break
+                
+        if all_exist:
+            print("Loading OpenCV mouth-masked HINDI avatar images for zero facial jitter...")
+            base_img = Image.open("assets/masked_hindi_rest.png")
+            aspect = base_img.width / base_img.height
+            target_w = int(350 * aspect)
             
-            # Crop the grid
-            cropped = img.crop((left, upper, right, lower))
-            
-            # Resize
-            resized = cropped.resize((target_w, 350), Image.Resampling.LANCZOS)
-            avatars[name] = np.array(resized)
+            for name in viseme_mapping_hi:
+                img = Image.open(f"assets/masked_{name}.png").convert("RGBA")
+                resized = img.resize((target_w, 350), Image.Resampling.LANCZOS)
+                avatars[name] = np.array(resized)
+        else:
+            print("Warning: Missing masked_hindi_X.png in assets/. Hindi Avatar overlay disabled.")
     else:
-        print("Warning: MASTER_AVATAR_6VISEME_GRID.png not found. Avatar overlay will be disabled.")
+        # ENGLISH LOGIC: OpenCV Masked Avatars (from previous step)
+        viseme_mapping = {
+            "idle": 0,
+            "bmp":  0,
+            "ee":   1,
+            "fv":   1,
+            "oh":   2,
+            "aa":   3
+        }
+        
+        all_exist = True
+        for i in range(4):
+            if not os.path.exists(f"assets/masked_avatar_{i}.png"):
+                all_exist = False
+                break
+                
+        if all_exist:
+            print("Loading OpenCV mouth-masked avatar images for zero facial jitter (English)...")
+            base_img = Image.open("assets/masked_avatar_0.png")
+            aspect = base_img.width / base_img.height
+            target_w = int(350 * aspect)
+            
+            for name, file_idx in viseme_mapping.items():
+                img = Image.open(f"assets/masked_avatar_{file_idx}.png").convert("RGBA")
+                resized = img.resize((target_w, 350), Image.Resampling.LANCZOS)
+                avatars[name] = np.array(resized)
+        else:
+            print("Warning: Missing masked_avatar_X.png in assets/. Avatar overlay disabled.")
         
     try:
         for i, slide in enumerate(slides_data):
@@ -83,39 +114,68 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                 audio_fps = audio_clip.fps
                 samples_per_video_frame = int(audio_fps / fps)
                 
-                avatar_frames = []
                 total_frames = int(duration * fps)
+                avatar_frames = []
                 
+                # 1. Calculate raw RMS per frame
+                raw_rms = []
                 for f_idx in range(total_frames):
                     start_sample = f_idx * samples_per_video_frame
                     end_sample = min(start_sample + samples_per_video_frame, len(audio_array))
                     
                     if start_sample >= len(audio_array):
-                        rms = 0.0
+                        raw_rms.append(0.0)
                     else:
                         chunk = audio_array[start_sample:end_sample]
                         if len(chunk) > 0:
-                            # RMS = sqrt(mean(chunk^2))
-                            rms = np.sqrt(np.mean(chunk**2))
+                            raw_rms.append(np.sqrt(np.mean(chunk**2)))
                         else:
-                            rms = 0.0
+                            raw_rms.append(0.0)
+                
+                # 2. Smooth the volume data to remove rapid flapping/jitter
+                # A 6-frame window (250ms) is perfect to blend out micro-bursts and smooth Hindi lip-sync
+                window_size = 6 if is_hindi else 4
+                if len(raw_rms) >= window_size:
+                    smoothed_rms = np.convolve(raw_rms, np.ones(window_size)/window_size, mode='same')
+                else:
+                    smoothed_rms = raw_rms
                     
-                    # 3. Tiered Volume-Banded Mapping
-                    if rms < 0.05:
-                        viseme = "idle"
-                    elif rms < 0.12:
-                        viseme = "ee"
-                    elif rms < 0.20:
-                        viseme = "fv"
-                    elif rms < 0.30:
-                        viseme = "oh"
+                # 3. Assign visemes based on smoothed RMS
+                for rms in smoothed_rms:
+                    if is_hindi:
+                        # HINDI OPTIMIZED THRESHOLDS
+                        if rms < 0.05:
+                            viseme = "hindi_rest"
+                        elif rms < 0.12:
+                            viseme = "hindi_ai"
+                        elif rms < 0.20:
+                            viseme = "hindi_ee"
+                        elif rms < 0.30:
+                            viseme = "hindi_oh"
+                        elif rms < 0.40:
+                            viseme = "hindi_bmp"
+                        else:
+                            viseme = "hindi_aa"
                     else:
-                        viseme = "aa"
+                        # ENGLISH STANDARD THRESHOLDS
+                        if rms < 0.05:
+                            viseme = "idle"
+                        elif rms < 0.12:
+                            viseme = "ee"
+                        elif rms < 0.20:
+                            viseme = "fv"
+                        elif rms < 0.30:
+                            viseme = "oh"
+                        else:
+                            viseme = "aa"
                         
                     avatar_frames.append(avatars[viseme])
                 
                 # 4. Video Compositing
-                avatar_clip = ImageSequenceClip(avatar_frames, fps=fps).with_position(("right", "bottom")).with_duration(duration)
+                vw, vh = base_clip.size
+                ax = vw - target_w - 40
+                ay = vh - 350 - 40
+                avatar_clip = ImageSequenceClip(avatar_frames, fps=fps).with_position((ax, ay)).with_duration(duration)
                 composite_layers.append(avatar_clip)
                 
             slide_clip = CompositeVideoClip(composite_layers).with_duration(duration).with_audio(audio_clip)

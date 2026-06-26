@@ -7,6 +7,10 @@ on:
         description: 'Path to the lesson JSON (e.g. rag_learning_series/lesson_001/lesson_001.json)'
         required: true
         default: 'rag_learning_series/lesson_001/lesson_001.json'
+      language:
+        description: "Language to render (en, hi, all)"
+        required: true
+        default: "all"
 
 jobs:
   render:
@@ -46,7 +50,7 @@ jobs:
           SERIES_DIR=$(echo "$LESSON_FILE" | cut -d'/' -f1)
           echo "SERIES_DIR=$SERIES_DIR" >> $GITHUB_ENV
           echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
-          python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID"
+          python run_pipeline.py --input "$LESSON_FILE" --video-id "$VIDEO_ID" --lang "${{ github.event.inputs.language }}"
 
       # ── 6. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos

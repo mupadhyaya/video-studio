@@ -7,6 +7,10 @@ on:
         description: "Day/Lesson number to generate (e.g., 1 for lesson_001)"
         required: true
         default: "1"
+      language:
+        description: "Language to render (en, hi, all)"
+        required: true
+        default: "all"
 
 jobs:
   render:
@@ -47,7 +51,7 @@ jobs:
       - name: Render presentation videos
         run: |
           echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
-          python run_pipeline.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "$VIDEO_ID"
+          python run_pipeline.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "$VIDEO_ID" --lang "${{ github.event.inputs.language }}"
 
       # ── 7. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos

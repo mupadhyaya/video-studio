@@ -93,6 +93,12 @@ def main():
         default="dark",
         help="Visual theme preset (reserved for future use).",
     )
+    parser.add_argument(
+        "--lang",
+        default="all",
+        choices=["en", "hi", "all"],
+        help="Language to render (en, hi, or all).",
+    )
     args = parser.parse_args()
 
     # --- Validate input ---
@@ -124,13 +130,16 @@ def main():
         en_path = os.path.join(input_dir, f"{args.video_id}_en.mp4")
         hi_path = os.path.join(input_dir, f"{args.video_id}_hi.mp4")
 
-        await build_video_for_language(lesson_data, "en", args.theme, en_path)
-        await build_video_for_language(lesson_data, "hi", args.theme, hi_path)
+        if args.lang in ["en", "all"]:
+            await build_video_for_language(lesson_data, "en", args.theme, en_path)
+            
+        if args.lang in ["hi", "all"]:
+            await build_video_for_language(lesson_data, "hi", args.theme, hi_path)
 
         print(f"\n{'='*60}")
         print("  All builds complete!")
-        print(f"  English : {en_path}")
-        print(f"  Hindi   : {hi_path}")
+        if args.lang in ["en", "all"]: print(f"  English : {en_path}")
+        if args.lang in ["hi", "all"]: print(f"  Hindi   : {hi_path}")
         print(f"{'='*60}")
 
         # --- Automatic YouTube Upload ---

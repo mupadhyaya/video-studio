@@ -17,3 +17,8 @@ When executing video studio creation pipelines, follow these strict architectura
 - Save all structural pipeline code blocks in `core/` (`image_engine.py`, `audio_engine.py`, `compiler.py`).
 - Keep incoming curriculum lesson JSON files in `scripts/`.
 - Maintain the main orchestrator loop execution gateway in `run_pipeline.py`.
+
+## 3. Versioning & Evolution (v1 vs. v2 Roadmap)
+Do not break the current deterministic execution flow (v1) when experimenting with ML features (v2).
+- **v1 (Current Stable):** Rule-based lip sync (RMS volume mapping), static deterministic layouts, and OpenCV pixel masking for anti-jitter. Must run quickly and predictably on low-spec GitHub Actions runners.
+- **v2 (Future ML Pipeline):** To bring the avatar to life (head bobs, emotion, layout choices), we will separate ML inference from rendering. A lightweight ONNX or TFLite CPU-friendly model (or remote API) will process the audio/script *first*, outputting a lightweight `choreography.json`. The video compiler will then simply read the choreography file to apply 2D pixel warps. This prevents heavy GPU ML models from breaking the standard CI/CD Github Action. Reference `docs/v2_ml_roadmap.md` for architectural design.
