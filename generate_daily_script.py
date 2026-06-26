@@ -20,7 +20,8 @@ def generate_lesson():
     if args.day:
         day_num = args.day
     else:
-        start_date = datetime.date.today() # Resetting to today to start from the beginning
+        # We use June 25, 2026 as the launch date for the series
+        start_date = datetime.date(2026, 6, 25)
         today = datetime.date.today()
         day_num = max(1, (today - start_date).days + 1)
     
