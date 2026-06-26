@@ -200,6 +200,33 @@ def draw_curriculum_map(img, width, height, visual_content):
             
         y_offset += 20
 
+def draw_title_slide(img, width, height, title, subtitle):
+    draw = ImageDraw.Draw(img)
+    
+    # Fonts
+    title_font = get_font("Arial Unicode.ttf", 110)
+    subtitle_font = get_font("Arial Unicode.ttf", 55)
+    
+    left_margin = 100
+    
+    # 1. Draw large Title text
+    title_y = int(height * 0.25)
+    title_lines = wrap_text(str(title).upper(), title_font, int(width * 0.6))
+    for line in title_lines:
+        draw.text((left_margin, title_y), line, font=title_font, fill="#38BDF8")
+        title_y += 120
+        
+    # Draw an elegant separator line
+    line_y = title_y + 30
+    draw.line([(left_margin, line_y), (left_margin + int(width * 0.5), line_y)], fill="#334155", width=4)
+    
+    # 2. Draw Subtitle text below the line
+    subtitle_y = line_y + 60
+    subtitle_lines = wrap_text(str(subtitle), subtitle_font, int(width * 0.6))
+    for line in subtitle_lines:
+        draw.text((left_margin, subtitle_y), line, font=subtitle_font, fill="#F8FAFC")
+        subtitle_y += 70
+
 def render_slide(title, content_text, visual_type, visual_content, output_base, output_content):
 
     width, height = 1920, 1080
@@ -209,12 +236,16 @@ def render_slide(title, content_text, visual_type, visual_content, output_base, 
     base_draw = ImageDraw.Draw(base_img)
     draw_background(base_draw, width, height)
     
-    title_font = get_font("Arial Unicode.ttf", 60)
     bullet_font = get_font("Arial Unicode.ttf", 36)
-    
     title_x, title_y = 100, 100
-    base_draw.text((title_x, title_y), title, font=title_font, fill="#38BDF8")
-    base_draw.line([(title_x, title_y + 90), (width * 0.55, title_y + 90)], fill="#38BDF8", width=3)
+    
+    if visual_type == "title_slide":
+        # For the title slide, we just render the beautiful typography onto the base directly!
+        draw_title_slide(base_img, width, height, title, content_text)
+    else:
+        title_font = get_font("Arial Unicode.ttf", 60)
+        base_draw.text((title_x, title_y), title, font=title_font, fill="#38BDF8")
+        base_draw.line([(title_x, title_y + 90), (width * 0.55, title_y + 90)], fill="#38BDF8", width=3)
     
     base_img.save(output_base)
     
@@ -233,13 +264,14 @@ def render_slide(title, content_text, visual_type, visual_content, output_base, 
         draw_curriculum_map(content_img, width, height, visual_content)
         
     # Text
-    content_y = 280
-    max_text_width = (width * 0.55) - title_x
-    if content_text:
-        wrapped_lines = wrap_text(str(content_text), bullet_font, max_text_width)
-        for line in wrapped_lines:
-            content_draw.text((title_x, content_y), line, font=bullet_font, fill="#E2E8F0")
-            content_y += 50
+    if visual_type != "title_slide":
+        content_y = 280
+        max_text_width = (width * 0.55) - title_x
+        if content_text:
+            wrapped_lines = wrap_text(str(content_text), bullet_font, max_text_width)
+            for line in wrapped_lines:
+                content_draw.text((title_x, content_y), line, font=bullet_font, fill="#E2E8F0")
+                content_y += 50
             
     content_img.save(output_content)
 

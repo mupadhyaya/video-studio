@@ -115,6 +115,19 @@ def generate_lesson():
         data = json.loads(clean_text)
         storyboard = data.get("storyboard", [])
         
+        yt_meta_hi = data.get("youtube_metadata_hi", {})
+        
+        title_slide = {
+            "title_en": current_topic,
+            "title_hi": yt_meta_hi.get("title", current_topic),
+            "content_text_en": f"Welcome to the {base_name.replace('_', ' ').title()} Series",
+            "content_text_hi": f"{base_name.replace('_', ' ').title()} सीरीज में आपका स्वागत है",
+            "visual_type": "title_slide",
+            "visual_content": current_topic,
+            "narration_text_en": f"Welcome! Today we are discussing {current_topic}.",
+            "narration_text_hi": f"आपका स्वागत है! आज हम {current_topic} पर चर्चा कर रहे हैं।"
+        }
+        
         agenda_slide = {
             "title_en": "Series Curriculum Map",
             "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
@@ -126,11 +139,12 @@ def generate_lesson():
                 "present": current_topic,
                 "future": [t["topic"] for t in topics[topic_index+1:]]
             }),
-            "narration_text_en": f"Welcome back! Today we are covering: {current_topic}. Let's dive in.",
-            "narration_text_hi": f"वापसी पर स्वागत है! आज हम कवर कर रहे हैं: {current_topic}। आइए शुरू करते हैं।"
+            "narration_text_en": "Here is a quick look at where we are in our curriculum.",
+            "narration_text_hi": "यहां हमारे पाठ्यक्रम की एक झलक है।"
         }
         
         storyboard.insert(0, agenda_slide)
+        storyboard.insert(0, title_slide)
         data["storyboard"] = storyboard
         
         with open(filename, "w", encoding="utf-8") as f:

@@ -4,6 +4,7 @@ import json
 import asyncio
 import argparse
 import shutil
+from PIL import Image
 from core.image_engine import render_slide
 from core.audio_engine import generate_speech
 from core.compiler import compile_video
@@ -48,6 +49,26 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
 
             print(f"  Rendering frame for slide {i + 1}: '{title}'...")
             render_slide(title, content_text, visual_type, visual_content, img_base_path, img_content_path)
+            
+            # --- Thumbnail Extraction ---
+            if visual_type == "title_slide":
+                print(f"  [THUMBNAIL] Extracting Title Slide as Thumbnail...")
+                thumb_path = os.path.join(os.path.dirname(os.path.abspath(output_path)), f"thumbnail_{lang}.png")
+                
+                # Composite the Base Slide (which has the Title text rendered on it)
+                thumb_img = Image.open(img_base_path).convert("RGBA")
+                
+                # Paste the avatar on the right side
+                avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
+                if os.path.exists(avatar_path):
+                    avatar_img = Image.open(avatar_path).convert("RGBA")
+                    # Scale avatar slightly if needed, or just paste it aligned to bottom right
+                    paste_x = thumb_img.width - avatar_img.width - 50
+                    paste_y = thumb_img.height - avatar_img.height
+                    thumb_img.paste(avatar_img, (paste_x, paste_y), avatar_img)
+                
+                thumb_img.save(thumb_path)
+                print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
 
         # --- Step 2: Synthesize narrations ---
         print(f"\nStep 2: Synthesizing [{lang.upper()}] narrations with edge-tts...")
@@ -153,13 +174,15 @@ def main():
             en_upload_data = {
                 "title": yt_meta_en.get("title", f"[EN] {meta_title}"),
                 "description": yt_meta_en.get("description", "Daily automated tech curriculum update."),
-                "tags": yt_meta_en.get("tags", ["AIML", "Tutorial", "AI"])
+                "tags": yt_meta_en.get("tags", ["AIML", "Tutorial", "AI"]),
+                "thumbnail_path": os.path.join(input_dir, "thumbnail_en.png")
             }
             
             hi_upload_data = {
                 "title": yt_meta_hi.get("title", f"[HI] {meta_title}"),
                 "description": yt_meta_hi.get("description", "डेली ऑटोमेटेड टेक अपडेट।"),
-                "tags": yt_meta_hi.get("tags", ["AIML", "Tutorial", "AI in Hindi"])
+                "tags": yt_meta_hi.get("tags", ["AIML", "Tutorial", "AI in Hindi"]),
+                "thumbnail_path": os.path.join(input_dir, "thumbnail_hi.png")
             }
             
             try:

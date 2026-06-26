@@ -28,4 +28,19 @@ def upload_video(video_path, metadata):
     print(f"Uploading {video_path} to YouTube as a private draft...")
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
     response = request.execute()
-    print(f"✅ Success! Video deployed to channel. Video ID: {response['id']}")
+    video_id = response['id']
+    print(f"✅ Success! Video deployed to channel. Video ID: {video_id}")
+    
+    # --- Upload Custom Thumbnail ---
+    thumbnail_path = metadata.get("thumbnail_path")
+    if thumbnail_path and os.path.exists(thumbnail_path):
+        print(f"Uploading custom thumbnail from {thumbnail_path}...")
+        thumb_media = MediaFileUpload(thumbnail_path, mimetype="image/png")
+        try:
+            youtube.thumbnails().set(
+                videoId=video_id,
+                media_body=thumb_media
+            ).execute()
+            print("✅ Custom thumbnail attached successfully!")
+        except Exception as e:
+            print(f"⚠️ Failed to upload thumbnail: {e}")
