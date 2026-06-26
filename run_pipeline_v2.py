@@ -8,6 +8,9 @@ from PIL import Image
 from core.image_engine import render_slide, generate_thumbnail
 from core.audio_engine import generate_speech
 from core.compiler_v2 import compile_video
+import urllib.parse
+import urllib.request
+from moviepy.editor import AudioFileClip
 
 
 async def build_video_for_language(lesson_data, lang, theme, output_path):
@@ -72,6 +75,66 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             audio_tasks.append(generate_speech(narration, audio_path, lang_code=lang))
 
         await asyncio.gather(*audio_tasks)
+
+        # --- Step 2.5: Auto-Timestamps & Exports ---
+        print(f"\nStep 2.5: Generating timestamps and exporting resources...")
+        
+        # Create an exports folder
+        exports_dir = os.path.join(os.path.dirname(os.path.abspath(output_path)), "exports")
+        os.makedirs(exports_dir, exist_ok=True)
+        
+        timestamps = ["\n📌 Timestamps:"]
+        resources = ["\n📥 Downloadable Resources:"]
+        
+        current_time = 0.0
+        for i, slide in enumerate(lesson_data):
+            # Timestamps
+            title = slide.get(f"title_{lang}", slide.get("title", f"Slide {i + 1}"))
+            mins = int(current_time // 60)
+            secs = int(current_time % 60)
+            timestamps.append(f"{mins}:{secs:02d} - {title}")
+            
+            # Read audio duration
+            audio_path = os.path.join(audio_dir, f"audio_{i}.mp3")
+            with AudioFileClip(audio_path) as audio_clip:
+                current_time += audio_clip.duration
+                
+            # Exports & TinyURL
+            visual_type = slide.get("visual_type", "")
+            visual_content = slide.get("visual_content", "")
+            video_id = os.path.basename(output_path).replace(f"_{lang}.mp4", "")
+            
+            file_name = None
+            file_path = None
+            if visual_type == "code_snippet":
+                file_name = f"{video_id}_slide_{i}.py"
+                file_path = os.path.join(exports_dir, file_name)
+                with open(file_path, "w") as f:
+                    f.write(str(visual_content))
+            elif visual_type in ["architecture_diagram", "sequence_diagram"]:
+                # Save the Mermaid raw code to a .mmd file
+                file_name = f"{video_id}_slide_{i}.mmd"
+                file_path = os.path.join(exports_dir, file_name)
+                with open(file_path, "w") as f:
+                    f.write(str(visual_content))
+            
+            if file_name:
+                print(f"  Exported {file_name}")
+                # The user wants this to be on the public rag-learning-series repo
+                raw_github_url = f"https://raw.githubusercontent.com/mupadhyaya/rag-learning-series/main/assets/{file_name}"
+                try:
+                    tiny_url = urllib.request.urlopen("http://tinyurl.com/api-create.php?url=" + urllib.parse.quote(raw_github_url)).read().decode("utf-8")
+                    resources.append(f"- {title} ({file_name}): {tiny_url}")
+                except Exception as e:
+                    print(f"  Failed to generate TinyURL: {e}")
+                    resources.append(f"- {title}: {raw_github_url}")
+
+        # Store these in lesson_data for the YouTube uploader to pick up
+        if not isinstance(lesson_data, list) or len(lesson_data) == 0:
+            pass
+        else:
+            lesson_data[0][f"generated_timestamps_{lang}"] = "\n".join(timestamps)
+            lesson_data[0][f"generated_resources_{lang}"] = "\n".join(resources)
 
         # --- Step 3: Compile video ---
         print(f"\nStep 3: Compiling [{lang.upper()}] slide sequence into video...")
@@ -162,14 +225,14 @@ def main():
             
             en_upload_data = {
                 "title": yt_meta_en.get("title", f"[EN] {meta_title}"),
-                "description": yt_meta_en.get("description", "Daily automated tech curriculum update."),
+                "description": yt_meta_en.get("description", "Daily automated tech curriculum update.") + "\n" + lesson_data[0].get("generated_timestamps_en", "") + "\n" + lesson_data[0].get("generated_resources_en", ""),
                 "tags": yt_meta_en.get("tags", ["AIML", "Tutorial", "AI"]),
                 "thumbnail_path": os.path.join(input_dir, "thumbnail_en.png")
             }
             
             hi_upload_data = {
                 "title": yt_meta_hi.get("title", f"[HI] {meta_title}"),
-                "description": yt_meta_hi.get("description", "डेली ऑटोमेटेड टेक अपडेट।"),
+                "description": yt_meta_hi.get("description", "डेली ऑटोमेटेड टेक अपडेट।") + "\n" + lesson_data[0].get("generated_timestamps_hi", "") + "\n" + lesson_data[0].get("generated_resources_hi", ""),
                 "tags": yt_meta_hi.get("tags", ["AIML", "Tutorial", "AI in Hindi"]),
                 "thumbnail_path": os.path.join(input_dir, "thumbnail_hi.png")
             }
