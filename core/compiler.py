@@ -204,7 +204,10 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
             fps=24,
             codec="libx264",
             audio_codec="aac",
-            pixel_format="yuv420p"
+            pixel_format="yuv420p",
+            bitrate="12000k",
+            preset="slow",
+            threads=4
         )
         
     finally:

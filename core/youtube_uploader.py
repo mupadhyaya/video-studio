@@ -5,8 +5,13 @@ from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
 
 def upload_video(video_path, metadata):
+    token_str = os.environ.get("YOUTUBE_OAUTH_TOKEN")
+    if not token_str:
+        print("⚠️ YOUTUBE_OAUTH_TOKEN not found. Skipping upload. Video generated locally!")
+        return
+
     print("Authenticating with YouTube API...")
-    creds_info = json.loads(os.environ["YOUTUBE_OAUTH_TOKEN"])
+    creds_info = json.loads(token_str)
     credentials = Credentials.from_authorized_user_info(creds_info)
     
     youtube = build("youtube", "v3", credentials=credentials)
