@@ -10,7 +10,7 @@ from core.audio_engine import generate_speech
 from core.compiler_v2 import compile_video
 import urllib.parse
 import urllib.request
-from moviepy.editor import AudioFileClip
+from moviepy import AudioFileClip
 
 
 async def build_video_for_language(lesson_data, lang, theme, output_path):
