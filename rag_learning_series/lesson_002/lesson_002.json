@@ -1,46 +1,47 @@
 {
   "video_id": "lesson_002",
-  "meta_title": "Module 1.2: The RAG Paradigm Shift",
+  "meta_title": "Module 1.2: Setting up your local Python RAG Environment (Practical)",
   "youtube_metadata_en": {
-    "title": "RAG Paradigm Shift: Unlocking Advanced AI with Retrieval Augmented Generation | Module 1.2",
-    "description": "Dive into Module 1.2 of our AI series: The RAG Paradigm Shift! Discover how Retrieval Augmented Generation (RAG) revolutionizes Large Language Models (LLMs) by providing accurate, up-to-date, and context-specific information. Learn how RAG addresses common LLM limitations like hallucination and outdated knowledge, enabling more reliable and powerful AI applications. We'll explore the core components of RAG, its benefits, and its impact on the future of AI development. Don't miss this crucial step in building robust AI systems! Stay tuned for Module 2.1: Introduction to Vector Databases.",
+    "title": "Python RAG Setup Guide: Build Your Local RAG Environment (Practical Tutorial)",
+    "description": "Dive into the practical setup of a local Python RAG (Retrieval Augmented Generation) environment. This tutorial covers everything from virtual environments to installing key libraries like LangChain/LlamaIndex, Sentence Transformers, and FAISS. Learn how to configure your local setup to start building powerful RAG applications. Download the source code and try it yourself: https://github.com/mupadhyaya/video-studio-oss",
     "tags": [
-      "RAG",
-      "Retrieval Augmented Generation",
-      "LLM",
-      "Large Language Model",
-      "AI Tutorial",
-      "AI Series",
-      "Prompt Engineering",
-      "NLP",
-      "Machine Learning",
-      "AI Basics"
+      "Python RAG",
+      "Local RAG Setup",
+      "LangChain Tutorial",
+      "LlamaIndex Tutorial",
+      "Vector Database",
+      "Embeddings",
+      "AI Environment",
+      "Practical AI",
+      "Python AI"
     ]
   },
   "youtube_metadata_hi": {
-    "title": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन से उन्नत AI को अनलॉक करें | मॉड्यूल 1.2",
-    "description": "हमारी AI सीरीज़ के मॉड्यूल 1.2 में गहराई से उतरें: RAG पैराडाइम शिफ्ट! जानें कि कैसे रिट्रीवल ऑगमेंटेड जनरेशन (RAG) लार्ज लैंग्वेज मॉडल्स (LLMs) को सटीक, अद्यतन और संदर्भ-विशिष्ट जानकारी प्रदान करके क्रांतिकारी बना रहा है। जानें कि RAG कैसे LLM की सामान्य सीमाओं जैसे मतिभ्रम और पुरानी जानकारी को दूर करता है, जिससे अधिक विश्वसनीय और शक्तिशाली AI एप्लिकेशन संभव होते हैं। हम RAG के मुख्य घटकों, इसके लाभों और AI विकास के भविष्य पर इसके प्रभाव का पता लगाएंगे। मज़बूत AI सिस्टम बनाने में इस महत्वपूर्ण कदम को न चूकें! मॉड्यूल 2.1: वेक्टर डेटाबेस का परिचय के लिए बने रहें।",
+    "title": "पायथन RAG सेटअप गाइड: अपना लोकल RAG एनवायरनमेंट बनाएँ (प्रैक्टिकल ट्यूटोरियल)",
+    "description": "एक लोकल पायथन RAG (रिट्रीवल ऑगमेंटेड जनरेशन) एनवायरनमेंट के व्यावहारिक सेटअप में गोता लगाएँ। यह ट्यूटोरियल वर्चुअल एनवायरनमेंट से लेकर LangChain/LlamaIndex, Sentence Transformers, और FAISS जैसी प्रमुख लाइब्रेरीज़ को इंस्टॉल करने तक सब कुछ कवर करता है। शक्तिशाली RAG एप्लिकेशन बनाना शुरू करने के लिए अपना लोकल सेटअप कॉन्फ़िगर करना सीखें। स्रोत कोड डाउनलोड करें और इसे स्वयं आज़माएं: https://github.com/mupadhyaya/video-studio-oss",
     "tags": [
-      "RAG in Hindi",
-      "AI in Hindi",
-      "LLM in Hindi",
-      "मशीन लर्निंग",
-      "एनएलपी",
-      "एआई ट्यूटोरियल",
-      "जनरेटिव एआई",
-      "एआई बेसिक्स"
+      "पायथन RAG",
+      "लोकल RAG सेटअप",
+      "LangChain ट्यूटोरियल",
+      "LlamaIndex ट्यूटोरियल",
+      "वेक्टर डेटाबेस",
+      "एम्बेडिंग",
+      "AI एनवायरनमेंट",
+      "प्रैक्टिकल AI",
+      "पायथन AI",
+      "हिंदी AI"
     ]
   },
   "storyboard": [
     {
-      "title_en": "Module 1.2: The RAG Paradigm Shift",
-      "title_hi": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन से उन्नत AI को अनलॉक करें | मॉड्यूल 1.2",
+      "title_en": "Module 1.2: Setting up your local Python RAG Environment (Practical)",
+      "title_hi": "पायथन RAG सेटअप गाइड: अपना लोकल RAG एनवायरनमेंट बनाएँ (प्रैक्टिकल ट्यूटोरियल)",
       "content_text_en": "Welcome to the Rag Series",
       "content_text_hi": "Rag सीरीज में आपका स्वागत है",
       "visual_type": "title_slide",
-      "visual_content": "Module 1.2: The RAG Paradigm Shift",
-      "narration_text_en": "Welcome! Today we are discussing Module 1.2: The RAG Paradigm Shift.",
-      "narration_text_hi": "आपका स्वागत है! आज हम Module 1.2: The RAG Paradigm Shift पर चर्चा कर रहे हैं।"
+      "visual_content": "Module 1.2: Setting up your local Python RAG Environment (Practical)",
+      "narration_text_en": "Welcome! Today we are discussing Module 1.2: Setting up your local Python RAG Environment (Practical).",
+      "narration_text_hi": "आपका स्वागत है! आज हम Module 1.2: Setting up your local Python RAG Environment (Practical) पर चर्चा कर रहे हैं।"
     },
     {
       "title_en": "Series Curriculum Map",
@@ -48,75 +49,75 @@
       "content_text_en": "Tracking our progress through the Learning Series.",
       "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
       "visual_type": "curriculum_map",
-      "visual_content": "{\"past\": [\"Module 1.1: What is a Knowledge Cutoff?\"], \"present\": \"Module 1.2: The RAG Paradigm Shift\", \"future\": [\"Module 2.1: Introduction to Vector Databases\", \"Module 2.2: Deep Dive into Text Embeddings\", \"Module 3.1: Data Chunking Strategies\", \"Module 3.2: Practical Chunking Code Exercise\", \"Module 3.3: Chunking Exercise Solutions\", \"Module 4.1: The Retrieval Process\", \"Module 4.2: Vector Search Algorithms (KNN/ANN)\", \"Module 5.1: Synthesizing the Final Answer\", \"Module 5.2: Handling Hallucinations in RAG\", \"Module 6.1: Evaluating RAG Pipelines (RAGAS)\", \"Module 6.2: Advanced RAG: Query Transformation\", \"Module 6.3: Advanced RAG: Re-ranking\", \"Module 7.1: Model Context Protocol (MCP) Intro\", \"Module 7.2: Exposing Vector Databases via MCP\", \"Module 7.3: Connecting Agents to MCP Servers\", \"Module 8.1: End-to-End RAG Project Setup\", \"Module 8.2: End-to-End RAG Project Solution\", \"Module 9.1: Productionizing RAG\", \"Module 9.2: Multi-Modal RAG\", \"Module 10.1: Introduction to GraphRAG\", \"Module 10.2: Agentic RAG\", \"Module 1.1: What are Autonomous Agents?\", \"Module 1.2: Tool Calling & APIs\", \"Module 2.1: Memory Management in Agents\", \"Module 2.2: Multi-Agent Orchestration\"]}",
+      "visual_content": "{\"past\": [\"Module 1.1: What is a Knowledge Cutoff? (Theory)\"], \"present\": \"Module 1.2: Setting up your local Python RAG Environment (Practical)\", \"future\": [\"Module 2.1: The RAG Paradigm Shift & Architecture (Theory)\", \"Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)\", \"Module 3.1: Deep Dive into Text Embeddings (Theory)\", \"Module 3.2: Generating Embeddings locally with HuggingFace (Practical)\", \"Module 4.1: Introduction to Vector Databases (Theory)\", \"Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)\", \"Module 5.1: Data Chunking Strategies (Theory)\", \"Module 5.2: Writing a Document Loader and Splitter (Practical)\", \"Module 6.1: The Retrieval Process & KNN Algorithms (Theory)\", \"Module 6.2: Implementing a basic Retriever Chain (Practical)\", \"Module 7.1: Synthesizing the Final Answer & Hallucinations (Theory)\", \"Module 7.2: Building a full End-to-End RAG script (Practical)\", \"Module 8.1: Evaluating RAG Pipelines with RAGAS (Theory)\", \"Module 8.2: Writing unit tests for RAG accuracy (Practical)\", \"Module 9.1: Advanced RAG: Query Transformation & Re-ranking (Theory)\", \"Module 9.2: Implementing Cross-Encoder Re-ranking (Practical)\", \"Module 10.1: Model Context Protocol (MCP) Intro (Theory)\", \"Module 10.2: Exposing Vector Databases via MCP (Practical)\", \"Module 11.1: Multi-Modal RAG (Theory)\", \"Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)\", \"Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)\", \"Module 12.2: Building an Agentic RAG system with FastAPI (Practical)\", \"Module 1.1: What are Autonomous Agents?\", \"Module 1.2: Tool Calling & APIs\", \"Module 2.1: Memory Management in Agents\", \"Module 2.2: Multi-Agent Orchestration\"]}",
       "narration_text_en": "Here is a quick look at where we are in our curriculum.",
       "narration_text_hi": "यहां हमारे पाठ्यक्रम की एक झलक है।"
     },
     {
       "slide_index": 1,
-      "title_en": "Understanding the RAG Paradigm Shift",
-      "title_hi": "RAG पैराडाइम शिफ्ट को समझना",
-      "content_text_en": "Retrieval Augmented Generation, or RAG, represents a fundamental change in how we interact with and utilize Large Language Models (LLMs). It moves beyond simply prompting an LLM by integrating an external knowledge retrieval step, allowing models to access current and specific information. This paradigm shift significantly enhances the factual accuracy and relevance of AI-generated responses.",
-      "content_text_hi": "रिट्रीवल ऑगमेंटेड जनरेशन, या RAG, इस बात में एक मौलिक परिवर्तन का प्रतिनिधित्व करता है कि हम लार्ज लैंग्वेज मॉडल्स (LLMs) के साथ कैसे बातचीत करते हैं और उनका उपयोग करते हैं। यह एक बाहरी ज्ञान पुनर्प्राप्ति चरण को एकीकृत करके LLM को केवल प्रॉम्प्ट करने से आगे बढ़ता है, जिससे मॉडल को वर्तमान और विशिष्ट जानकारी तक पहुंचने की अनुमति मिलती है। यह प्रतिमान बदलाव AI-जनित प्रतिक्रियाओं की तथ्यात्मक सटीकता और प्रासंगिकता को काफी बढ़ाता है।",
-      "narration_text_en": "Welcome back to our AI series! Today, we're diving into Module 1.2: The RAG Paradigm Shift. RAG, or Retrieval Augmented Generation, is transforming how we leverage Large Language Models. Essentially, it allows LLMs to consult external knowledge bases, moving beyond their pre-trained data to provide more accurate and relevant answers. This is a game-changer for building reliable AI applications.",
-      "narration_text_hi": "हमारी AI सीरीज़ में आपका फिर से स्वागत है! आज, हम मॉड्यूल 1.2: RAG पैराडाइम शिफ्ट में गहराई से उतर रहे हैं। RAG, या रिट्रीवल ऑगमेंटेड जनरेशन, जिस तरह से हम लार्ज लैंग्वेज मॉडल्स का लाभ उठाते हैं, उसे बदल रहा है। अनिवार्य रूप से, यह LLM को बाहरी ज्ञान डेटाबेस से परामर्श करने की अनुमति देता है, जिससे वे अपने पूर्व-प्रशिक्षित डेटा से परे जाकर अधिक सटीक और प्रासंगिक उत्तर प्रदान कर सकें। विश्वसनीय AI एप्लिकेशन बनाने के लिए यह एक गेम-चेंजर है।",
+      "title_en": "Getting Started: Your Local RAG Workspace",
+      "title_hi": "शुरुआत करना: आपका लोकल RAG वर्कस्पेस",
+      "content_text_en": "This module focuses on the crucial first step for any RAG project: setting up a robust and isolated Python environment on your local machine. We'll ensure you have all the necessary tools and libraries installed, laying a solid foundation for practical RAG development.",
+      "content_text_hi": "यह मॉड्यूल किसी भी RAG प्रोजेक्ट के लिए महत्वपूर्ण पहले कदम पर केंद्रित है: आपकी लोकल मशीन पर एक मजबूत और अलग पायथन एनवायरनमेंट स्थापित करना। हम यह सुनिश्चित करेंगे कि आपके पास सभी आवश्यक उपकरण और लाइब्रेरीज़ स्थापित हों, जिससे व्यावहारिक RAG विकास के लिए एक ठोस नींव रखी जा सके।",
+      "narration_text_en": "Welcome back, everyone! Today, we're diving into the hands-on aspect of RAG by setting up your very own local Python environment. This is a critical foundation, ensuring you have a dedicated space for all your RAG experiments and projects. Think of it as preparing your workshop before you start building. We'll cover everything from virtual environments to essential library installations, making sure you're ready to code.",
+      "narration_text_hi": "सभी का फिर से स्वागत है! आज, हम आपके स्वयं के लोकल पायथन एनवायरनमेंट को स्थापित करके RAG के व्यावहारिक पहलू में गोता लगा रहे हैं। यह एक महत्वपूर्ण नींव है, जो यह सुनिश्चित करती है कि आपके पास अपने सभी RAG प्रयोगों और परियोजनाओं के लिए एक समर्पित स्थान हो। इसे निर्माण शुरू करने से पहले अपनी कार्यशाला तैयार करने जैसा समझें। हम वर्चुअल एनवायरनमेंट से लेकर आवश्यक लाइब्रेरी इंस्टॉलेशन तक सब कुछ कवर करेंगे, यह सुनिश्चित करते हुए कि आप कोड करने के लिए तैयार हैं।",
       "visual_type": "concept_box",
-      "visual_content": "RAG: Beyond Pre-trained Knowledge\n(LLM + External Knowledge Retrieval)"
+      "visual_content": "Isolated Development Environment"
     },
     {
       "slide_index": 2,
-      "title_en": "Addressing LLM Limitations",
-      "title_hi": "LLM की सीमाओं को दूर करना",
-      "content_text_en": "Traditional LLMs often face challenges with hallucination, generating plausible but incorrect information, or being limited by their training data's cutoff date, leading to outdated responses. They also lack domain-specific expertise unless explicitly trained on such data. RAG directly tackles these issues by providing a mechanism for LLMs to access verified, real-time, or proprietary information.",
-      "content_text_hi": "पारंपरिक LLM अक्सर मतिभ्रम, प्रशंसनीय लेकिन गलत जानकारी उत्पन्न करने, या अपने प्रशिक्षण डेटा की कटऑफ तिथि से सीमित होने जैसी चुनौतियों का सामना करते हैं, जिसके परिणामस्वरूप पुरानी प्रतिक्रियाएँ मिलती हैं। उनमें डोमेन-विशिष्ट विशेषज्ञता की भी कमी होती है जब तक कि उन्हें ऐसे डेटा पर स्पष्ट रूप से प्रशिक्षित न किया गया हो। RAG इन समस्याओं को सीधे हल करता है, LLM को सत्यापित, वास्तविक समय या मालिकाना जानकारी तक पहुंचने के लिए एक तंत्र प्रदान करके।",
-      "narration_text_en": "Before RAG, LLMs often struggled with what we call 'hallucination' – making up facts that sound convincing but are entirely false. They were also stuck with knowledge up to their last training date, meaning no current events or specific company data. RAG offers a powerful solution by bridging this gap, allowing LLMs to access and verify information on the fly.",
-      "narration_text_hi": "RAG से पहले, LLM अक्सर जिसे हम 'मतिभ्रम' कहते हैं, उससे जूझते थे - ऐसे तथ्य गढ़ते थे जो ठोस लगते थे लेकिन पूरी तरह से गलत थे। वे अपनी अंतिम प्रशिक्षण तिथि तक के ज्ञान से भी बंधे हुए थे, जिसका अर्थ है कि कोई वर्तमान घटनाएँ या विशिष्ट कंपनी डेटा नहीं था। RAG इस अंतर को पाटकर एक शक्तिशाली समाधान प्रदान करता है, जिससे LLM को तुरंत जानकारी तक पहुंचने और उसे सत्यापित करने की अनुमति मिलती है।",
-      "visual_type": "concept_box",
-      "visual_content": "Vanilla LLM Problems:\n- Hallucination\n- Outdated Info\n- Lack of Specificity\n\nRAG's Solution: Real-time, Verified Data Access"
+      "title_en": "Best Practices: Virtual Environments",
+      "title_hi": "सर्वोत्तम अभ्यास: वर्चुअल एनवायरनमेंट",
+      "content_text_en": "Before installing any libraries, it's paramount to create a Python virtual environment. This isolates your project's dependencies, preventing conflicts with other projects or your system's global Python installation, ensuring a clean and manageable workspace.",
+      "content_text_hi": "किसी भी लाइब्रेरी को स्थापित करने से पहले, एक पायथन वर्चुअल एनवायरनमेंट बनाना सर्वोपरि है। यह आपके प्रोजेक्ट की निर्भरताओं को अलग करता है, अन्य परियोजनाओं या आपके सिस्टम के ग्लोबल पायथन इंस्टॉलेशन के साथ संघर्ष को रोकता है, जिससे एक स्वच्छ और प्रबंधनीय कार्यक्षेत्र सुनिश्चित होता है।",
+      "narration_text_en": "The first, and arguably most important, best practice is to always use a Python virtual environment. This keeps your project's dependencies neatly separated from other projects on your machine, preventing the dreaded 'dependency hell.' It's like having a dedicated toolbox for each project, ensuring everything works smoothly and predictably. We'll use `venv`, Python's built-in module, for this.",
+      "narration_text_hi": "पहला, और शायद सबसे महत्वपूर्ण, सर्वोत्तम अभ्यास हमेशा एक पायथन वर्चुअल एनवायरनमेंट का उपयोग करना है। यह आपकी प्रोजेक्ट की निर्भरताओं को आपकी मशीन पर अन्य परियोजनाओं से बड़े करीने से अलग रखता है, जिससे 'डिपेंडेंसी हेल' से बचा जा सके। यह प्रत्येक प्रोजेक्ट के लिए एक समर्पित टूलबॉक्स होने जैसा है, यह सुनिश्चित करते हुए कि सब कुछ सुचारू रूप से और अनुमानित रूप से काम करता है। हम इसके लिए पायथन के बिल्ट-इन मॉड्यूल `venv` का उपयोग करेंगे।",
+      "visual_type": "code_snippet",
+      "visual_content": "# Create a virtual environment\npython3 -m venv rag_env\n\n# Activate the virtual environment (macOS/Linux)\nsource rag_env/bin/activate\n\n# Activate the virtual environment (Windows)\n# rag_env\\Scripts\\activate"
     },
     {
       "slide_index": 3,
-      "title_en": "The Retrieval Step: Finding Relevant Information",
-      "title_hi": "पुनर्प्राप्ति चरण: प्रासंगिक जानकारी ढूँढना",
-      "content_text_en": "The first critical component of RAG is the retrieval step. When a user queries the system, a retriever module searches a vast external knowledge base, which could be documents, databases, or web content. It identifies and extracts the most relevant pieces of information, often using semantic search or vector embeddings, ensuring that only highly pertinent context is considered for augmentation.",
-      "content_text_hi": "RAG का पहला महत्वपूर्ण घटक पुनर्प्राप्ति चरण है। जब कोई उपयोगकर्ता सिस्टम से प्रश्न करता है, तो एक रिट्रीवर मॉड्यूल एक विशाल बाहरी ज्ञान आधार की खोज करता है, जो दस्तावेज़, डेटाबेस या वेब सामग्री हो सकता है। यह अक्सर सिमेंटिक सर्च या वेक्टर एम्बेडिंग का उपयोग करके जानकारी के सबसे प्रासंगिक टुकड़ों को पहचानता और निकालता है, यह सुनिश्चित करता है कि संवर्धन के लिए केवल अत्यधिक प्रासंगिक संदर्भ पर विचार किया जाए।",
-      "narration_text_en": "So, how does RAG actually work? It starts with the 'Retrieval' phase. When you ask a question, the system first consults an extensive knowledge base—think of it as a super-smart library. It uses sophisticated techniques, often involving embeddings, to quickly find and pull out the most relevant documents or data snippets that directly address your query. This ensures the LLM gets the best possible context.",
-      "narration_text_hi": "तो, RAG वास्तव में कैसे काम करता है? यह 'पुनर्प्राप्ति' चरण से शुरू होता है। जब आप कोई प्रश्न पूछते हैं, तो सिस्टम सबसे पहले एक व्यापक ज्ञान आधार से परामर्श करता है - इसे एक सुपर-स्मार्ट लाइब्रेरी के रूप में सोचें। यह आपकी क्वेरी को सीधे संबोधित करने वाले सबसे प्रासंगिक दस्तावेज़ों या डेटा स्निपेट्स को तेज़ी से खोजने और बाहर निकालने के लिए एम्बेडिंग सहित परिष्कृत तकनीकों का उपयोग करता है। यह सुनिश्चित करता है कि LLM को सर्वोत्तम संभव संदर्भ मिले।",
-      "visual_type": "architecture_diagram",
-      "visual_content": "graph TD\n    A[User Query] --> B(Embed Query)\n    B --> C{Search Vector Index}\n    C --> D[Retrieve Top-K Chunks]\n    D --> E[Relevant Context]"
+      "title_en": "Essential RAG Libraries & Tools",
+      "title_hi": "आवश्यक RAG लाइब्रेरीज़ और उपकरण",
+      "content_text_en": "A typical local RAG setup relies on several key Python libraries. These include frameworks like LangChain or LlamaIndex for orchestration, embedding models (e.g., Sentence Transformers) for vectorization, and local vector stores like FAISS or ChromaDB for efficient retrieval.",
+      "content_text_hi": "एक विशिष्ट लोकल RAG सेटअप कई प्रमुख पायथन लाइब्रेरीज़ पर निर्भर करता है। इनमें ऑर्केस्ट्रेशन के लिए LangChain या LlamaIndex जैसे फ्रेमवर्क, वेक्टरइज़ेशन के लिए एम्बेडिंग मॉडल (जैसे, Sentence Transformers), और कुशल पुनर्प्राप्ति के लिए FAISS या ChromaDB जैसे लोकल वेक्टर स्टोर शामिल हैं।",
+      "narration_text_en": "Now, let's talk about the essential tools in our RAG arsenal. We'll need a framework to orchestrate our RAG pipeline – here, LangChain or LlamaIndex are excellent choices. For transforming our text into numerical vectors, which is crucial for similarity search, we'll use embedding models, often from libraries like Sentence Transformers. And finally, to store and quickly search these vectors, we'll set up a local vector database, with options like FAISS or a lightweight ChromaDB.",
+      "narration_text_hi": "अब, आइए हमारे RAG शस्त्रागार में आवश्यक उपकरणों के बारे में बात करते हैं। हमें अपनी RAG पाइपलाइन को व्यवस्थित करने के लिए एक फ्रेमवर्क की आवश्यकता होगी - यहाँ, LangChain या LlamaIndex उत्कृष्ट विकल्प हैं। हमारे टेक्स्ट को संख्यात्मक वैक्टर में बदलने के लिए, जो समानता खोज के लिए महत्वपूर्ण है, हम एम्बेडिंग मॉडल का उपयोग करेंगे, अक्सर Sentence Transformers जैसी लाइब्रेरीज़ से। और अंत में, इन वैक्टरों को स्टोर करने और जल्दी से खोजने के लिए, हम FAISS या एक हल्के ChromaDB जैसे लोकल वेक्टर डेटाबेस स्थापित करेंगे।",
+      "visual_type": "concept_box",
+      "visual_content": "RAG Components: Orchestration Framework (LangChain/LlamaIndex) -> Embedding Models (Sentence Transformers) -> Vector Store (FAISS/ChromaDB)"
     },
     {
       "slide_index": 4,
-      "title_en": "The Augmentation and Generation Steps",
-      "title_hi": "संवर्धन और जनरेशन चरण",
-      "content_text_en": "Once relevant information is retrieved, the 'Augmentation' step combines this context with the original user query, forming an enriched prompt. This augmented prompt is then fed into the Large Language Model during the 'Generation' phase. The LLM then uses this specific, up-to-date context to formulate a highly accurate, grounded, and comprehensive response, minimizing the risk of hallucination.",
-      "content_text_hi": "एक बार जब प्रासंगिक जानकारी प्राप्त हो जाती है, तो 'संवर्धन' चरण इस संदर्भ को मूल उपयोगकर्ता क्वेरी के साथ जोड़ता है, जिससे एक समृद्ध प्रॉम्प्ट बनता है। इस संवर्धित प्रॉम्प्ट को फिर 'जनरेशन' चरण के दौरान लार्ज लैंग्वेज मॉडल में फीड किया जाता है। LLM तब इस विशिष्ट, अद्यतन संदर्भ का उपयोग करके एक अत्यधिक सटीक, आधारभूत और व्यापक प्रतिक्रिया तैयार करता है, जिससे मतिभ्रम का जोखिम कम होता है।",
-      "narration_text_en": "After retrieval, we move to 'Augmentation' and 'Generation'. The retrieved information isn't just handed to the LLM; it's cleverly integrated with your original query to create a super-rich prompt. This enhanced prompt then guides the LLM to generate a response that is not only coherent and natural-sounding but also factually supported by the external data. This dramatically improves the reliability of the output.",
-      "narration_text_hi": "पुनर्प्राप्ति के बाद, हम 'संवर्धन' और 'जनरेशन' पर जाते हैं। पुनर्प्राप्त जानकारी केवल LLM को नहीं दी जाती है; इसे आपकी मूल क्वेरी के साथ चतुराई से एकीकृत किया जाता है ताकि एक सुपर-रिच प्रॉम्प्ट बनाया जा सके। यह उन्नत प्रॉम्प्ट फिर LLM को एक ऐसी प्रतिक्रिया उत्पन्न करने के लिए मार्गदर्शन करता है जो न केवल सुसंगत और स्वाभाविक लगती है, बल्कि बाहरी डेटा द्वारा तथ्यात्मक रूप से समर्थित भी होती है। यह आउटपुट की विश्वसनीयता में नाटकीय रूप से सुधार करता है।",
-      "visual_type": "architecture_diagram",
-      "visual_content": "graph LR\n    A[User Query] --> B(Retriever)\n    B --> C[Knowledge Base]\n    C --> D[Relevant Context]\n    A --> E[Prompt Augmentation]\n    D --> E\n    E --> F[Large Language Model]\n    F --> G[Generated Response]"
+      "title_en": "Installing Your RAG Toolkit",
+      "title_hi": "अपनी RAG टूलकिट स्थापित करना",
+      "content_text_en": "Once the virtual environment is active, we can proceed to install the primary RAG libraries. This typically includes a framework like LangChain, a transformer library for embeddings (e.g., `sentence-transformers`), and a local vector store implementation such as `faiss-cpu` for efficient similarity search.",
+      "content_text_hi": "एक बार जब वर्चुअल एनवायरनमेंट सक्रिय हो जाता है, तो हम प्राथमिक RAG लाइब्रेरीज़ को स्थापित करने के लिए आगे बढ़ सकते हैं। इसमें आमतौर पर LangChain जैसा एक फ्रेमवर्क, एम्बेडिंग के लिए एक ट्रांसफार्मर लाइब्रेरी (जैसे, `sentence-transformers`), और कुशल समानता खोज के लिए `faiss-cpu` जैसा एक लोकल वेक्टर स्टोर कार्यान्वयन शामिल होता है।",
+      "narration_text_en": "With our virtual environment activated, we can now install the necessary packages. We'll start with LangChain, a powerful framework for building LLM applications. Then, `sentence-transformers` for generating our embeddings, which convert text into numerical representations. And finally, `faiss-cpu`, a robust library from Facebook AI for efficient similarity search, acting as our local vector store. Remember, you'll need an active internet connection for this step.",
+      "narration_text_hi": "हमारे वर्चुअल एनवायरनमेंट के सक्रिय होने के साथ, हम अब आवश्यक पैकेज स्थापित कर सकते हैं। हम LangChain के साथ शुरुआत करेंगे, जो LLM एप्लिकेशन बनाने के लिए एक शक्तिशाली फ्रेमवर्क है। फिर, `sentence-transformers` हमारे एम्बेडिंग उत्पन्न करने के लिए, जो टेक्स्ट को संख्यात्मक निरूपण में परिवर्तित करते हैं। और अंत में, `faiss-cpu`, Facebook AI की एक मजबूत लाइब्रेरी कुशल समानता खोज के लिए, जो हमारे लोकल वेक्टर स्टोर के रूप में कार्य करती है। याद रखें, इस चरण के लिए आपको एक सक्रिय इंटरनेट कनेक्शन की आवश्यकता होगी।",
+      "visual_type": "code_snippet",
+      "visual_content": "# Install core RAG libraries\npip install langchain sentence-transformers faiss-cpu pypdf"
     },
     {
       "slide_index": 5,
-      "title_en": "Key Benefits of RAG Systems",
-      "title_hi": "RAG सिस्टम के प्रमुख लाभ",
-      "content_text_en": "RAG systems offer several crucial advantages: they significantly reduce hallucination by grounding responses in real data, provide access to current and proprietary information, and enhance explainability by showing sources. Furthermore, RAG allows for easier updates to knowledge without retraining the entire LLM, making AI applications more adaptable and cost-effective for enterprises.",
-      "content_text_hi": "RAG सिस्टम कई महत्वपूर्ण लाभ प्रदान करते हैं: वे वास्तविक डेटा में प्रतिक्रियाओं को आधार बनाकर मतिभ्रम को काफी कम करते हैं, वर्तमान और मालिकाना जानकारी तक पहुंच प्रदान करते हैं, और स्रोतों को दिखाकर व्याख्यात्मकता बढ़ाते हैं। इसके अलावा, RAG पूरे LLM को फिर से प्रशिक्षित किए बिना ज्ञान को आसान अपडेट की अनुमति देता है, जिससे AI एप्लिकेशन उद्यमों के लिए अधिक अनुकूलनीय और लागत प्रभावी बन जाते हैं।",
-      "narration_text_en": "The benefits of RAG are substantial. We get far less hallucination, as responses are now grounded in verifiable facts. It allows LLMs to use the absolute latest information, crucial for fast-evolving domains, and even proprietary company data that wasn't part of their original training. This makes RAG invaluable for enterprise solutions requiring accuracy and up-to-dateness.",
-      "narration_text_hi": "RAG के लाभ पर्याप्त हैं। हमें बहुत कम मतिभ्रम मिलता है, क्योंकि प्रतिक्रियाएँ अब सत्यापन योग्य तथ्यों पर आधारित होती हैं। यह LLM को बिल्कुल नवीनतम जानकारी का उपयोग करने की अनुमति देता है, जो तेजी से विकसित होने वाले डोमेन के लिए महत्वपूर्ण है, और यहां तक कि मालिकाना कंपनी डेटा भी जो उनके मूल प्रशिक्षण का हिस्सा नहीं था। यह RAG को सटीकता और अद्यतनीकरण की आवश्यकता वाले उद्यम समाधानों के लिए अमूल्य बनाता है।",
-      "visual_type": "concept_box",
-      "visual_content": "RAG Benefits:\n- Reduced Hallucination\n- Up-to-Date Information\n- Domain-Specific Knowledge\n- Enhanced Explainability\n- Cost-Effective Updates"
+      "title_en": "First Steps: Embeddings and Vector Store",
+      "title_hi": "पहले कदम: एम्बेडिंग और वेक्टर स्टोर",
+      "content_text_en": "After installation, we can programmatically initialize our embedding model and a simple in-memory vector store. This practical step demonstrates how to load a pre-trained embedding model and prepare a vector database to store and retrieve document chunks for our RAG system.",
+      "content_text_hi": "स्थापना के बाद, हम अपने एम्बेडिंग मॉडल और एक सरल इन-मेमोरी वेक्टर स्टोर को प्रोग्रामेटिक रूप से इनिशियलाइज़ कर सकते हैं। यह व्यावहारिक कदम दर्शाता है कि कैसे एक पूर्व-प्रशिक्षित एम्बेडिंग मॉडल को लोड किया जाए और हमारे RAG सिस्टम के लिए दस्तावेज़ के टुकड़ों को स्टोर और पुनर्प्राप्त करने के लिए एक वेक्टर डेटाबेस तैयार किया जाए।",
+      "narration_text_en": "Now for the practical application! Let's initialize some of these components in Python. We'll load a `HuggingFaceEmbeddings` model, which uses `sentence-transformers` under the hood, to create our text embeddings. Then, we'll set up an in-memory FAISS vector store. This little snippet is your first tangible step towards building a RAG application. It’s here that you can truly see how these components come to life. **Download the code from the GitHub link in the description below to try it yourself.**",
+      "narration_text_hi": "अब व्यावहारिक अनुप्रयोग के लिए! आइए पायथन में इनमें से कुछ घटकों को इनिशियलाइज़ करें। हम एक `HuggingFaceEmbeddings` मॉडल लोड करेंगे, जो `sentence-transformers` का उपयोग करता है, हमारे टेक्स्ट एम्बेडिंग बनाने के लिए। फिर, हम एक इन-मेमोरी FAISS वेक्टर स्टोर स्थापित करेंगे। यह छोटा सा कोड स्निपेट RAG एप्लिकेशन बनाने की दिशा में आपका पहला ठोस कदम है। यहीं पर आप वास्तव में देख सकते हैं कि ये घटक कैसे जीवंत होते हैं। **इसे स्वयं आज़माने के लिए नीचे विवरण में दिए गए GitHub लिंक से कोड डाउनलोड करें।**",
+      "visual_type": "code_snippet",
+      "visual_content": "from langchain_community.embeddings import HuggingFaceEmbeddings\nfrom langchain_community.vectorstores import FAISS\nfrom langchain_community.document_loaders import TextLoader\nfrom langchain.text_splitter import CharacterTextSplitter\n\n# 1. Create an 'example.txt' file with some text for testing\n# e.g., 'The quick brown fox jumps over the lazy dog. This is a sample document for RAG.'\n\n# 2. Load a simple document\nloader = TextLoader(\"example.txt\") \ndocuments = loader.load()\n\n# 3. Split the document into chunks\ntext_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=0)\ndocs = text_splitter.split_documents(documents)\n\n# 4. Initialize Embeddings\n# Using a small, efficient model suitable for local setup\nmodel_name = \"sentence-transformers/all-MiniLM-L6-v2\"\nmodel_kwargs = {'device': 'cpu'} # Use 'cuda' if GPU is available\nencode_kwargs = {'normalize_embeddings': False}\nembeddings = HuggingFaceEmbeddings(\n    model_name=model_name,\n    model_kwargs=model_kwargs,\n    encode_kwargs=encode_kwargs\n)\n\n# 5. Create a FAISS vector store from the documents\n# This will generate embeddings for each doc chunk and store them\nvectorstore = FAISS.from_documents(docs, embeddings)\n\nprint(\"FAISS vector store created successfully with example document!\")\n# You can now perform a similarity search:\n# query = \"What is the document about?\"\n# docs_with_scores = vectorstore.similarity_search_with_score(query)\n# print(docs_with_scores)"
     },
     {
       "slide_index": 6,
-      "title_en": "The Future of RAG & What's Next",
-      "title_hi": "RAG का भविष्य और आगे क्या है",
-      "content_text_en": "The RAG paradigm shift is fundamental to building robust, reliable, and enterprise-ready AI systems that leverage LLMs. It empowers models to act as intelligent interfaces to vast knowledge, ensuring their utility in dynamic environments. Mastering RAG is essential for anyone looking to develop advanced AI applications capable of real-world impact and informed decision-making.",
-      "content_text_hi": "RAG प्रतिमान बदलाव LLM का लाभ उठाने वाले मज़बूत, विश्वसनीय और उद्यम-तैयार AI सिस्टम बनाने के लिए मौलिक है। यह मॉडल को विशाल ज्ञान के लिए बुद्धिमान इंटरफेस के रूप में कार्य करने में सशक्त बनाता है, जिससे गतिशील वातावरण में उनकी उपयोगिता सुनिश्चित होती है। वास्तविक दुनिया के प्रभाव और सूचित निर्णय लेने में सक्षम उन्नत AI एप्लिकेशन विकसित करने वाले किसी भी व्यक्ति के लिए RAG में महारत हासिल करना आवश्यक है।",
-      "narration_text_en": "The RAG paradigm is truly reshaping the landscape of AI, making LLMs not just smarter, but also more trustworthy and adaptable for real-world applications. It’s a core component for anyone serious about building powerful AI systems. To effectively implement RAG, understanding the underlying technologies for efficient data retrieval is key. That’s precisely what we'll explore in our very next lecture, Module 2.1: Introduction to Vector Databases. Don't miss it!",
-      "narration_text_hi": "RAG प्रतिमान वास्तव में AI के परिदृश्य को नया आकार दे रहा है, जिससे LLM न केवल होशियार हो रहे हैं, बल्कि वास्तविक दुनिया के अनुप्रयोगों के लिए अधिक भरोसेमंद और अनुकूलनीय भी बन रहे हैं। शक्तिशाली AI सिस्टम बनाने के बारे में गंभीर किसी भी व्यक्ति के लिए यह एक मुख्य घटक है। RAG को प्रभावी ढंग से लागू करने के लिए, कुशल डेटा पुनर्प्राप्ति के लिए अंतर्निहित प्रौद्योगिकियों को समझना महत्वपूर्ण है। ठीक यही हम अपने अगले व्याख्यान, मॉड्यूल 2.1: वेक्टर डेटाबेस का परिचय में खोजेंगे। इसे देखना न भूलें!",
+      "title_en": "Verifying Your Setup & Beyond",
+      "title_hi": "अपने सेटअप को सत्यापित करना और आगे बढ़ना",
+      "content_text_en": "With our environment configured and basic components initialized, you've successfully established the groundwork for your RAG projects. This robust local setup empowers you to experiment with various RAG architectures and models.",
+      "content_text_hi": "हमारे एनवायरनमेंट को कॉन्फ़िगर करने और बुनियादी घटकों को इनिशियलाइज़ करने के साथ, आपने अपने RAG प्रोजेक्ट्स के लिए सफलतापूर्वक आधारशिला रखी है। यह मजबूत लोकल सेटअप आपको विभिन्न RAG आर्किटेक्चर और मॉडल के साथ प्रयोग करने में सक्षम बनाता है।",
+      "narration_text_en": "Congratulations! You've successfully set up a foundational local Python RAG environment. This is a huge step, and with this environment ready, you can start exploring different RAG configurations and experimenting with your data. Next time, in **Module 2.1: The RAG Paradigm Shift & Architecture (Theory)**, we'll shift gears back to theory, diving deep into the conceptual framework and architectural components that make RAG so powerful. Get ready to understand the 'why' behind what we've just set up!",
+      "narration_text_hi": "बधाई हो! आपने सफलतापूर्वक एक मूलभूत लोकल पायथन RAG एनवायरनमेंट स्थापित कर लिया है। यह एक बहुत बड़ा कदम है, और इस एनवायरनमेंट के तैयार होने के साथ, आप विभिन्न RAG कॉन्फ़िगरेशन का पता लगाना और अपने डेटा के साथ प्रयोग करना शुरू कर सकते हैं। अगली बार, **मॉड्यूल 2.1: द RAG पैराडाइम शिफ्ट एंड आर्किटेक्चर (थ्योरी)** में, हम सिद्धांत पर वापस लौटेंगे, वैचारिक फ्रेमवर्क और स्थापत्य घटकों में गहराई से गोता लगाएंगे जो RAG को इतना शक्तिशाली बनाते हैं। हमने अभी जो स्थापित किया है, उसके पीछे के 'क्यों' को समझने के लिए तैयार हो जाइए!",
       "visual_type": "concept_box",
-      "visual_content": "RAG: Foundations for Reliable AI\n\nNext Up: Module 2.1: Introduction to Vector Databases"
+      "visual_content": "Next Steps: Explore RAG architectures, Experiment with data, Understand the 'Why' (Theory)"
     }
   ]
 }
