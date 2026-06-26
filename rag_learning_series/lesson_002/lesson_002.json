@@ -2,40 +2,39 @@
   "video_id": "lesson_002",
   "meta_title": "Module 1.2: The RAG Paradigm Shift",
   "youtube_metadata_en": {
-    "title": "RAG Paradigm Shift: Unlocking Smarter LLMs with Retrieval Augmented Generation",
-    "description": "Dive deep into Retrieval Augmented Generation (RAG) and discover how it revolutionizes Large Language Models (LLMs). This module explains the limitations of traditional LLMs, the core components of RAG (retrieval, augmentation, generation), and why it's a game-changer for building reliable, factual, and current AI applications. Learn how RAG prevents hallucinations and grounds LLM responses in verifiable knowledge. Perfect for AI enthusiasts, developers, and data scientists looking to build advanced AI systems. #RAG #LLM #AITutorial #GenerativeAI #VectorDB #AIExplained",
+    "title": "RAG Paradigm Shift: Unlocking Advanced AI with Retrieval Augmented Generation | Module 1.2",
+    "description": "Dive into Module 1.2 of our AI series: The RAG Paradigm Shift! Discover how Retrieval Augmented Generation (RAG) revolutionizes Large Language Models (LLMs) by providing accurate, up-to-date, and context-specific information. Learn how RAG addresses common LLM limitations like hallucination and outdated knowledge, enabling more reliable and powerful AI applications. We'll explore the core components of RAG, its benefits, and its impact on the future of AI development. Don't miss this crucial step in building robust AI systems! Stay tuned for Module 2.1: Introduction to Vector Databases.",
     "tags": [
       "RAG",
       "Retrieval Augmented Generation",
       "LLM",
-      "Generative AI",
+      "Large Language Model",
       "AI Tutorial",
-      "AI Explanation",
-      "LangChain",
-      "Vector Databases",
-      "Paradigm Shift",
-      "AI Applications"
+      "AI Series",
+      "Prompt Engineering",
+      "NLP",
+      "Machine Learning",
+      "AI Basics"
     ]
   },
   "youtube_metadata_hi": {
-    "title": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन के साथ स्मार्टर LLMs को अनलॉक करना",
-    "description": "रिट्रीवल ऑगमेंटेड जनरेशन (RAG) में गहराई से उतरें और जानें कि यह लार्ज लैंग्वेज मॉडल्स (LLMs) में कैसे क्रांति ला रहा है। यह मॉड्यूल पारंपरिक LLMs की सीमाओं, RAG के मुख्य घटकों (रिट्रीवल, ऑगमेंटेशन, जनरेशन), और यह विश्वसनीय, तथ्यात्मक और वर्तमान AI एप्लिकेशन बनाने के लिए क्यों गेम-चेंजर है, की व्याख्या करता है। सीखें कि RAG कैसे भ्रम को रोकता है और LLM प्रतिक्रियाओं को सत्यापन योग्य ज्ञान में आधार बनाता है। AI उत्साही, डेवलपर्स और डेटा वैज्ञानिकों के लिए एकदम सही है जो उन्नत AI सिस्टम बनाना चाहते हैं। #RAG #LLM #AITutorial #GenerativeAI #VectorDB #AIExplained",
+    "title": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन से उन्नत AI को अनलॉक करें | मॉड्यूल 1.2",
+    "description": "हमारी AI सीरीज़ के मॉड्यूल 1.2 में गहराई से उतरें: RAG पैराडाइम शिफ्ट! जानें कि कैसे रिट्रीवल ऑगमेंटेड जनरेशन (RAG) लार्ज लैंग्वेज मॉडल्स (LLMs) को सटीक, अद्यतन और संदर्भ-विशिष्ट जानकारी प्रदान करके क्रांतिकारी बना रहा है। जानें कि RAG कैसे LLM की सामान्य सीमाओं जैसे मतिभ्रम और पुरानी जानकारी को दूर करता है, जिससे अधिक विश्वसनीय और शक्तिशाली AI एप्लिकेशन संभव होते हैं। हम RAG के मुख्य घटकों, इसके लाभों और AI विकास के भविष्य पर इसके प्रभाव का पता लगाएंगे। मज़बूत AI सिस्टम बनाने में इस महत्वपूर्ण कदम को न चूकें! मॉड्यूल 2.1: वेक्टर डेटाबेस का परिचय के लिए बने रहें।",
     "tags": [
       "RAG in Hindi",
-      "LLM Hindi",
-      "Generative AI Hindi",
-      "AI Tutorial Hindi",
-      "RAG समझाया",
-      "वेक्टर डेटाबेस",
-      "LangChain Hindi",
-      "AI क्रांति",
-      "कृत्रिम बुद्धिमत्ता"
+      "AI in Hindi",
+      "LLM in Hindi",
+      "मशीन लर्निंग",
+      "एनएलपी",
+      "एआई ट्यूटोरियल",
+      "जनरेटिव एआई",
+      "एआई बेसिक्स"
     ]
   },
   "storyboard": [
     {
       "title_en": "Module 1.2: The RAG Paradigm Shift",
-      "title_hi": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन के साथ स्मार्टर LLMs को अनलॉक करना",
+      "title_hi": "RAG पैराडाइम शिफ्ट: रिट्रीवल ऑगमेंटेड जनरेशन से उन्नत AI को अनलॉक करें | मॉड्यूल 1.2",
       "content_text_en": "Welcome to the Rag Series",
       "content_text_hi": "Rag सीरीज में आपका स्वागत है",
       "visual_type": "title_slide",
@@ -55,47 +54,69 @@
     },
     {
       "slide_index": 1,
-      "title_en": "Beyond Hallucinations: The Need for RAG",
-      "title_hi": "भ्रम से परे: RAG की आवश्यकता",
-      "content_text_en": "Large Language Models (LLMs) are powerful but often suffer from 'hallucinations,' providing plausible but incorrect information, or lack access to up-to-date knowledge. Retrieval Augmented Generation (RAG) emerged as a critical solution to these limitations, grounding LLM responses in verifiable, external data sources.",
-      "content_text_hi": "लार्ज लैंग्वेज मॉडल्स (LLMs) शक्तिशाली होते हैं, लेकिन अक्सर 'भ्रम' से ग्रस्त होते हैं, जो प्रशंसनीय लेकिन गलत जानकारी प्रदान करते हैं, या उनके पास नवीनतम ज्ञान तक पहुंच नहीं होती है। रिट्रीवल ऑगमेंटेड जनरेशन (RAG) इन सीमाओं को दूर करने के लिए एक महत्वपूर्ण समाधान के रूप में उभरा है, जो LLM प्रतिक्रियाओं को सत्यापन योग्य, बाहरी डेटा स्रोतों पर आधारित करता है।",
-      "narration_text_en": "Hello everyone, and welcome back to our AI series! Today, we're diving into Module 1.2: 'The RAG Paradigm Shift.' Before RAG, working with Large Language Models presented a significant challenge: while incredibly creative, LLMs could sometimes confidently generate information that was factually incorrect or simply outdated, often referred to as 'hallucinations.' This made them unreliable for applications requiring precision or real-time data. RAG was developed to directly address this fundamental problem, ensuring our AI applications deliver grounded, factual, and current information.",
-      "narration_text_hi": "नमस्ते दोस्तों, और हमारी AI श्रृंखला में आपका फिर से स्वागत है! आज, हम मॉड्यूल 1.2: 'द RAG पैराडाइम शिफ्ट' में गोता लगा रहे हैं। RAG से पहले, लार्ज लैंग्वेज मॉडल्स के साथ काम करना एक महत्वपूर्ण चुनौती पेश करता था: अविश्वसनीय रूप से रचनात्मक होने के बावजूद, LLMs कभी-कभी आत्मविश्वास से ऐसी जानकारी उत्पन्न कर सकते थे जो तथ्यात्मक रूप से गलत या बस पुरानी थी, जिसे अक्सर 'भ्रम' कहा जाता है। इसने उन्हें उन अनुप्रयोगों के लिए अविश्वसनीय बना दिया जिन्हें सटीकता या वास्तविक समय डेटा की आवश्यकता होती है। RAG को इस मौलिक समस्या को सीधे संबोधित करने के लिए विकसित किया गया था, यह सुनिश्चित करते हुए कि हमारे AI एप्लिकेशन जमीनी, तथ्यात्मक और वर्तमान जानकारी प्रदान करें।",
-      "visual_type": "architecture_diagram",
-      "visual_content": "graph LR\n    A[User Query] --> B{Vanilla LLM}\n    B --> C[Hallucination / Outdated Response]\n\n    subgraph RAG System\n        A --> D[Retrieval Component]\n        D --> E[External Knowledge Base]\n        E -- Retrieved Chunks --> F[LLM Augmentation]\n        F --> G[Grounded, Factual Response]\n    end\n"
+      "title_en": "Understanding the RAG Paradigm Shift",
+      "title_hi": "RAG पैराडाइम शिफ्ट को समझना",
+      "content_text_en": "Retrieval Augmented Generation, or RAG, represents a fundamental change in how we interact with and utilize Large Language Models (LLMs). It moves beyond simply prompting an LLM by integrating an external knowledge retrieval step, allowing models to access current and specific information. This paradigm shift significantly enhances the factual accuracy and relevance of AI-generated responses.",
+      "content_text_hi": "रिट्रीवल ऑगमेंटेड जनरेशन, या RAG, इस बात में एक मौलिक परिवर्तन का प्रतिनिधित्व करता है कि हम लार्ज लैंग्वेज मॉडल्स (LLMs) के साथ कैसे बातचीत करते हैं और उनका उपयोग करते हैं। यह एक बाहरी ज्ञान पुनर्प्राप्ति चरण को एकीकृत करके LLM को केवल प्रॉम्प्ट करने से आगे बढ़ता है, जिससे मॉडल को वर्तमान और विशिष्ट जानकारी तक पहुंचने की अनुमति मिलती है। यह प्रतिमान बदलाव AI-जनित प्रतिक्रियाओं की तथ्यात्मक सटीकता और प्रासंगिकता को काफी बढ़ाता है।",
+      "narration_text_en": "Welcome back to our AI series! Today, we're diving into Module 1.2: The RAG Paradigm Shift. RAG, or Retrieval Augmented Generation, is transforming how we leverage Large Language Models. Essentially, it allows LLMs to consult external knowledge bases, moving beyond their pre-trained data to provide more accurate and relevant answers. This is a game-changer for building reliable AI applications.",
+      "narration_text_hi": "हमारी AI सीरीज़ में आपका फिर से स्वागत है! आज, हम मॉड्यूल 1.2: RAG पैराडाइम शिफ्ट में गहराई से उतर रहे हैं। RAG, या रिट्रीवल ऑगमेंटेड जनरेशन, जिस तरह से हम लार्ज लैंग्वेज मॉडल्स का लाभ उठाते हैं, उसे बदल रहा है। अनिवार्य रूप से, यह LLM को बाहरी ज्ञान डेटाबेस से परामर्श करने की अनुमति देता है, जिससे वे अपने पूर्व-प्रशिक्षित डेटा से परे जाकर अधिक सटीक और प्रासंगिक उत्तर प्रदान कर सकें। विश्वसनीय AI एप्लिकेशन बनाने के लिए यह एक गेम-चेंजर है।",
+      "visual_type": "concept_box",
+      "visual_content": "RAG: Beyond Pre-trained Knowledge\n(LLM + External Knowledge Retrieval)"
     },
     {
       "slide_index": 2,
-      "title_en": "The Retrieval Phase: Finding Relevant Context",
-      "title_hi": "पुनर्प्राप्ति चरण: प्रासंगिक संदर्भ ढूँढना",
-      "content_text_en": "The first critical step in RAG is retrieval, where the user's query is used to fetch relevant information from a vast external knowledge base. This involves converting the query into a numerical representation (an embedding) and then performing a similarity search to identify the most pertinent document chunks.",
-      "content_text_hi": "RAG में पहला महत्वपूर्ण कदम पुनर्प्राप्ति है, जहाँ उपयोगकर्ता की क्वेरी का उपयोग एक विशाल बाहरी ज्ञान आधार से प्रासंगिक जानकारी प्राप्त करने के लिए किया जाता है। इसमें क्वेरी को एक संख्यात्मक प्रतिनिधित्व (एक एम्बेडिंग) में बदलना और फिर सबसे प्रासंगिक दस्तावेज़ खंडों की पहचान करने के लिए समानता खोज करना शामिल है।",
-      "narration_text_en": "The RAG process begins with a crucial step called 'retrieval.' When a user asks a question, the RAG system doesn't immediately send it to the LLM. Instead, it first takes that query, converts it into a numerical vector using an embedding model, and then uses this vector to search through a pre-indexed external knowledge base. This knowledge base could be anything from your company's internal documents, research papers, or even real-time web data. The goal is to retrieve the most relevant pieces of information, typically called 'chunks,' that are semantically similar to the user's question. This ensures that only pertinent, accurate information is considered.",
-      "narration_text_hi": "RAG प्रक्रिया 'पुनर्प्राप्ति' नामक एक महत्वपूर्ण चरण से शुरू होती है। जब कोई उपयोगकर्ता एक प्रश्न पूछता है, तो RAG सिस्टम उसे तुरंत LLM को नहीं भेजता है। इसके बजाय, यह पहले उस क्वेरी को लेता है, एक एम्बेडिंग मॉडल का उपयोग करके उसे एक संख्यात्मक वेक्टर में परिवर्तित करता है, और फिर इस वेक्टर का उपयोग एक पूर्व-अनुक्रमित बाहरी ज्ञान आधार में खोज करने के लिए करता है। यह ज्ञान आधार आपकी कंपनी के आंतरिक दस्तावेज़ों, शोध पत्रों या यहां तक कि वास्तविक समय के वेब डेटा से कुछ भी हो सकता है। लक्ष्य जानकारी के सबसे प्रासंगिक टुकड़ों को प्राप्त करना है, जिन्हें आमतौर पर 'चंक्स' कहा जाता है, जो उपयोगकर्ता के प्रश्न के अर्थ में समान हैं। यह सुनिश्चित करता है कि केवल प्रासंगिक, सटीक जानकारी पर विचार किया जाए।",
-      "visual_type": "sequence_diagram",
-      "visual_content": "sequenceDiagram\n    participant User\n    participant RAG_Application\n    participant Embedding_Model\n    participant Vector_Database\n\n    User->>RAG_Application: Sends Query\n    RAG_Application->>Embedding_Model: Embed Query\n    Embedding_Model-->>RAG_Application: Query Vector\n    RAG_Application->>Vector_Database: Similarity Search (Top-K)\n    Vector_Database-->>RAG_Application: Relevant Document Chunks\n    RAG_Application-->>User: (Proceeds to Augmentation)\n"
+      "title_en": "Addressing LLM Limitations",
+      "title_hi": "LLM की सीमाओं को दूर करना",
+      "content_text_en": "Traditional LLMs often face challenges with hallucination, generating plausible but incorrect information, or being limited by their training data's cutoff date, leading to outdated responses. They also lack domain-specific expertise unless explicitly trained on such data. RAG directly tackles these issues by providing a mechanism for LLMs to access verified, real-time, or proprietary information.",
+      "content_text_hi": "पारंपरिक LLM अक्सर मतिभ्रम, प्रशंसनीय लेकिन गलत जानकारी उत्पन्न करने, या अपने प्रशिक्षण डेटा की कटऑफ तिथि से सीमित होने जैसी चुनौतियों का सामना करते हैं, जिसके परिणामस्वरूप पुरानी प्रतिक्रियाएँ मिलती हैं। उनमें डोमेन-विशिष्ट विशेषज्ञता की भी कमी होती है जब तक कि उन्हें ऐसे डेटा पर स्पष्ट रूप से प्रशिक्षित न किया गया हो। RAG इन समस्याओं को सीधे हल करता है, LLM को सत्यापित, वास्तविक समय या मालिकाना जानकारी तक पहुंचने के लिए एक तंत्र प्रदान करके।",
+      "narration_text_en": "Before RAG, LLMs often struggled with what we call 'hallucination' – making up facts that sound convincing but are entirely false. They were also stuck with knowledge up to their last training date, meaning no current events or specific company data. RAG offers a powerful solution by bridging this gap, allowing LLMs to access and verify information on the fly.",
+      "narration_text_hi": "RAG से पहले, LLM अक्सर जिसे हम 'मतिभ्रम' कहते हैं, उससे जूझते थे - ऐसे तथ्य गढ़ते थे जो ठोस लगते थे लेकिन पूरी तरह से गलत थे। वे अपनी अंतिम प्रशिक्षण तिथि तक के ज्ञान से भी बंधे हुए थे, जिसका अर्थ है कि कोई वर्तमान घटनाएँ या विशिष्ट कंपनी डेटा नहीं था। RAG इस अंतर को पाटकर एक शक्तिशाली समाधान प्रदान करता है, जिससे LLM को तुरंत जानकारी तक पहुंचने और उसे सत्यापित करने की अनुमति मिलती है।",
+      "visual_type": "concept_box",
+      "visual_content": "Vanilla LLM Problems:\n- Hallucination\n- Outdated Info\n- Lack of Specificity\n\nRAG's Solution: Real-time, Verified Data Access"
     },
     {
       "slide_index": 3,
-      "title_en": "Augmentation and Generation: Crafting Informed Responses",
-      "title_hi": "ऑगमेंटेशन और जनरेशन: सूचित प्रतिक्रियाएँ तैयार करना",
-      "content_text_en": "Following retrieval, the relevant document chunks are combined with the original user query and fed into the LLM as context – this is the augmentation step. The LLM then uses this enriched prompt to generate a grounded, accurate, and comprehensive answer, effectively preventing hallucinations.",
-      "content_text_hi": "पुनर्प्राप्ति के बाद, प्रासंगिक दस्तावेज़ खंडों को मूल उपयोगकर्ता क्वेरी के साथ जोड़ा जाता है और संदर्भ के रूप में LLM में फीड किया जाता है - यह संवर्धन चरण है। LLM तब इस समृद्ध प्रॉम्प्ट का उपयोग एक जमीनी, सटीक और व्यापक उत्तर उत्पन्न करने के लिए करता है, जिससे भ्रम को प्रभावी ढंग से रोका जा सकता है।",
-      "narration_text_en": "Once the relevant chunks are retrieved, the RAG system moves to the 'augmentation' phase. Here, the original user query is combined with these retrieved documents to form an enriched prompt. This enhanced prompt is then passed to the Large Language Model. The LLM now has a specific, factual context to work with, drastically reducing its tendency to hallucinate. The final step is 'generation,' where the LLM produces a coherent, accurate, and relevant answer based on the provided context, delivering a much more reliable output than a standalone LLM ever could. This is where the magic of grounding LLMs in real data truly happens.",
-      "narration_text_hi": "एक बार जब प्रासंगिक चंक्स प्राप्त हो जाते हैं, तो RAG सिस्टम 'संवर्धन' चरण में चला जाता है। यहाँ, मूल उपयोगकर्ता क्वेरी को इन प्राप्त दस्तावेज़ों के साथ मिलाकर एक समृद्ध प्रॉम्प्ट बनाया जाता है। इस उन्नत प्रॉम्प्ट को तब लार्ज लैंग्वेज मॉडल में पास किया जाता है। LLM के पास अब काम करने के लिए एक विशिष्ट, तथ्यात्मक संदर्भ होता है, जिससे उसके भ्रम की प्रवृत्ति बहुत कम हो जाती है। अंतिम चरण 'जनरेशन' है, जहाँ LLM प्रदान किए गए संदर्भ के आधार पर एक सुसंगत, सटीक और प्रासंगिक उत्तर उत्पन्न करता है, जो एक अकेले LLM से कहीं अधिक विश्वसनीय आउटपुट प्रदान करता है। यहीं पर वास्तविक डेटा में LLM को आधार बनाने का जादू होता है।",
-      "visual_type": "code_snippet",
-      "visual_content": "from langchain_community.embeddings import HuggingFaceEmbeddings\nfrom langchain_community.vectorstores import FAISS\nfrom langchain_core.prompts import ChatPromptTemplate\nfrom langchain_community.chat_models import ChatOpenAI\nfrom langchain.chains.combine_documents import create_stuff_documents_chain\nfrom langchain.chains import create_retrieval_chain\nfrom langchain.text_splitter import RecursiveCharacterTextSplitter\n\n# 1. Load and split documents\ndocuments = [\n    \"Retrieval Augmented Generation (RAG) combines information retrieval with language model generation.\",\n    \"RAG helps LLMs provide more accurate and up-to-date information by grounding responses in external knowledge sources.\",\n    \"Vector databases are crucial for efficient similarity search in RAG systems.\"\n]\ntext_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)\nchunks = text_splitter.create_documents([{'page_content': doc} for doc in documents])\n\n# 2. Create embeddings and vector store\nembeddings = HuggingFaceEmbeddings(model_name=\"all-MiniLM-L6-v2\")\nvector_store = FAISS.from_documents(chunks, embeddings)\nretriever = vector_store.as_retriever()\n\n# 3. Define prompt and LLM\nprompt = ChatPromptTemplate.from_template(\n    \"Answer the following question based only on the provided context:\\nContext: {context}\\nQuestion: {input}\"\n)\nllm = ChatOpenAI(model=\"gpt-3.5-turbo\", temperature=0) # Use your OpenAI key or local LLM\n\n# 4. Create RAG chain\ndocument_chain = create_stuff_documents_chain(llm, prompt)\nretrieval_chain = create_retrieval_chain(retriever, document_chain)\n\n# 5. Invoke the chain\nresponse = retrieval_chain.invoke({\"input\": \"What is RAG?\"})\nprint(response[\"answer\"])\n"
+      "title_en": "The Retrieval Step: Finding Relevant Information",
+      "title_hi": "पुनर्प्राप्ति चरण: प्रासंगिक जानकारी ढूँढना",
+      "content_text_en": "The first critical component of RAG is the retrieval step. When a user queries the system, a retriever module searches a vast external knowledge base, which could be documents, databases, or web content. It identifies and extracts the most relevant pieces of information, often using semantic search or vector embeddings, ensuring that only highly pertinent context is considered for augmentation.",
+      "content_text_hi": "RAG का पहला महत्वपूर्ण घटक पुनर्प्राप्ति चरण है। जब कोई उपयोगकर्ता सिस्टम से प्रश्न करता है, तो एक रिट्रीवर मॉड्यूल एक विशाल बाहरी ज्ञान आधार की खोज करता है, जो दस्तावेज़, डेटाबेस या वेब सामग्री हो सकता है। यह अक्सर सिमेंटिक सर्च या वेक्टर एम्बेडिंग का उपयोग करके जानकारी के सबसे प्रासंगिक टुकड़ों को पहचानता और निकालता है, यह सुनिश्चित करता है कि संवर्धन के लिए केवल अत्यधिक प्रासंगिक संदर्भ पर विचार किया जाए।",
+      "narration_text_en": "So, how does RAG actually work? It starts with the 'Retrieval' phase. When you ask a question, the system first consults an extensive knowledge base—think of it as a super-smart library. It uses sophisticated techniques, often involving embeddings, to quickly find and pull out the most relevant documents or data snippets that directly address your query. This ensures the LLM gets the best possible context.",
+      "narration_text_hi": "तो, RAG वास्तव में कैसे काम करता है? यह 'पुनर्प्राप्ति' चरण से शुरू होता है। जब आप कोई प्रश्न पूछते हैं, तो सिस्टम सबसे पहले एक व्यापक ज्ञान आधार से परामर्श करता है - इसे एक सुपर-स्मार्ट लाइब्रेरी के रूप में सोचें। यह आपकी क्वेरी को सीधे संबोधित करने वाले सबसे प्रासंगिक दस्तावेज़ों या डेटा स्निपेट्स को तेज़ी से खोजने और बाहर निकालने के लिए एम्बेडिंग सहित परिष्कृत तकनीकों का उपयोग करता है। यह सुनिश्चित करता है कि LLM को सर्वोत्तम संभव संदर्भ मिले।",
+      "visual_type": "architecture_diagram",
+      "visual_content": "graph TD\n    A[User Query] --> B(Embed Query)\n    B --> C{Search Vector Index}\n    C --> D[Retrieve Top-K Chunks]\n    D --> E[Relevant Context]"
     },
     {
       "slide_index": 4,
-      "title_en": "The RAG Paradigm Shift: Reliability and Future Impact",
-      "title_hi": "RAG पैराडाइम शिफ्ट: विश्वसनीयता और भविष्य का प्रभाव",
-      "content_text_en": "RAG represents a true paradigm shift in how we build with LLMs, moving from often unreliable, isolated models to integrated, grounded, and factual AI systems. This new approach empowers developers to create robust applications that can confidently tackle complex, knowledge-intensive tasks, unlocking new possibilities for AI adoption across industries.",
-      "content_text_hi": "RAG LLM के साथ हमारे निर्माण के तरीके में एक वास्तविक पैराडाइम शिफ्ट का प्रतिनिधित्व करता है, जो अक्सर अविश्वसनीय, अलग-थलग मॉडलों से एकीकृत, जमीनी और तथ्यात्मक AI प्रणालियों की ओर बढ़ता है। यह नया दृष्टिकोण डेवलपर्स को मजबूत एप्लिकेशन बनाने में सशक्त बनाता है जो आत्मविश्वास से जटिल, ज्ञान-गहन कार्यों से निपट सकते हैं, जिससे उद्योगों में AI अपनाने के लिए नई संभावनाएं खुलती हैं।",
-      "narration_text_en": "The RAG paradigm shift isn't just a technical improvement; it's a fundamental change in how we perceive and develop with large language models. By enabling LLMs to dynamically access and integrate external, up-to-date information, RAG transforms them from brilliant but sometimes flawed conversationalists into reliable, factual knowledge workers. This shift empowers us to build truly impactful AI applications across domains like customer service, research, and data analysis. As we've seen, the efficiency of this retrieval process is paramount, and a core component enabling this is the vector database. In our next lecture, Module 2.1, we'll dive deep into 'Introduction to Vector Databases' and explore how they make this whole retrieval process possible. Stay tuned!",
-      "narration_text_hi": "RAG पैराडाइम शिफ्ट सिर्फ एक तकनीकी सुधार नहीं है; यह हमारे बड़े भाषा मॉडल के साथ काम करने और विकसित करने के तरीके में एक मौलिक परिवर्तन है। LLM को बाहरी, अद्यतन जानकारी तक गतिशील रूप से पहुँचने और उसे एकीकृत करने में सक्षम करके, RAG उन्हें शानदार लेकिन कभी-कभी त्रुटिपूर्ण वार्ताकारों से विश्वसनीय, तथ्यात्मक ज्ञान कर्मचारियों में बदल देता है। यह बदलाव हमें ग्राहक सेवा, अनुसंधान और डेटा विश्लेषण जैसे डोमेन में वास्तव में प्रभावशाली AI एप्लिकेशन बनाने में सशक्त बनाता है। जैसा कि हमने देखा है, इस पुनर्प्राप्ति प्रक्रिया की दक्षता सर्वोपरि है, और इसे सक्षम करने वाला एक मुख्य घटक वेक्टर डेटाबेस है। हमारे अगले व्याख्यान, मॉड्यूल 2.1 में, हम 'वेक्टर डेटाबेस का परिचय' में गहराई से उतरेंगे और जानेंगे कि वे इस पूरी पुनर्प्राप्ति प्रक्रिया को कैसे संभव बनाते हैं। बने रहें!",
+      "title_en": "The Augmentation and Generation Steps",
+      "title_hi": "संवर्धन और जनरेशन चरण",
+      "content_text_en": "Once relevant information is retrieved, the 'Augmentation' step combines this context with the original user query, forming an enriched prompt. This augmented prompt is then fed into the Large Language Model during the 'Generation' phase. The LLM then uses this specific, up-to-date context to formulate a highly accurate, grounded, and comprehensive response, minimizing the risk of hallucination.",
+      "content_text_hi": "एक बार जब प्रासंगिक जानकारी प्राप्त हो जाती है, तो 'संवर्धन' चरण इस संदर्भ को मूल उपयोगकर्ता क्वेरी के साथ जोड़ता है, जिससे एक समृद्ध प्रॉम्प्ट बनता है। इस संवर्धित प्रॉम्प्ट को फिर 'जनरेशन' चरण के दौरान लार्ज लैंग्वेज मॉडल में फीड किया जाता है। LLM तब इस विशिष्ट, अद्यतन संदर्भ का उपयोग करके एक अत्यधिक सटीक, आधारभूत और व्यापक प्रतिक्रिया तैयार करता है, जिससे मतिभ्रम का जोखिम कम होता है।",
+      "narration_text_en": "After retrieval, we move to 'Augmentation' and 'Generation'. The retrieved information isn't just handed to the LLM; it's cleverly integrated with your original query to create a super-rich prompt. This enhanced prompt then guides the LLM to generate a response that is not only coherent and natural-sounding but also factually supported by the external data. This dramatically improves the reliability of the output.",
+      "narration_text_hi": "पुनर्प्राप्ति के बाद, हम 'संवर्धन' और 'जनरेशन' पर जाते हैं। पुनर्प्राप्त जानकारी केवल LLM को नहीं दी जाती है; इसे आपकी मूल क्वेरी के साथ चतुराई से एकीकृत किया जाता है ताकि एक सुपर-रिच प्रॉम्प्ट बनाया जा सके। यह उन्नत प्रॉम्प्ट फिर LLM को एक ऐसी प्रतिक्रिया उत्पन्न करने के लिए मार्गदर्शन करता है जो न केवल सुसंगत और स्वाभाविक लगती है, बल्कि बाहरी डेटा द्वारा तथ्यात्मक रूप से समर्थित भी होती है। यह आउटपुट की विश्वसनीयता में नाटकीय रूप से सुधार करता है।",
+      "visual_type": "architecture_diagram",
+      "visual_content": "graph LR\n    A[User Query] --> B(Retriever)\n    B --> C[Knowledge Base]\n    C --> D[Relevant Context]\n    A --> E[Prompt Augmentation]\n    D --> E\n    E --> F[Large Language Model]\n    F --> G[Generated Response]"
+    },
+    {
+      "slide_index": 5,
+      "title_en": "Key Benefits of RAG Systems",
+      "title_hi": "RAG सिस्टम के प्रमुख लाभ",
+      "content_text_en": "RAG systems offer several crucial advantages: they significantly reduce hallucination by grounding responses in real data, provide access to current and proprietary information, and enhance explainability by showing sources. Furthermore, RAG allows for easier updates to knowledge without retraining the entire LLM, making AI applications more adaptable and cost-effective for enterprises.",
+      "content_text_hi": "RAG सिस्टम कई महत्वपूर्ण लाभ प्रदान करते हैं: वे वास्तविक डेटा में प्रतिक्रियाओं को आधार बनाकर मतिभ्रम को काफी कम करते हैं, वर्तमान और मालिकाना जानकारी तक पहुंच प्रदान करते हैं, और स्रोतों को दिखाकर व्याख्यात्मकता बढ़ाते हैं। इसके अलावा, RAG पूरे LLM को फिर से प्रशिक्षित किए बिना ज्ञान को आसान अपडेट की अनुमति देता है, जिससे AI एप्लिकेशन उद्यमों के लिए अधिक अनुकूलनीय और लागत प्रभावी बन जाते हैं।",
+      "narration_text_en": "The benefits of RAG are substantial. We get far less hallucination, as responses are now grounded in verifiable facts. It allows LLMs to use the absolute latest information, crucial for fast-evolving domains, and even proprietary company data that wasn't part of their original training. This makes RAG invaluable for enterprise solutions requiring accuracy and up-to-dateness.",
+      "narration_text_hi": "RAG के लाभ पर्याप्त हैं। हमें बहुत कम मतिभ्रम मिलता है, क्योंकि प्रतिक्रियाएँ अब सत्यापन योग्य तथ्यों पर आधारित होती हैं। यह LLM को बिल्कुल नवीनतम जानकारी का उपयोग करने की अनुमति देता है, जो तेजी से विकसित होने वाले डोमेन के लिए महत्वपूर्ण है, और यहां तक कि मालिकाना कंपनी डेटा भी जो उनके मूल प्रशिक्षण का हिस्सा नहीं था। यह RAG को सटीकता और अद्यतनीकरण की आवश्यकता वाले उद्यम समाधानों के लिए अमूल्य बनाता है।",
       "visual_type": "concept_box",
-      "visual_content": "## The RAG Paradigm Shift\n\n**From:**\n- Hallucinations\n- Outdated Knowledge\n- Limited Scope\n\n**To:**\n- Grounded Facts\n- Real-time Information\n- Enhanced Reliability\n- Custom Knowledge Base Integration"
+      "visual_content": "RAG Benefits:\n- Reduced Hallucination\n- Up-to-Date Information\n- Domain-Specific Knowledge\n- Enhanced Explainability\n- Cost-Effective Updates"
+    },
+    {
+      "slide_index": 6,
+      "title_en": "The Future of RAG & What's Next",
+      "title_hi": "RAG का भविष्य और आगे क्या है",
+      "content_text_en": "The RAG paradigm shift is fundamental to building robust, reliable, and enterprise-ready AI systems that leverage LLMs. It empowers models to act as intelligent interfaces to vast knowledge, ensuring their utility in dynamic environments. Mastering RAG is essential for anyone looking to develop advanced AI applications capable of real-world impact and informed decision-making.",
+      "content_text_hi": "RAG प्रतिमान बदलाव LLM का लाभ उठाने वाले मज़बूत, विश्वसनीय और उद्यम-तैयार AI सिस्टम बनाने के लिए मौलिक है। यह मॉडल को विशाल ज्ञान के लिए बुद्धिमान इंटरफेस के रूप में कार्य करने में सशक्त बनाता है, जिससे गतिशील वातावरण में उनकी उपयोगिता सुनिश्चित होती है। वास्तविक दुनिया के प्रभाव और सूचित निर्णय लेने में सक्षम उन्नत AI एप्लिकेशन विकसित करने वाले किसी भी व्यक्ति के लिए RAG में महारत हासिल करना आवश्यक है।",
+      "narration_text_en": "The RAG paradigm is truly reshaping the landscape of AI, making LLMs not just smarter, but also more trustworthy and adaptable for real-world applications. It’s a core component for anyone serious about building powerful AI systems. To effectively implement RAG, understanding the underlying technologies for efficient data retrieval is key. That’s precisely what we'll explore in our very next lecture, Module 2.1: Introduction to Vector Databases. Don't miss it!",
+      "narration_text_hi": "RAG प्रतिमान वास्तव में AI के परिदृश्य को नया आकार दे रहा है, जिससे LLM न केवल होशियार हो रहे हैं, बल्कि वास्तविक दुनिया के अनुप्रयोगों के लिए अधिक भरोसेमंद और अनुकूलनीय भी बन रहे हैं। शक्तिशाली AI सिस्टम बनाने के बारे में गंभीर किसी भी व्यक्ति के लिए यह एक मुख्य घटक है। RAG को प्रभावी ढंग से लागू करने के लिए, कुशल डेटा पुनर्प्राप्ति के लिए अंतर्निहित प्रौद्योगिकियों को समझना महत्वपूर्ण है। ठीक यही हम अपने अगले व्याख्यान, मॉड्यूल 2.1: वेक्टर डेटाबेस का परिचय में खोजेंगे। इसे देखना न भूलें!",
+      "visual_type": "concept_box",
+      "visual_content": "RAG: Foundations for Reliable AI\n\nNext Up: Module 2.1: Introduction to Vector Databases"
     }
   ]
 }
