@@ -19,6 +19,10 @@ def synthesize_talking_face(image_path: str, audio_path: str, output_path: str):
     # Import the newly created runner
     from core.wav2lip_runner import run_inference
     
+    env = os.environ.copy()
+    venv_bin = os.path.abspath(".venv/bin")
+    env["PATH"] = f"{venv_bin}:{env.get('PATH', '')}"
+
     success = run_inference(image_path, audio_path, output_path)
     if success:
         return True

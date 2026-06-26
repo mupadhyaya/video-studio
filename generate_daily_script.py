@@ -62,6 +62,7 @@ def generate_lesson():
     - The total combined narration text across all slides must be around 300 words (which takes exactly 2 minutes to speak).
     - You must analyze the topic and decide the best visual aid. You MUST heavily prioritize generating a 'code_snippet', 'architecture_diagram', or 'sequence_diagram' over a generic 'concept_box' whenever the topic allows.
     - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. It must withstand public scrutiny.
+    - If the topic is marked as (Practical) and you generate a 'code_snippet', you MUST instruct the viewer in the narration to "download the code from the GitHub link in the description below to try it yourself".
     - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code.
 
     {{
@@ -69,12 +70,12 @@ def generate_lesson():
       "meta_title": "{current_topic}",
       "youtube_metadata_en": {{
         "title": "[An engaging, search-optimized English YouTube title for this topic]",
-        "description": "[A detailed YouTube description including a summary, what they will learn, and relevant links or a call to action.]",
+        "description": "[A detailed YouTube description including a summary, what they will learn, and ALWAYS include this exact sentence: 'Download the source code and try it yourself: https://github.com/mupadhyaya/video-studio-oss']",
         "tags": ["AI", "Tutorial", "list of 5 to 10 relevant tags"]
       }},
       "youtube_metadata_hi": {{
         "title": "[An engaging, search-optimized Hindi YouTube title for this topic]",
-        "description": "[The exact same detailed YouTube description translated beautifully to Hindi.]",
+        "description": "[The exact same detailed YouTube description translated beautifully to Hindi. Also translate the github link sentence.]",
         "tags": ["AI in Hindi", "Hindi Tutorial", "list of 5 to 10 relevant tags"]
       }},
       "storyboard": [

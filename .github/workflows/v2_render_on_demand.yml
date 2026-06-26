@@ -1,10 +1,16 @@
-name: V2 Daily Video Render
+name: V2 Render On Demand
 
 on:
-  schedule:
-    # 00:30 UTC = 06:00 AM IST
-    - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      lesson_path:
+        description: 'Path to the lesson JSON (e.g. rag_learning_series/lesson_001/lesson_001.json)'
+        required: true
+        default: 'rag_learning_series/lesson_001/lesson_001.json'
+      language:
+        description: "Language to render (en, hi, all)"
+        required: true
+        default: "all"
 
 jobs:
   render:
@@ -13,7 +19,6 @@ jobs:
       contents: write
 
     env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       YOUTUBE_OAUTH_TOKEN: ${{ secrets.YOUTUBE_OAUTH_TOKEN }}
 
     steps:
@@ -46,30 +51,29 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements_v2.txt
 
-      # ── 5. Generate today's lesson script via Gemini ───────────────────────
-      - name: Generate daily lesson JSON
-        run: python generate_daily_script.py
-
-      # ── 6. Render dual-language videos ─────────────────────────────────────
+      # ── 5. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
-          echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
-          python run_pipeline_v2.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "v2_$VIDEO_ID"
+          LESSON_FILE="${{ github.event.inputs.lesson_path }}"
+          VIDEO_ID=$(basename "$LESSON_FILE" .json)
+          SERIES_DIR=$(echo "$LESSON_FILE" | cut -d'/' -f1)
+          echo "SERIES_DIR=$SERIES_DIR" >> $GITHUB_ENV
+          echo "Rendering from: $LESSON_FILE (video-id: $VIDEO_ID)"
+          python run_pipeline_v2.py --input "$LESSON_FILE" --video-id "v2_$VIDEO_ID" --lang "${{ github.event.inputs.language }}"
 
-      # ── 7. Upload compiled videos as artifacts ─────────────────────────────
+      # ── 6. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos
         uses: actions/upload-artifact@v4
         with:
-          name: rendered-videos
+          name: on-demand-rendered-videos
           path: "${{ env.SERIES_DIR }}/**/*.mp4"
           retention-days: 14
 
-      # ── 8. Commit to current repo ───────────────────────────────────────────
-      - name: Commit curriculum and generated videos
+      # ── 7. Commit to current repo ───────────────────────────────────────────
+      - name: Commit generated videos to repo
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add curriculum.txt rag_curriculum.txt agent_curriculum.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add *_learning_series/
-          git commit -m "chore: auto-generate lesson and advance curriculum" || echo "No changes to commit"
+          git commit -m "feat: Manual re-render of ${{ github.event.inputs.lesson_path }}" || echo "No changes to commit"
           git push

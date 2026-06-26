@@ -1,10 +1,16 @@
-name: V2 Daily Video Render
+name: V2 Generate & Render On Demand
 
 on:
-  schedule:
-    # 00:30 UTC = 06:00 AM IST
-    - cron: "30 0 * * *"
   workflow_dispatch:
+    inputs:
+      day_number:
+        description: "Day/Lesson number to generate (e.g., 1 for lesson_001)"
+        required: true
+        default: "1"
+      language:
+        description: "Language to render (en, hi, all)"
+        required: true
+        default: "all"
 
 jobs:
   render:
@@ -46,30 +52,29 @@ jobs:
       - name: Install Python packages
         run: pip install -r requirements_v2.txt
 
-      # ── 5. Generate today's lesson script via Gemini ───────────────────────
+      # ── 5. Generate lesson JSON via Gemini ─────────────────────────────────
       - name: Generate daily lesson JSON
-        run: python generate_daily_script.py
+        run: python generate_daily_script.py --day ${{ github.event.inputs.day_number }}
 
       # ── 6. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         run: |
           echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
-          python run_pipeline_v2.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "v2_$VIDEO_ID"
+          python run_pipeline_v2.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "v2_$VIDEO_ID" --lang "${{ github.event.inputs.language }}"
 
       # ── 7. Upload compiled videos as artifacts ─────────────────────────────
       - name: Upload rendered videos
         uses: actions/upload-artifact@v4
         with:
-          name: rendered-videos
+          name: generated-on-demand-videos
           path: "${{ env.SERIES_DIR }}/**/*.mp4"
           retention-days: 14
 
       # ── 8. Commit to current repo ───────────────────────────────────────────
-      - name: Commit curriculum and generated videos
+      - name: Commit generated videos to repo
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add curriculum.txt rag_curriculum.txt agent_curriculum.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add *_learning_series/
-          git commit -m "chore: auto-generate lesson and advance curriculum" || echo "No changes to commit"
+          git commit -m "feat: Manual RE-GENERATE & render of lesson ${{ github.event.inputs.day_number }}" || echo "No changes to commit"
           git push

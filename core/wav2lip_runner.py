@@ -14,8 +14,14 @@ def download_file(url, dest):
     if not os.path.exists(dest):
         print(f"Downloading {url} to {dest}...")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
-        urllib.request.urlretrieve(url, dest)
-        print("Download complete.")
+        try:
+            subprocess.run(["curl", "--retry", "5", "--retry-all-errors", "-L", "-o", dest, url], check=True)
+            print("Download complete.")
+        except subprocess.CalledProcessError:
+            print(f"Failed to download {url}")
+            if os.path.exists(dest):
+                os.remove(dest)
+            sys.exit(1)
     else:
         print(f"File {dest} already exists.")
 
@@ -53,9 +59,13 @@ def run_inference(image_path, audio_path, output_path):
         "--outfile", os.path.abspath(output_path),
         "--pads", "0", "10", "0", "0" # slight padding to avoid cropping the chin
     ]
-    
+    # Create environment with .venv/bin for ffmpeg
+    env = os.environ.copy()
+    venv_bin = os.path.abspath(".venv/bin")
+    env["PATH"] = f"{venv_bin}:{env.get('PATH', '')}"
+
     try:
-        subprocess.run(cmd, cwd=WAV2LIP_DIR, check=True)
+        subprocess.run(cmd, cwd=WAV2LIP_DIR, check=True, env=env)
         return True
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] Wav2Lip inference failed: {e}")

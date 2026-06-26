@@ -5,7 +5,7 @@ import asyncio
 import argparse
 import shutil
 from PIL import Image
-from core.image_engine import render_slide
+from core.image_engine import render_slide, generate_thumbnail
 from core.audio_engine import generate_speech
 from core.compiler_v2 import compile_video
 
@@ -54,20 +54,9 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             if visual_type == "title_slide":
                 print(f"  [THUMBNAIL] Extracting Title Slide as Thumbnail...")
                 thumb_path = os.path.join(os.path.dirname(os.path.abspath(output_path)), f"thumbnail_{lang}.png")
-                
-                # Composite the Base Slide (which has the Title text rendered on it)
-                thumb_img = Image.open(img_base_path).convert("RGBA")
-                
-                # Paste the avatar on the right side
                 avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
-                if os.path.exists(avatar_path):
-                    avatar_img = Image.open(avatar_path).convert("RGBA")
-                    # Scale avatar slightly if needed, or just paste it aligned to bottom right
-                    paste_x = thumb_img.width - avatar_img.width - 50
-                    paste_y = thumb_img.height - avatar_img.height
-                    thumb_img.paste(avatar_img, (paste_x, paste_y), avatar_img)
-                
-                thumb_img.save(thumb_path)
+                generate_thumbnail(title, thumb_path, avatar_path)
+                print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
                 print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
 
         # --- Step 2: Synthesize narrations ---

@@ -1,23 +1,24 @@
-Module 1.1: What is a Knowledge Cutoff?
-Module 1.2: The RAG Paradigm Shift
-Module 2.1: Introduction to Vector Databases
-Module 2.2: Deep Dive into Text Embeddings
-Module 3.1: Data Chunking Strategies
-Module 3.2: Practical Chunking Code Exercise
-Module 3.3: Chunking Exercise Solutions
-Module 4.1: The Retrieval Process
-Module 4.2: Vector Search Algorithms (KNN/ANN)
-Module 5.1: Synthesizing the Final Answer
-Module 5.2: Handling Hallucinations in RAG
-Module 6.1: Evaluating RAG Pipelines (RAGAS)
-Module 6.2: Advanced RAG: Query Transformation
-Module 6.3: Advanced RAG: Re-ranking
-Module 7.1: Model Context Protocol (MCP) Intro
-Module 7.2: Exposing Vector Databases via MCP
-Module 7.3: Connecting Agents to MCP Servers
-Module 8.1: End-to-End RAG Project Setup
-Module 8.2: End-to-End RAG Project Solution
-Module 9.1: Productionizing RAG
-Module 9.2: Multi-Modal RAG
-Module 10.1: Introduction to GraphRAG
-Module 10.2: Agentic RAG
+Module 1.1: What is a Knowledge Cutoff? (Theory)
+Module 1.2: Setting up your local Python RAG Environment (Practical)
+Module 2.1: The RAG Paradigm Shift & Architecture (Theory)
+Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)
+Module 3.1: Deep Dive into Text Embeddings (Theory)
+Module 3.2: Generating Embeddings locally with HuggingFace (Practical)
+Module 4.1: Introduction to Vector Databases (Theory)
+Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)
+Module 5.1: Data Chunking Strategies (Theory)
+Module 5.2: Writing a Document Loader and Splitter (Practical)
+Module 6.1: The Retrieval Process & KNN Algorithms (Theory)
+Module 6.2: Implementing a basic Retriever Chain (Practical)
+Module 7.1: Synthesizing the Final Answer & Hallucinations (Theory)
+Module 7.2: Building a full End-to-End RAG script (Practical)
+Module 8.1: Evaluating RAG Pipelines with RAGAS (Theory)
+Module 8.2: Writing unit tests for RAG accuracy (Practical)
+Module 9.1: Advanced RAG: Query Transformation & Re-ranking (Theory)
+Module 9.2: Implementing Cross-Encoder Re-ranking (Practical)
+Module 10.1: Model Context Protocol (MCP) Intro (Theory)
+Module 10.2: Exposing Vector Databases via MCP (Practical)
+Module 11.1: Multi-Modal RAG (Theory)
+Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)
+Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)
+Module 12.2: Building an Agentic RAG system with FastAPI (Practical)

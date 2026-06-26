@@ -77,10 +77,30 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                     # Resize the video clip
                     avatar_video_clip = avatar_video_clip.resized(height=350)
                     
+                    # Apply original alpha mask to remove black background
+                    avatar_mask = ImageClip(avatar_idle_path).resized(height=350).mask
+                    avatar_video_clip = avatar_video_clip.with_mask(avatar_mask)
+                    
                     # Position at bottom right
                     ax = vw - target_w - 40
                     ay = vh - 350 - 40
+                    
+                    # Apply breathing animation (scale slightly over a 2-second loop)
+                    # We use moviepy's resize with a custom function of time
+                    def breathing_scale(t):
+                        # Sinusoidal scaling between 1.0 and 1.03 over 3 seconds
+                        return 1.0 + 0.015 * (1 + math.sin(2 * math.pi * t / 3.0))
+                    
+                    # Store original mask so we can restore it after resize
                     avatar_video_clip = avatar_video_clip.with_position((ax, ay)).without_audio()
+                    
+                    # Only apply resize if moviepy 2.0 allows dynamic resize (which it does via fl_image, but it's simpler to just shift position for breathing)
+                    def breathing_position(t):
+                        # Move up and down by 8 pixels
+                        dy = 8 * math.sin(2 * math.pi * t / 3.0)
+                        return (ax, ay + dy)
+                        
+                    avatar_video_clip = avatar_video_clip.with_position(breathing_position)
                     
                     composite_layers.append(avatar_video_clip)
                 else:

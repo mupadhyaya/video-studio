@@ -273,5 +273,39 @@ def render_slide(title, content_text, visual_type, visual_content, output_base, 
                 content_draw.text((title_x, content_y), line, font=bullet_font, fill="#E2E8F0")
                 content_y += 50
             
+            
     content_img.save(output_content)
 
+def generate_thumbnail(title, output_path, avatar_path="assets/masked_avatar_0.png"):
+    width, height = 1280, 720
+    img = Image.new("RGBA", (width, height), (0,0,0,255))
+    draw = ImageDraw.Draw(img)
+    draw_background(draw, width, height)
+    
+    # 1. Avatar (right side)
+    if os.path.exists(avatar_path):
+        with Image.open(avatar_path) as av:
+            av = av.convert("RGBA")
+            aspect = av.width / av.height
+            new_h = 600
+            new_w = int(new_h * aspect)
+            av = av.resize((new_w, new_h), Image.Resampling.LANCZOS)
+            img.paste(av, (width - new_w - 20, height - new_h), av)
+            
+    # 2. Text (left side)
+    title_font = get_font("Arial Unicode.ttf", 80)
+    badge_font = get_font("Arial Unicode.ttf", 40)
+    
+    # Draw badge
+    draw.rounded_rectangle([80, 80, 420, 160], radius=15, fill="#38BDF8")
+    draw.text((110, 95), "NEW LESSON", font=badge_font, fill="#0F172A")
+    
+    # Draw Title
+    title_lines = wrap_text(str(title).upper(), title_font, 750)
+    text_y = 220
+    for line in title_lines:
+        draw.text((84, text_y+4), line, font=title_font, fill="#000000") # shadow
+        draw.text((80, text_y), line, font=title_font, fill="#F8FAFC")
+        text_y += 90
+        
+    img.save(output_path)

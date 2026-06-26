@@ -2,13 +2,12 @@
 
 Video Studio is an automated pipeline that generates high-quality, dark-mode technical slide presentation videos with AI voiceover narration and a perfectly lip-synced avatar.
 
-## Features (v1 Pipeline)
-- **Automated Script to Video:** Takes a structured JSON lesson script and compiles it into a 1080p, 24fps MP4 video.
-- **Multilingual Support:** Supports generating both English and Hindi versions (`--lang en` or `--lang hi`).
-- **AI Voiceover:** Uses `edge-tts` to dynamically generate clear, natural-sounding voiceovers.
-- **Jitter-Free Avatar Lip-Sync:** 
-  - Calculates a 6-frame moving average of the audio RMS (volume) to trigger specific mouth visemes (vowel shapes).
-  - Uses Computer-Vision template matching (OpenCV) to freeze the avatar's body/shoulders in place and exclusively mask the mouth, preventing any pixel-jitter or drifting.
+## Features (v2 Pipeline - *New!*)
+- **True ML Lip-Syncing:** Upgraded from the v1 rule-based viseme system to a full **Wav2Lip** implementation for pixel-perfect lip synchronization matching the TTS audio.
+- **Dynamic Avatar Realism:** Features a custom mathematical engine within MoviePy that applies a subtle "breathing" and head-bobbing scale animation to the avatar, bypassing the need for GPU-heavy models like LivePortrait.
+- **Transparent Masking Pipeline:** Retains the crisp Alpha Channel transparency behind the ML avatar, ensuring the avatar flawlessly overlays onto dark-mode slides without black backgrounds.
+- **Auto YouTube Thumbnails:** Automatically extracts the Title Slide and renders a beautiful HD 1280x720 YouTube thumbnail utilizing Lanczos upscaling for ultimate clarity.
+- **Practical RAG Curriculum:** Integrated Gemini prompts enforce generating hands-on, highly accurate Python code exercises on the slides, interleaving theory with project-based execution.
 
 ## Running Locally
 
@@ -21,23 +20,22 @@ pip install -r requirements.txt
 
 2. Run the pipeline on a specific lesson JSON file:
 ```bash
-python run_pipeline.py --input rag_learning_series/lesson_001/lesson_001.json --video-id lesson_001 --lang all
+python run_pipeline_v2.py --input rag_learning_series/lesson_001/lesson_001.json --video-id lesson_001 --lang all
 ```
 
-## GitHub Actions Workflows
+## GitHub Actions Workflows (v2 Optimized)
 
-We use automated CI/CD to handle generation without needing local hardware:
+We use automated CI/CD to handle generation without needing local hardware. 
+**Note:** Our v2 ML pipeline leverages `actions/cache@v3` to instantaneously retrieve the 400MB Wav2Lip models securely on the runner, bypassing download wait times!
 
-*   **Generate Daily Script:** Runs every night at midnight to automatically author new JSON scripts using Google Gemini.
-*   **Render On Demand (Re-Render Older Videos):** If you update the avatar assets, fix a bug in the code, or tweak a script, you can re-render older videos directly from GitHub!
+*   **V2 Daily Render:** Runs every night at midnight to automatically author new JSON scripts using Google Gemini and render them via the v2 pipeline.
+*   **V2 Render On Demand (Re-Render Older Videos):** If you update the avatar assets, fix a bug in the code, or tweak a script, you can re-render older videos directly from GitHub!
     1. Go to the **Actions** tab in the GitHub repository.
-    2. Click on the **Render On Demand** workflow on the left side.
+    2. Click on the **V2 Render On Demand** workflow on the left side.
     3. Click the **Run workflow** dropdown on the right.
     4. Type the path of the lesson you want to update (e.g., `rag_learning_series/lesson_001/lesson_001.json`).
-    5. Hit **Run workflow**. It will automatically compile the new video using the latest code and push the `.mp4` directly back to the `main` branch!
+    5. Hit **Run workflow**. It will automatically compile the new video using the latest Wav2Lip engine and push the `.mp4` and `.png` thumbnail directly back to the `main` branch!
 
-## Architecture Evolution
+## Legacy Support (v1)
 
-We enforce strict separation between our stable production pipeline and future ML experimentation.
-- **v1 (Current Branch):** Fast, rule-based RMS volume mapping with static, deterministic OpenCV masking. Designed to run quickly and reliably on 2-core GitHub Action CPU runners.
-- **v2 (Future Roadmap):** Please see `docs/v2_ml_roadmap.md` for our plans to integrate hyper-optimized, CPU-friendly ONNX/TFLite models to add expressive head-tracking, blinks, and dynamic ML-driven slide layouts.
+We enforce strict separation between our stable production pipelines. The original v1 pipeline (using deterministic OpenCV viseme mapping) is fully retained and can be run via `run_pipeline.py`.
