@@ -27,9 +27,14 @@ def download_file(url, dest):
 
 def setup_wav2lip():
     """Clones the Wav2Lip repo and downloads required weights if they don't exist."""
-    if not os.path.exists(WAV2LIP_DIR):
+    if not os.path.exists(os.path.join(WAV2LIP_DIR, "inference.py")):
         print(f"Cloning Wav2Lip repository into {WAV2LIP_DIR}...")
-        subprocess.run(["git", "clone", WAV2LIP_REPO, WAV2LIP_DIR], check=True)
+        if not os.path.exists(WAV2LIP_DIR):
+            os.makedirs(WAV2LIP_DIR)
+        subprocess.run(["git", "init"], cwd=WAV2LIP_DIR, check=True)
+        subprocess.run(["git", "remote", "add", "origin", WAV2LIP_REPO], cwd=WAV2LIP_DIR, check=False)
+        subprocess.run(["git", "fetch", "origin", "master"], cwd=WAV2LIP_DIR, check=True)
+        subprocess.run(["git", "reset", "--hard", "FETCH_HEAD"], cwd=WAV2LIP_DIR, check=True)
     
     # Download main GAN weights
     checkpoints_dir = os.path.join(WAV2LIP_DIR, "checkpoints")
