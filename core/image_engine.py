@@ -75,6 +75,43 @@ def draw_code_block(draw, width, height, code_text):
             if text_y > box_y + box_h - 40:
                 break
 
+def draw_terminal_output(draw, width, height, terminal_text):
+    box_x = int(width * 0.55)
+    box_y = int(height * 0.2)
+    box_w = int(width * 0.4)
+    box_h = int(height * 0.6)
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + box_h], radius=10, fill="#0F172A", outline="#1E293B", width=3)
+    draw.rounded_rectangle([box_x, box_y, box_x + box_w, box_y + 35], radius=10, fill="#1E293B")
+    
+    font = get_font("Arial Unicode.ttf", 20)
+    draw.text((box_x + box_w // 2 - 50, box_y + 5), "bash - Terminal", fill="#94A3B8", font=font)
+    
+    if terminal_text:
+        term_font = get_font("Courier New.ttf", 22)
+        if isinstance(term_font, ImageFont.ImageFont):
+            term_font = get_font("Arial.ttf", 22)
+        
+        terminal_text = str(terminal_text)
+        terminal_text = terminal_text.replace("```bash", "").replace("```sh", "").replace("```", "").strip()
+            
+        lines = terminal_text.split('\n')
+        wrapped_lines = []
+        for line in lines:
+            if not line.strip():
+                wrapped_lines.append("")
+                continue
+            wrapped_lines.extend(wrap_text(line, term_font, box_w - 40))
+        
+        text_y = box_y + 50
+        for line in wrapped_lines:
+            if line.strip().startswith("$") or line.strip().startswith(">"):
+                draw.text((box_x + 20, text_y), line, font=term_font, fill="#4ADE80") # Green
+            else:
+                draw.text((box_x + 20, text_y), line, font=term_font, fill="#F1F5F9") # White
+            text_y += 30
+            if text_y > box_y + box_h - 40:
+                break
+
 def draw_concept_box(draw, width, height, concept_text, font):
     box_x = int(width * 0.55)
     box_y = int(height * 0.25)
@@ -262,6 +299,8 @@ def render_slide(title, content_text, visual_type, visual_content, output_base, 
         draw_mermaid_diagram(content_img, width, height, visual_content)
     elif visual_type == "curriculum_map":
         draw_curriculum_map(content_img, width, height, visual_content)
+    elif visual_type == "terminal_output":
+        draw_terminal_output(content_draw, width, height, visual_content)
         
     # Text
     if visual_type != "title_slide":

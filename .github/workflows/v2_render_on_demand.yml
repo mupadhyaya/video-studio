@@ -55,6 +55,8 @@ jobs:
 
       # ── 5. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
+        env:
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
           LESSON_FILE="${{ github.event.inputs.lesson_path }}"
           VIDEO_ID=$(basename "$LESSON_FILE" .json)

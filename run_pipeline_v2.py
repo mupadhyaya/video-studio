@@ -120,14 +120,45 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             
             if file_name:
                 print(f"  Exported {file_name}")
-                # The user wants this to be on the public rag-learning-series repo
-                raw_github_url = f"https://raw.githubusercontent.com/mupadhyaya/rag-learning-series/main/assets/{file_name}"
-                try:
-                    tiny_url = urllib.request.urlopen("http://tinyurl.com/api-create.php?url=" + urllib.parse.quote(raw_github_url)).read().decode("utf-8")
-                    resources.append(f"- {title} ({file_name}): {tiny_url}")
-                except Exception as e:
-                    print(f"  Failed to generate TinyURL: {e}")
-                    resources.append(f"- {title}: {raw_github_url}")
+                gist_url = None
+                gist_token = os.environ.get("GIST_TOKEN", os.environ.get("PUBLIC_REPO_TOKEN"))
+                if gist_token:
+                    try:
+                        gist_data = {
+                            "description": f"{title} - {file_name}",
+                            "public": True,
+                            "files": {
+                                file_name: {
+                                    "content": str(visual_content)
+                                }
+                            }
+                        }
+                        req = urllib.request.Request(
+                            "https://api.github.com/gists",
+                            data=json.dumps(gist_data).encode("utf-8"),
+                            headers={
+                                "Authorization": f"token {gist_token}",
+                                "Accept": "application/vnd.github.v3+json",
+                                "User-Agent": "video-studio-bot"
+                            },
+                            method="POST"
+                        )
+                        with urllib.request.urlopen(req) as response:
+                            gist_resp = json.loads(response.read().decode("utf-8"))
+                            gist_url = gist_resp.get("html_url")
+                            print(f"  Created Gist: {gist_url}")
+                    except Exception as e:
+                        print(f"  [ERROR] Failed to create Gist: {e}")
+                
+                if gist_url:
+                    try:
+                        tiny_url = urllib.request.urlopen("http://tinyurl.com/api-create.php?url=" + urllib.parse.quote(gist_url)).read().decode("utf-8")
+                        resources.append(f"- {title} ({file_name}): {tiny_url}")
+                    except Exception as e:
+                        print(f"  Failed to generate TinyURL: {e}")
+                        resources.append(f"- {title} ({file_name}): {gist_url}")
+                else:
+                    resources.append(f"- {title} ({file_name}): (Requires GIST_TOKEN)")
 
         # Store these in lesson_data for the YouTube uploader to pick up
         if not isinstance(lesson_data, list) or len(lesson_data) == 0:

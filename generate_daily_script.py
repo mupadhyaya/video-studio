@@ -62,7 +62,8 @@ def generate_lesson():
     - The total combined narration text across all slides must be around 300 words (which takes exactly 2 minutes to speak).
     - You must analyze the topic and decide the best visual aid. You MUST heavily prioritize generating a 'code_snippet', 'architecture_diagram', or 'sequence_diagram' over a generic 'concept_box' whenever the topic allows.
     - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. It must withstand public scrutiny.
-    - If the topic is marked as (Practical) and you generate a 'code_snippet', you MUST instruct the viewer in the narration to "download the code from the GitHub link in the description below to try it yourself".
+    - If the topic is marked as (Practical) and you generate a 'code_snippet', you MUST instruct the viewer in the narration to "check the link in the description to download the code and try it yourself". Do NOT put raw URLs in the narration or slide text.
+    - IMPORTANT: Every time you generate a 'code_snippet', you MUST immediately follow it with a new slide whose `visual_type` is 'terminal_output'. The `visual_content` for this slide must be the expected realistic terminal output (e.g., standard output, logs) when running the preceding Python script.
     - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code.
 
     {{
@@ -70,7 +71,7 @@ def generate_lesson():
       "meta_title": "{current_topic}",
       "youtube_metadata_en": {{
         "title": "[An engaging, search-optimized English YouTube title for this topic]",
-        "description": "[A detailed YouTube description including a summary, what they will learn, and ALWAYS include this exact sentence: 'Download the source code and try it yourself: https://github.com/mupadhyaya/video-studio-oss']",
+        "description": "[A detailed YouTube description including a summary and what they will learn. (We will automatically append the code download links later)]",
         "tags": ["AI", "Tutorial", "list of 5 to 10 relevant tags"]
       }},
       "youtube_metadata_hi": {{
@@ -87,8 +88,8 @@ def generate_lesson():
           "content_text_hi": "[The exact same paragraph translated perfectly to conversational Hindi.]",
           "narration_text_en": "[Conversational explanation for this slide in English]",
           "narration_text_hi": "[The exact same conversational explanation translated to Hindi]",
-          "visual_type": "[Must be exactly 'code_snippet', 'architecture_diagram', 'sequence_diagram', or 'concept_box']",
-          "visual_content": "[If 'code_snippet', you MUST provide actual, working Python code. If 'architecture_diagram', raw Mermaid.js code. If 'concept_box', provide a short analogy. (Leave code/Mermaid/analogy in English)]"
+          "visual_type": "[Must be exactly 'code_snippet', 'architecture_diagram', 'sequence_diagram', 'concept_box', or 'terminal_output']",
+          "visual_content": "[If 'code_snippet', provide working Python code. If 'terminal_output', provide simulated terminal output. If 'architecture_diagram', raw Mermaid.js code. If 'concept_box', provide a short analogy. (Leave code/Mermaid/analogy/output in English)]"
         }}
       ]
     }}
