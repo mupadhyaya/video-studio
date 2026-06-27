@@ -77,22 +77,3 @@ jobs:
           git add *_learning_series/
           git commit -m "chore: auto-generate lesson and advance curriculum" || echo "No changes to commit"
           git push
-
-      # ── 9. Push Exports to Public Repo ──────────────────────────────────────
-      - name: Push Exports to Public Repo
-        env:
-          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
-        run: |
-          if [ -z "$PUBLIC_REPO_TOKEN" ]; then
-            echo "No PUBLIC_REPO_TOKEN provided. Skipping public push."
-            exit 0
-          fi
-          git clone https://x-access-token:${PUBLIC_REPO_TOKEN}@github.com/mupadhyaya/rag-learning-series.git
-          cd rag-learning-series
-          mkdir -p assets
-          cp -R ../*_learning_series/*/exports/* assets/ 2>/dev/null || echo "No exports found"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/
-          git commit -m "chore: Update exported assets and diagrams" || echo "No changes to commit"
-          git push
