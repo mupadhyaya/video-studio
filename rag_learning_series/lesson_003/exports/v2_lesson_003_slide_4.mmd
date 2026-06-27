@@ -1,0 +1,16 @@
+graph TD
+    subgraph Indexing Phase
+        A[Documents/Data] --> B{Chunking}
+        B --> C{Embedding Model}
+        C --> D[Vector Database]
+    end
+
+    subgraph Retrieval & Generation Phase
+        E[User Query] --> F{Query Embedding}
+        F --> G{Vector Database - Retrieval}
+        G --> H[Relevant Chunks/Context]
+        H --> I{LLM (with Prompt Augmentation)}
+        I --> J[Grounded Response]
+    end
+
+    E -.-> G
