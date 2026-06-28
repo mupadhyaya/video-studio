@@ -55,11 +55,11 @@ def generate_lesson():
     The output MUST be valid JSON matching this schema exactly.
     
     Requirements for the video lecture:
-    - Create as many slides as needed to comprehensively cover the topic with high-quality, Senior Principal Engineer-level depth.
+    - Create as many slides as needed to comprehensively cover the topic with high-quality, Senior Principal Engineer-level depth. Do not rush the content!
     - Each slide must have a single `content_text` block instead of bullet points. This should be a highly engaging paragraph (2-3 sentences) emphasizing real-world case studies, actionable insights, and data-driven examples.
     - The narration for each slide should be in-depth, conversational, and impactful, avoiding fluff. Hook the viewer immediately!
     - IMPORTANT: During the narration of the final slide, you MUST explicitly mention and tease the next upcoming lecture topic: "{next_topic}".
-    - The total combined narration text across all slides must be around 300 words (which takes exactly 2 minutes to speak).
+    - The video should be a deep-dive. Generate enough slides and narration so the total script is approximately 1000-1500 words (about 8-10 minutes of speaking time).
     - You must analyze the topic and decide the best visual aid. You MUST heavily prioritize generating a 'code_snippet', 'architecture_diagram', or 'sequence_diagram' to make the content highly valuable for professionals.
     - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. Focus on best practices!
     - If you generate a 'code_snippet' or diagram, you MUST instruct the viewer in the narration to "check the link in the description to download the architecture diagram and script".
