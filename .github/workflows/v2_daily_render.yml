@@ -55,7 +55,7 @@ jobs:
       # ── 6. Render dual-language videos ─────────────────────────────────────
       - name: Render presentation videos
         env:
-          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
+          PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN_GIST }}
         run: |
           echo "Rendering from: $LESSON_DIR/lesson_*.json (video-id: $VIDEO_ID)"
           python run_pipeline_v2.py --input "$LESSON_DIR/$VIDEO_ID.json" --video-id "v2_$VIDEO_ID"
