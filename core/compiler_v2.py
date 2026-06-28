@@ -22,6 +22,8 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
     if not has_avatar:
         print(f"Warning: Missing {avatar_idle_path} in assets/. ML Avatar overlay disabled.")
         
+    global_time_offset = 0.0
+        
     try:
         for i, slide in enumerate(slides_data):
             img_base_path = os.path.join(images_dir, f"slide_{i}_base.png")
@@ -94,13 +96,13 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                     # Store original mask so we can restore it after resize
                     avatar_video_clip = avatar_video_clip.with_position((ax, ay)).without_audio()
                     
-                    # Only apply resize if moviepy 2.0 allows dynamic resize (which it does via fl_image, but it's simpler to just shift position for breathing)
-                    def breathing_position(t):
-                        # Move up and down by 8 pixels
-                        dy = 8 * math.sin(2 * math.pi * t / 3.0)
-                        return (ax, ay + dy)
+                    def make_breathing(offset, base_x, base_y):
+                        def breathing_position(t):
+                            dy = 8 * math.sin(2 * math.pi * (t + offset) / 3.0)
+                            return (base_x, base_y + dy)
+                        return breathing_position
                         
-                    avatar_video_clip = avatar_video_clip.with_position(breathing_position)
+                    avatar_video_clip = avatar_video_clip.with_position(make_breathing(global_time_offset, ax, ay))
                     
                     composite_layers.append(avatar_video_clip)
                 else:
@@ -119,12 +121,17 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                                      .resized(height=350)
                                      .with_duration(duration))
                     
-                    def breathing_position(t):
-                        dy = 8 * math.sin(2 * math.pi * t / 3.0)
-                        return (ax, ay + dy)
+                    def make_breathing(offset, base_x, base_y):
+                        def breathing_position(t):
+                            dy = 8 * math.sin(2 * math.pi * (t + offset) / 3.0)
+                            return (base_x, base_y + dy)
+                        return breathing_position
                         
-                    fallback_clip = fallback_clip.with_position(breathing_position)
+                    fallback_clip = fallback_clip.with_position(make_breathing(global_time_offset, ax, ay))
                     composite_layers.append(fallback_clip)
+            
+            global_time_offset += duration
+            
             slide_clip = CompositeVideoClip(composite_layers).with_duration(duration).with_audio(audio_clip)
 
             clips.append(slide_clip)

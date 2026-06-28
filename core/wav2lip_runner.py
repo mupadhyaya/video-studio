@@ -35,6 +35,14 @@ def setup_wav2lip():
         subprocess.run(["git", "remote", "add", "origin", WAV2LIP_REPO], cwd=WAV2LIP_DIR, check=False)
         subprocess.run(["git", "fetch", "origin", "master"], cwd=WAV2LIP_DIR, check=True)
         subprocess.run(["git", "reset", "--hard", "FETCH_HEAD"], cwd=WAV2LIP_DIR, check=True)
+        
+    # Ensure dependencies are installed in the venv
+    venv_python = os.path.abspath(".venv/bin/python")
+    python_exec = venv_python if os.path.exists(venv_python) else sys.executable
+    
+    print("Checking and installing Wav2Lip required dependencies...")
+    # We install modern versions that are compatible, as the original ones are too old for Python 3.10
+    subprocess.run([python_exec, "-m", "pip", "install", "torch", "torchvision", "torchaudio", "librosa", "tqdm", "numba", "scipy"], check=False)
     
     # Download main GAN weights
     checkpoints_dir = os.path.join(WAV2LIP_DIR, "checkpoints")
@@ -56,8 +64,11 @@ def run_inference(image_path, audio_path, output_path):
     checkpoint_path = os.path.join(WAV2LIP_DIR, "checkpoints", "wav2lip_gan.pth")
     
     # Run the inference script in the Wav2Lip directory context
+    venv_python = os.path.abspath(".venv/bin/python")
+    python_exec = venv_python if os.path.exists(venv_python) else sys.executable
+    
     cmd = [
-        sys.executable, inference_script,
+        python_exec, inference_script,
         "--checkpoint_path", checkpoint_path,
         "--face", os.path.abspath(image_path),
         "--audio", os.path.abspath(audio_path),
