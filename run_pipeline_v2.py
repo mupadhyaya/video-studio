@@ -163,12 +163,17 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
                 if gist_url:
                     try:
                         tiny_url = urllib.request.urlopen("http://tinyurl.com/api-create.php?url=" + urllib.parse.quote(gist_url)).read().decode("utf-8")
-                        resources.append(f"- {title} ({file_name}): {tiny_url}")
+                        if not tiny_url.startswith("http"):
+                            tiny_url = "https://" + tiny_url
+                        elif tiny_url.startswith("http://"):
+                            tiny_url = tiny_url.replace("http://", "https://")
+                        
+                        resources.append(f"📥 {title} ({file_name}):\n👉 {tiny_url}\n")
                     except Exception as e:
                         print(f"  Failed to generate TinyURL: {e}")
-                        resources.append(f"- {title} ({file_name}): {gist_url}")
+                        resources.append(f"📥 {title} ({file_name}):\n👉 {gist_url}\n")
                 else:
-                    resources.append(f"- {title} ({file_name}): (Requires GIST_TOKEN)")
+                    resources.append(f"📥 {title} ({file_name}): (Requires GIST_TOKEN)\n")
 
         # Store these in lesson_data for the YouTube uploader to pick up
         if not isinstance(lesson_data, list) or len(lesson_data) == 0:

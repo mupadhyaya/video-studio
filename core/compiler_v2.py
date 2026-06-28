@@ -104,8 +104,27 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                     
                     composite_layers.append(avatar_video_clip)
                 else:
-                    print(f"Warning: ML avatar synthesis failed for slide {i}")
-                
+                    print(f"Warning: ML avatar synthesis failed for slide {i}. Falling back to static breathing avatar.")
+                    
+                    # Read size from original image to get proper aspect ratio
+                    with Image.open(avatar_idle_path) as img:
+                        aspect = img.width / img.height
+                        target_w = int(350 * aspect)
+                        
+                    vw, vh = base_clip.size
+                    ax = vw - target_w - 40
+                    ay = vh - 350 - 40
+                    
+                    fallback_clip = (ImageClip(avatar_idle_path)
+                                     .resized(height=350)
+                                     .with_duration(duration))
+                    
+                    def breathing_position(t):
+                        dy = 8 * math.sin(2 * math.pi * t / 3.0)
+                        return (ax, ay + dy)
+                        
+                    fallback_clip = fallback_clip.with_position(breathing_position)
+                    composite_layers.append(fallback_clip)
             slide_clip = CompositeVideoClip(composite_layers).with_duration(duration).with_audio(audio_clip)
 
             clips.append(slide_clip)

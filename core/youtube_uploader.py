@@ -20,8 +20,8 @@ def upload_video(video_path, metadata):
         "snippet": {
             "title": metadata.get("title", metadata.get("meta_title", "New AIML Lesson")),
             "description": metadata.get("description", "Daily automated tech curriculum update."),
-            "tags": metadata.get("tags", ["AIML", "RAG", "Engineering", "Tutorial"]),
-            "categoryId": "27" # Education Category
+            "tags": metadata.get("tags", ["AIML", "RAG", "Engineering", "Tutorial", "Python"]),
+            "categoryId": "28" # Science & Technology Category
         },
         "status": {
             "privacyStatus": "private" # Uploads as a draft for your review
