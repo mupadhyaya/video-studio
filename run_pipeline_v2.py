@@ -36,10 +36,13 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
     audio_dir = os.path.join(temp_dir, "audio")
     os.makedirs(images_dir, exist_ok=True)
     os.makedirs(audio_dir, exist_ok=True)
+    
+    input_dir = os.path.dirname(os.path.abspath(output_path))
 
     try:
         # --- Step 1: Render slide frames ---
         print(f"Step 1: Rendering [{lang.upper()}] slide images with Pillow...")
+        thumbnail_generated = False
         for i, slide in enumerate(lesson_data):
             img_base_path = os.path.join(images_dir, f"slide_{i}_base.png")
             img_content_path = os.path.join(images_dir, f"slide_{i}_content.png")
@@ -56,11 +59,18 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             # --- Thumbnail Extraction ---
             if visual_type == "title_slide":
                 print(f"  [THUMBNAIL] Extracting Title Slide as Thumbnail...")
-                thumb_path = os.path.join(os.path.dirname(os.path.abspath(output_path)), f"thumbnail_{lang}.png")
+                thumb_path = os.path.join(input_dir, f"thumbnail_{lang}.png")
                 avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
                 generate_thumbnail(title, thumb_path, avatar_path)
                 print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
-                print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
+                thumbnail_generated = True
+
+        if not thumbnail_generated and len(lesson_data) > 0:
+            print(f"  [THUMBNAIL] No title slide found. Falling back to slide 0 for thumbnail...")
+            thumb_path = os.path.join(input_dir, f"thumbnail_{lang}.png")
+            avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
+            generate_thumbnail(lesson_data[0].get("title", ""), thumb_path, avatar_path)
+            print(f"  [THUMBNAIL] Saved fallback thumbnail to: {thumb_path}")
 
         # --- Step 2: Synthesize narrations ---
         print(f"\nStep 2: Synthesizing [{lang.upper()}] narrations with edge-tts...")
