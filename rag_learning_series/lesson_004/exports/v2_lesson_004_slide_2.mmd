@@ -1,0 +1,10 @@
+sequenceDiagram
+  autonumber
+  participant User as Client Application
+  participant Prompt as ChatPromptTemplate
+  participant LLM as ChatOpenAI
+  participant Parser as StrOutputParser
+  User->>Prompt: invoke({"topic": "software engineering"})
+  Prompt->>LLM: formatted ChatMessages
+  LLM->>Parser: AIMessage(content="...")
+  Parser->>User: extracted string response
