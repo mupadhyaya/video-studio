@@ -64,7 +64,8 @@ def generate_lesson():
     - If you choose 'code_snippet', the code MUST be production-grade, highly accurate, and syntactically correct Python code. Never hallucinate fake libraries or methods. Focus on best practices!
     - If you generate a 'code_snippet' or diagram, you MUST instruct the viewer in the narration to "check the link in the description to download the architecture diagram and script".
     - IMPORTANT: Every time you generate a 'code_snippet', you MUST immediately follow it with a new slide whose `visual_type` is 'terminal_output'. The `visual_content` for this slide must be the expected realistic terminal output (e.g., standard output, logs) when running the preceding Python script.
-    - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code.
+    - If you choose 'architecture_diagram' or 'sequence_diagram', the `visual_content` MUST be valid, raw Mermaid.js code. IMPORTANT: Always use double quotes for node labels in Mermaid (e.g., `A["Text with [brackets] or special chars"]`) to avoid syntax errors!
+    - The Hindi narration should be spoken by a female presenter. You MUST use feminine conjugations and pronouns (e.g., use 'मिलूंगी' instead of 'मिलूंगा', 'करूंगी' instead of 'करूंगा').
 
     {{
       "video_id": "lesson_{day_num:03d}",

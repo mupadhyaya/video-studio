@@ -3,7 +3,7 @@ Module 1.2: Setting up your local Python RAG Environment (Practical)
 Module 2.1: The RAG Paradigm Shift & Architecture (Theory)
 Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)
 Module 3.1: Deep Dive into Text Embeddings (Theory)
-Module 3.2: Generating Embeddings locally with HuggingFace (Practical)
+Module 3.2: Generating Embeddings locally with HuggingFace & Sentence-Transformers (Practical). Will cover: Loading local BERT models, Vector extraction pipelines, and Batch embedding optimization.
 Module 4.1: Introduction to Vector Databases (Theory)
 Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)
 Module 5.1: Data Chunking Strategies (Theory)
