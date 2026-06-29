@@ -6,6 +6,8 @@ Video Studio is an automated pipeline that generates high-quality, dark-mode tec
 - **True ML Lip-Syncing:** Upgraded from the v1 rule-based viseme system to a full **Wav2Lip** implementation for pixel-perfect lip synchronization matching the TTS audio.
 - **Dynamic Avatar Realism:** Features a custom mathematical engine within MoviePy that applies a subtle "breathing" and head-bobbing scale animation to the avatar, bypassing the need for GPU-heavy models like LivePortrait.
 - **Transparent Masking Pipeline:** Retains the crisp Alpha Channel transparency behind the ML avatar, ensuring the avatar flawlessly overlays onto dark-mode slides without black backgrounds.
+- **Dual-Language Generation:** Seamlessly generates localized scripts and renders videos in both English and Hindi, complete with gender-accurate localized narration.
+- **Robust ML Fallback Mechanism:** Automatically detects Wav2Lip build errors and gracefully switches to a continuous, high-quality "breathing" fallback avatar, ensuring daily automated CI/CD runs never fail catastrophically.
 - **Auto YouTube Thumbnails:** Automatically extracts the Title Slide and renders a beautiful HD 1280x720 YouTube thumbnail utilizing Lanczos upscaling for ultimate clarity.
 - **Practical RAG Curriculum:** Integrated Gemini prompts enforce generating hands-on, highly accurate Python code exercises on the slides, interleaving theory with project-based execution.
 
@@ -16,6 +18,7 @@ Video Studio is an automated pipeline that generates high-quality, dark-mode tec
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements_v2.txt
 ```
 
 2. Run the pipeline on a specific lesson JSON file:
