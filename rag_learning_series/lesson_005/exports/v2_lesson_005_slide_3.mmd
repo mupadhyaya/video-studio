@@ -1,0 +1,5 @@
+graph LR
+    SubGraph1[Token Index: i] --> Lookup[Index Lookup Operation]
+    WeightMatrix[Embedding Weights: V x D] --> Lookup
+    Lookup --> OutVector[Dense Embedding Vector: 1 x D]
+    style Lookup fill:#f9f,stroke:#333,stroke-width:2px

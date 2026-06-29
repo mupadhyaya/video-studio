@@ -1,0 +1,13 @@
+sequenceDiagram
+    autonumber
+    participant User as Query Interface
+    participant BE as Bi-Encoder Model
+    participant DB as Vector Database
+    participant CE as Cross-Encoder Re-ranker
+    
+    Note over DB: Documents pre-embedded & stored
+    User->>BE: Submit search query
+    BE->>DB: Search query vector similarity
+    DB-->>User: Retrieve Top-100 candidates (Fast)
+    User->>CE: Send Query + Top-100 candidates
+    CE-->>User: Return precisely re-ranked Top-10 (Accurate)
