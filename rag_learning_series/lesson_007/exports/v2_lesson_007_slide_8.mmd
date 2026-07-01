@@ -1,0 +1,14 @@
+graph TD
+    subgraph "Write Ingestion Path"
+        A["Raw Content Source"] --> B["Chunking Strategy Tool"]
+        B --> C["Embedding Generator: OpenAI/Cohere"]
+        C --> D["Vector Index Builder: HNSW"]
+        D --> E["Index Storage & Write Ahead Logs (WAL)"]
+    end
+    subgraph "Read Query Path"
+        F["User Request Query"] --> G["Embedding Generator: OpenAI/Cohere"]
+        G --> H["Target Query Vector"]
+        H --> I["HNSW Graph Graph Traversal"]
+        E -.-> I
+        I --> J["Filtered Metadata + Top-K Output Payload"]
+    end

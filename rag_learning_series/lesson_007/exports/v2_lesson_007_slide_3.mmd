@@ -1,0 +1,9 @@
+graph TD
+    A["Unstructured Data: Text/Images"] --> B["Embedding Model: e.g., text-embedding-3-small"]
+    B --> C["High-Dimensional Vector: 1536-dim Float Array"]
+    C --> D["Vector Database: Indexing HNSW/IVF"]
+    E["User Search Query"] --> F["Embedding Model"]
+    F --> G["Query Vector"]
+    G --> H["Approximate Nearest Neighbor ANN Search"]
+    D --> H
+    H --> I["Top-K Nearest Neighbors Results"]
