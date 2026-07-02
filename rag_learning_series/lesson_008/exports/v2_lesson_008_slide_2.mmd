@@ -1,0 +1,7 @@
+graph TD
+    A["Raw Unstructured Documents"] --> B["Embedding Model (e.g. all-MiniLM-L6-v2)"]
+    B --> C["ChromaDB Persistent Storage"]
+    D["User Search Query"] --> E["Query Embedding Generation"]
+    E --> F["HNSW Vector Distance Engine"]
+    F --> C
+    C --> G["Top-K Ranked Context Results with Metadata"]
