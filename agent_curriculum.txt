@@ -1,4 +1,24 @@
-Module 1.1: What are Autonomous Agents?
-Module 1.2: Tool Calling & APIs
-Module 2.1: Memory Management in Agents
-Module 2.2: Multi-Agent Orchestration
+Module 1.1: The Anatomy of Autonomous Agents & The ReAct Pattern (Theory)
+Module 1.2: Building a basic Reasoning & Acting (ReAct) loop in Python (Practical)
+Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)
+Module 2.2: Connecting an LLM to external APIs and web search tools (Practical)
+Module 3.1: Cognitive Architectures: Short-term vs. Long-term Memory (Theory)
+Module 3.2: Implementing memory buffers and vector-backed knowledge (Practical)
+Module 4.1: Designing Custom Tools and Safe Execution Environments (Theory)
+Module 4.2: Writing robust Python tools and handling execution errors (Practical)
+Module 5.1: Agentic RAG: Going beyond simple retrieval (Theory)
+Module 5.2: Building an agent that can iteratively research and summarize (Practical)
+Module 6.1: Routing and Specialized Agents: The Supervisor Pattern (Theory)
+Module 6.2: Creating a semantic router to delegate tasks to sub-agents (Practical)
+Module 7.1: Multi-Agent Orchestration with Graph-based workflows (Theory)
+Module 7.2: Building a multi-agent system using LangGraph or AutoGen (Practical)
+Module 8.1: Reliability: Handling Agent Failures and Self-Correction (Theory)
+Module 8.2: Implementing retry logic and self-reflection loops (Practical)
+Module 9.1: Human-in-the-Loop (HITL) and Approval Workflows (Theory)
+Module 9.2: Pausing agent execution for human review and feedback (Practical)
+Module 10.1: Evaluating Agent Trajectories and Reasoning Steps (Theory)
+Module 10.2: Writing unit tests for agent decision-making pipelines (Practical)
+Module 11.1: Productionizing Agents: Observability, Tracing, and Logging (Theory)
+Module 11.2: Instrumenting an agent with LangSmith or similar tools (Practical)
+Module 12.1: The Future of Agents: Autonomous Software Engineers (Theory)
+Module 12.2: Capstone: Building a fully autonomous coding assistant agent (Practical)
