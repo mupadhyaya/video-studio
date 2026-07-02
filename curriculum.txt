@@ -1,2 +1,3 @@
 rag_curriculum.txt
 agent_curriculum.txt
+ml_algorithms_curriculum.txt
