@@ -87,7 +87,7 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
         await asyncio.gather(*audio_tasks)
 
         # --- Step 2.5: Auto-Timestamps & Exports ---
-        print(f"\nStep 2.5: Generating timestamps and exporting resources...")
+        print(f"\nStep 2.5: Generating timestamps, SRT subtitles, and exporting resources...")
         
         # Create an exports folder
         exports_dir = os.path.join(os.path.dirname(os.path.abspath(output_path)), "exports")
@@ -95,6 +95,14 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
         
         timestamps = ["\n📌 Timestamps:"]
         resources = ["\n📥 Downloadable Resources:"]
+        srt_content = ""
+        
+        def format_srt_time(seconds):
+            h = int(seconds // 3600)
+            m = int((seconds % 3600) // 60)
+            s = int(seconds % 60)
+            ms = int((seconds % 1) * 1000)
+            return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
         
         current_time = 0.0
         for i, slide in enumerate(lesson_data):
@@ -106,8 +114,16 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             
             # Read audio duration
             audio_path = os.path.join(audio_dir, f"audio_{i}.mp3")
+            start_time = current_time
             with AudioFileClip(audio_path) as audio_clip:
                 current_time += audio_clip.duration
+            end_time = current_time
+            
+            # Append to SRT content
+            narration = slide.get(f"narration_text_{lang}", slide.get("narration_text_en", ""))
+            srt_content += f"{i+1}\n"
+            srt_content += f"{format_srt_time(start_time)} --> {format_srt_time(end_time)}\n"
+            srt_content += f"{narration}\n\n"
                 
             # Exports & TinyURL
             visual_type = slide.get("visual_type", "")
@@ -181,6 +197,13 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
         else:
             lesson_data[0][f"generated_timestamps_{lang}"] = "\n".join(timestamps)
             lesson_data[0][f"generated_resources_{lang}"] = "\n".join(resources)
+            
+        # Write SRT to disk
+        input_dir = os.path.dirname(os.path.abspath(args.input))
+        srt_file = os.path.join(input_dir, f"{args.video_id}_{lang}.srt")
+        with open(srt_file, "w", encoding="utf-8") as f:
+            f.write(srt_content)
+        print(f"  Generated Subtitles: {srt_file}")
 
         # --- Step 3: Compile video ---
         print(f"\nStep 3: Compiling [{lang.upper()}] slide sequence into video...")
@@ -260,6 +283,20 @@ def main():
         if args.lang in ["en", "all"]: print(f"  English : {en_path}")
         if args.lang in ["hi", "all"]: print(f"  Hindi   : {hi_path}")
         print(f"{'='*60}")
+        
+        # --- Generate YouTube Shorts ---
+        print("\nStep 4: Generating Vertical YouTube Shorts...")
+        try:
+            import sys
+            sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+            from scripts.generate_shorts import generate_short
+            
+            if args.lang in ["en", "all"] and os.path.exists(en_path):
+                generate_short(args.input, en_path, "en")
+            if args.lang in ["hi", "all"] and os.path.exists(hi_path):
+                generate_short(args.input, hi_path, "hi")
+        except Exception as e:
+            print(f"  [ERROR] Failed to generate shorts: {e}")
 
         # --- Automatic YouTube Upload ---
         if "YOUTUBE_OAUTH_TOKEN" in os.environ:
@@ -273,19 +310,39 @@ def main():
                 "title": yt_meta_en.get("title", f"[EN] {meta_title}"),
                 "description": yt_meta_en.get("description", "Daily automated tech curriculum update.") + "\n" + lesson_data[0].get("generated_timestamps_en", "") + "\n" + lesson_data[0].get("generated_resources_en", ""),
                 "tags": yt_meta_en.get("tags", ["AIML", "Tutorial", "AI"]),
-                "thumbnail_path": os.path.join(input_dir, "thumbnail_en.png")
+                "thumbnail_path": os.path.join(input_dir, "thumbnail_en.png"),
+                "srt_path": os.path.join(input_dir, f"{args.video_id}_en.srt"),
+                "lang": "en",
+                "lang_name": "English"
             }
             
             hi_upload_data = {
                 "title": yt_meta_hi.get("title", f"[HI] {meta_title}"),
                 "description": yt_meta_hi.get("description", "डेली ऑटोमेटेड टेक अपडेट।") + "\n" + lesson_data[0].get("generated_timestamps_hi", "") + "\n" + lesson_data[0].get("generated_resources_hi", ""),
                 "tags": yt_meta_hi.get("tags", ["AIML", "Tutorial", "AI in Hindi"]),
-                "thumbnail_path": os.path.join(input_dir, "thumbnail_hi.png")
+                "thumbnail_path": os.path.join(input_dir, "thumbnail_hi.png"),
+                "srt_path": os.path.join(input_dir, f"{args.video_id}_hi.srt"),
+                "lang": "hi",
+                "lang_name": "Hindi"
             }
             
             try:
                 upload_video(en_path, en_upload_data)
                 upload_video(hi_path, hi_upload_data)
+                
+                # Upload Shorts if they exist
+                en_short_path = en_path.replace(".mp4", "_short.mp4")
+                if os.path.exists(en_short_path):
+                    en_short_data = en_upload_data.copy()
+                    en_short_data["title"] = f"{en_short_data['title']} #Shorts"
+                    upload_video(en_short_path, en_short_data)
+                    
+                hi_short_path = hi_path.replace(".mp4", "_short.mp4")
+                if os.path.exists(hi_short_path):
+                    hi_short_data = hi_upload_data.copy()
+                    hi_short_data["title"] = f"{hi_short_data['title']} #Shorts"
+                    upload_video(hi_short_path, hi_short_data)
+                    
             except Exception as e:
                 print(f"  [ERROR] YouTube upload failed: {e}")
         else:

@@ -24,7 +24,8 @@ def upload_video(video_path, metadata):
             "categoryId": "28" # Science & Technology Category
         },
         "status": {
-            "privacyStatus": "private" # Uploads as a draft for your review
+            "privacyStatus": "private", # Uploads as a draft for your review
+            "selfDeclaredMadeForKids": False
         }
     }
     
@@ -49,3 +50,25 @@ def upload_video(video_path, metadata):
             print("✅ Custom thumbnail attached successfully!")
         except Exception as e:
             print(f"⚠️ Failed to upload thumbnail: {e}")
+            
+    # --- Upload Subtitles (SRT) ---
+    srt_path = metadata.get("srt_path")
+    if srt_path and os.path.exists(srt_path):
+        print(f"Uploading subtitles from {srt_path}...")
+        try:
+            caption_insert_request = youtube.captions().insert(
+                part="snippet",
+                body={
+                    "snippet": {
+                        "videoId": video_id,
+                        "language": metadata.get("lang", "en"),
+                        "name": metadata.get("lang_name", "English"),
+                        "isDraft": False
+                    }
+                },
+                media_body=MediaFileUpload(srt_path, mimetype="text/srt")
+            )
+            caption_insert_request.execute()
+            print("✅ Subtitles attached successfully!")
+        except Exception as e:
+            print(f"⚠️ Failed to upload subtitles: {e}")
