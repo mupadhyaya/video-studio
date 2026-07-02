@@ -153,7 +153,7 @@ def generate_lesson():
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
             
-        for slide in storyboard:
+        for i, slide in enumerate(storyboard):
             if slide.get("visual_type") == "code_snippet":
                 snippet_code = slide.get("visual_content", "").strip()
                 if snippet_code:
@@ -164,6 +164,38 @@ def generate_lesson():
                     with open(snippet_file, "w", encoding="utf-8") as sf:
                         sf.write(snippet_code)
                     print(f"Extracted python snippet to {snippet_file}")
+                    
+                    import subprocess
+                    import sys
+                    print(f"Running {snippet_file} in sandbox to verify code...")
+                    try:
+                        # Use .venv python if available, otherwise fallback to sys.executable
+                        python_exe = ".venv/bin/python" if os.path.exists(".venv/bin/python") else sys.executable
+                        result = subprocess.run([python_exe, snippet_file], capture_output=True, text=True, timeout=60)
+                        
+                        actual_output = result.stdout
+                        if result.stderr:
+                            actual_output += "\n" + result.stderr
+                            
+                        if result.returncode != 0:
+                            print(f"CRITICAL ERROR: Generated python code failed with exit code {result.returncode}")
+                            print(f"Error output:\n{result.stderr}")
+                            print("Failing the pipeline so we don't render a broken video.")
+                            sys.exit(1)
+                            
+                        # Overwrite hallucinated terminal output on the next slide
+                        if i + 1 < len(storyboard) and storyboard[i+1].get("visual_type") == "terminal_output":
+                            formatted_output = f"$ python script.py\n{actual_output.strip()}\n\n[Process completed with exit code 0]"
+                            storyboard[i+1]["visual_content"] = formatted_output
+                            print("Successfully injected real terminal output into storyboard.")
+                            
+                    except subprocess.TimeoutExpired:
+                        print("CRITICAL ERROR: Generated python code timed out after 60 seconds.")
+                        sys.exit(1)
+                        
+        # Save the JSON again with the corrected real terminal outputs
+        with open(filename, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
                     
     except Exception as e:
         print(f"Failed to parse or inject agenda slide: {e}")
