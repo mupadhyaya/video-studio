@@ -1,0 +1,9 @@
+graph TD
+    A["Raw Document"] --> B["Chunking Engine"]
+    B --> C["Small Chunks (High Precision, Low Context)"]
+    B --> D["Large Chunks (High Context, Low Precision)"]
+    C --> E["Vector Database Storage"]
+    D --> E
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
