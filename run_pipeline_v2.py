@@ -13,13 +13,16 @@ import urllib.request
 from moviepy import AudioFileClip
 
 
-async def build_video_for_language(lesson_data, lang, theme, output_path):
+async def build_video_for_language(lesson_data, lang, theme, output_path, input_path, video_id):
     """
-    Builds a complete video for a single language track.
-
-    Extracts `title_{lang}`, `bullets_{lang}`, and `narration_{lang}` keys from
-    each slide object in the storyboard array.
-
+    Builds the video for a specific language (en or hi).
+    Steps:
+    1. Extract SVGs/Code/Mermaid, render HTML -> PNG
+    2. Generate Audio via EdgeTTS
+    3. Generate Subtitles (.srt) and extract chapter timestamps
+    4. Compile Video using MoviePy
+    """
+    """
     Args:
         lesson_data: List of slide dicts from the JSON storyboard.
         lang: Language code string ("en" or "hi").
@@ -128,7 +131,6 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             # Exports & TinyURL
             visual_type = slide.get("visual_type", "")
             visual_content = slide.get("visual_content", "")
-            video_id = os.path.basename(output_path).replace(f"_{lang}.mp4", "")
             
             file_name = None
             file_path = None
@@ -199,8 +201,7 @@ async def build_video_for_language(lesson_data, lang, theme, output_path):
             lesson_data[0][f"generated_resources_{lang}"] = "\n".join(resources)
             
         # Write SRT to disk
-        input_dir = os.path.dirname(os.path.abspath(args.input))
-        srt_file = os.path.join(input_dir, f"{args.video_id}_{lang}.srt")
+        srt_file = os.path.join(input_dir, f"{video_id}_{lang}.srt")
         with open(srt_file, "w", encoding="utf-8") as f:
             f.write(srt_content)
         print(f"  Generated Subtitles: {srt_file}")
@@ -271,12 +272,19 @@ def main():
         input_dir = os.path.dirname(os.path.abspath(args.input))
         en_path = os.path.join(input_dir, f"{args.video_id}_en.mp4")
         hi_path = os.path.join(input_dir, f"{args.video_id}_hi.mp4")
+        
+        print("\n=== STARTING PIPELINE V2 ===")
+        print(f"  Input   : {args.input}")
+        if args.lang in ["en", "all"]: print(f"  English : {en_path}")
+        if args.lang in ["hi", "all"]: print(f"  Hindi   : {hi_path}")
+        print("============================\n")
 
+        # 2. Build for requested languages
         if args.lang in ["en", "all"]:
-            await build_video_for_language(lesson_data, "en", args.theme, en_path)
+            await build_video_for_language(lesson_data, "en", args.theme, en_path, args.input, args.video_id)
             
         if args.lang in ["hi", "all"]:
-            await build_video_for_language(lesson_data, "hi", args.theme, hi_path)
+            await build_video_for_language(lesson_data, "hi", args.theme, hi_path, args.input, args.video_id)
 
         print(f"\n{'='*60}")
         print("  All builds complete!")
