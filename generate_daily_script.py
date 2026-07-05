@@ -37,14 +37,40 @@ def generate_lesson():
                 except Exception:
                     pass
             else:
-                topics.append({"topic": line, "source": "rag_curriculum.txt"})
+                topics.append({"topic": line, "source": "curriculum.txt"})
     
-    # Wrap around if day_num exceeds available topics
-    topic_index = (day_num - 1) % len(topics)
+    # If day_num exceeds available topics, invoke the AI Dean to generate more!
+    while day_num > len(topics):
+        print(f"Curriculum exhausted (Day {day_num} > {len(topics)} topics). Invoking AI Dean...")
+        import subprocess
+        import sys
+        subprocess.run([sys.executable, "scripts/generate_next_curriculum.py"], check=True)
+        
+        # Re-read topics
+        topics = []
+        with open("curriculum.txt", "r") as f:
+            for line in f:
+                line = line.strip()
+                if not line: continue
+                if line.endswith(".txt"):
+                    try:
+                        with open(line, "r") as sub_f:
+                            topics.extend([{"topic": sub_line.strip(), "source": line} for sub_line in sub_f if sub_line.strip()])
+                    except Exception:
+                        pass
+                else:
+                    topics.append({"topic": line, "source": "curriculum.txt"})
+                    
+    topic_index = day_num - 1
     current_topic_info = topics[topic_index]
     current_topic = current_topic_info["topic"]
     current_source = current_topic_info["source"]
-    next_topic = topics[(topic_index + 1) % len(topics)]["topic"]
+    
+    # Safely get the next topic (or "Course Conclusion" if it's somehow the last one)
+    if topic_index + 1 < len(topics):
+        next_topic = topics[topic_index + 1]["topic"]
+    else:
+        next_topic = "Course Conclusion & Next Steps"
     
     import subprocess
     import sys
@@ -91,12 +117,14 @@ def generate_lesson():
       "youtube_metadata_en": {{
         "title": "[An engaging, search-optimized English YouTube title for this topic]",
         "description": "[A detailed YouTube description including a summary and what they will learn. (We will automatically append the code download links later)]",
-        "tags": ["AI", "Tutorial", "list of 5 to 10 relevant tags"]
+        "tags": ["AI", "Tutorial", "list of 5 to 10 relevant tags"],
+        "thumbnail_text": "[Extract the short 2-5 word highly-clickable thumbnail text recommended by the YOUTUBE INSPIRATION STRATEGY]"
       }},
       "youtube_metadata_hi": {{
         "title": "[An engaging, search-optimized Hindi YouTube title for this topic]",
         "description": "[The exact same detailed YouTube description translated beautifully to Hindi. Also translate the github link sentence.]",
-        "tags": ["AI in Hindi", "Hindi Tutorial", "list of 5 to 10 relevant tags"]
+        "tags": ["AI in Hindi", "Hindi Tutorial", "list of 5 to 10 relevant tags"],
+        "thumbnail_text": "[Translate the short thumbnail text to Hindi]"
       }},
       "storyboard": [
         {{
