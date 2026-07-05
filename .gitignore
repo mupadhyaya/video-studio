@@ -231,8 +231,8 @@ check_*.py
 patch_*.py
 align_*.py
 user_align.py
-# We want to track final rendered videos, but ignore intermediate temp files
-*TEMP_MPY*.mp4
+# Videos are too large for GitHub (100MB limit), do not track them. Upload as artifacts instead.
+*.mp4
 temp_build_*/
 base.png
 content.png
