@@ -211,10 +211,22 @@ async def build_video_for_language(lesson_data, lang, theme, output_path, input_
         compile_video(lesson_data, images_dir, audio_dir, output_path)
         print(f"[{lang.upper()}] Video saved to: {output_path}")
 
+        # --- Generate YouTube Shorts ---
+        print(f"\nStep 4: Generating Vertical YouTube Short for [{lang.upper()}]...")
+        try:
+            import sys
+            sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+            from scripts.generate_shorts import generate_short
+            
+            if os.path.exists(output_path):
+                generate_short(input_path, output_path, lang)
+        except Exception as e:
+            print(f"  [ERROR] Failed to generate short for {lang}: {e}")
+
     finally:
         if os.path.exists(temp_dir):
             print(f"Cleaning up [{lang.upper()}] intermediate build assets...")
-            # shutil.rmtree(temp_dir)
+            shutil.rmtree(temp_dir)
 
 
 def main():
@@ -292,19 +304,7 @@ def main():
         if args.lang in ["hi", "all"]: print(f"  Hindi   : {hi_path}")
         print(f"{'='*60}")
         
-        # --- Generate YouTube Shorts ---
-        print("\nStep 4: Generating Vertical YouTube Shorts...")
-        try:
-            import sys
-            sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-            from scripts.generate_shorts import generate_short
-            
-            if args.lang in ["en", "all"] and os.path.exists(en_path):
-                generate_short(args.input, en_path, "en")
-            if args.lang in ["hi", "all"] and os.path.exists(hi_path):
-                generate_short(args.input, hi_path, "hi")
-        except Exception as e:
-            print(f"  [ERROR] Failed to generate shorts: {e}")
+
 
         # --- Automatic YouTube Upload ---
         if "YOUTUBE_OAUTH_TOKEN" in os.environ:
