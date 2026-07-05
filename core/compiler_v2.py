@@ -52,7 +52,7 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
             composite_layers = [base_clip, content_clip]
             
             # --- 2. ML Lip-sync Generation ---
-            use_ml_avatar = False  # Disabled for now per user request
+            use_ml_avatar = True  # Re-enabled per user request
             
             if has_avatar and use_ml_avatar:
                 print(f"  Generating ML synchronized lip-sync for slide {i}...")

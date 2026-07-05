@@ -46,15 +46,33 @@ def generate_lesson():
     current_source = current_topic_info["source"]
     next_topic = topics[(topic_index + 1) % len(topics)]["topic"]
     
+    import subprocess
+    import sys
+    print("Running automated YouTube Inspiration Research...")
+    subprocess.run([sys.executable, "scripts/fetch_youtube_inspiration.py", "--topic", current_topic])
+    
+    # Read the generated inspiration if it exists
+    inspiration_text = ""
+    try:
+        with open("inspiration.txt", "r", encoding="utf-8") as inf:
+            inspiration_text = inf.read()
+    except Exception:
+        pass
+
+    
     prompt = f"""
     You are the Lead Curriculum Director for an educational AI channel. 
     Write a comprehensive, multi-slide lesson for our series. 
     The topic for today is: "{current_topic}"
     The next upcoming lecture will be: "{next_topic}"
     
+    YOUTUBE INSPIRATION STRATEGY:
+    {inspiration_text}
+    
     The output MUST be valid JSON matching this schema exactly.
     
     Requirements for the video lecture:
+    - Incorporate the 'YOUTUBE INSPIRATION STRATEGY' into the title, description, and hook of the video.
     - Create as many slides as needed to comprehensively cover the topic with high-quality, Senior Principal Engineer-level depth. Do not rush the content!
     - Each slide must have a single `content_text` block instead of bullet points. This should be a highly engaging paragraph (2-3 sentences) emphasizing real-world case studies, actionable insights, and data-driven examples.
     - The narration for each slide should be in-depth, conversational, and impactful, avoiding fluff. Hook the viewer immediately!
