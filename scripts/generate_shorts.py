@@ -99,16 +99,16 @@ def generate_short(json_path, video_path, lang="en"):
             
             # Dynamic Header
             lesson_title = raw_data.get("meta_title", "Concept Highlight")
-            header_text = TextClip(text=lesson_title, font_size=70, color='white', font='Arial', method='caption', size=(900, None), horizontal_align='center')
+            header_text = TextClip(text=lesson_title, font_size=70, color='white', method='caption', size=(900, None), horizontal_align='center')
             header = header_text.with_position(('center', 250)).with_duration(highlight.duration)
             
             # Subheader
             slide_title = lesson_data[best_slide_idx].get(f"title_{lang}", lesson_data[best_slide_idx].get("title", ""))
-            subheader_text = TextClip(text=slide_title, font_size=50, color='#00FFCC', font='Arial', method='caption', size=(900, None), horizontal_align='center')
+            subheader_text = TextClip(text=slide_title, font_size=50, color='#00FFCC', method='caption', size=(900, None), horizontal_align='center')
             subheader = subheader_text.with_position(('center', 450)).with_duration(highlight.duration)
             
             # Footer CTA
-            cta_text = TextClip(text="👇 Full Tutorial Link in Description 👇", font_size=55, color='yellow', font='Arial', method='caption', size=(900, None), horizontal_align='center')
+            cta_text = TextClip(text="👇 Full Tutorial Link in Description 👇", font_size=55, color='yellow', method='caption', size=(900, None), horizontal_align='center')
             cta = cta_text.with_position(('center', 1550)).with_duration(highlight.duration)
             
             final = CompositeVideoClip([bg_video, dark_overlay, positioned_video, header, subheader, cta])
