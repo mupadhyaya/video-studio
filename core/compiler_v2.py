@@ -52,7 +52,9 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
             composite_layers = [base_clip, content_clip]
             
             # --- 2. ML Lip-sync Generation ---
-            if has_avatar:
+            use_ml_avatar = False  # Disabled for now per user request
+            
+            if has_avatar and use_ml_avatar:
                 print(f"  Generating ML synchronized lip-sync for slide {i}...")
                 
                 # We will synthesize the face into a temporary video file
@@ -87,12 +89,6 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                     ax = vw - target_w - 40
                     ay = vh - 350 - 40
                     
-                    # Apply breathing animation (scale slightly over a 2-second loop)
-                    # We use moviepy's resize with a custom function of time
-                    def breathing_scale(t):
-                        # Sinusoidal scaling between 1.0 and 1.03 over 3 seconds
-                        return 1.0 + 0.015 * (1 + math.sin(2 * math.pi * t / 3.0))
-                    
                     # Store original mask so we can restore it after resize
                     avatar_video_clip = avatar_video_clip.with_position((ax, ay)).without_audio()
                     
@@ -106,29 +102,34 @@ def compile_video(slides_data, images_dir, audio_dir, output_path):
                     
                     composite_layers.append(avatar_video_clip)
                 else:
+                    use_ml_avatar = False  # Trigger fallback
                     print(f"Warning: ML avatar synthesis failed for slide {i}. Falling back to static breathing avatar.")
+            
+            if has_avatar and not use_ml_avatar:
+                if not use_ml_avatar:
+                    print(f"  Using static breathing avatar for slide {i}...")
+                
+                # Read size from original image to get proper aspect ratio
+                with Image.open(avatar_idle_path) as img:
+                    aspect = img.width / img.height
+                    target_w = int(350 * aspect)
                     
-                    # Read size from original image to get proper aspect ratio
-                    with Image.open(avatar_idle_path) as img:
-                        aspect = img.width / img.height
-                        target_w = int(350 * aspect)
-                        
-                    vw, vh = base_clip.size
-                    ax = vw - target_w - 40
-                    ay = vh - 350 - 40
+                vw, vh = base_clip.size
+                ax = vw - target_w - 40
+                ay = vh - 350 - 40
+                
+                fallback_clip = (ImageClip(avatar_idle_path)
+                                 .resized(height=350)
+                                 .with_duration(duration))
+                
+                def make_breathing(offset, base_x, base_y):
+                    def breathing_position(t):
+                        dy = 8 * math.sin(2 * math.pi * (t + offset) / 3.0)
+                        return (base_x, base_y + dy)
+                    return breathing_position
                     
-                    fallback_clip = (ImageClip(avatar_idle_path)
-                                     .resized(height=350)
-                                     .with_duration(duration))
-                    
-                    def make_breathing(offset, base_x, base_y):
-                        def breathing_position(t):
-                            dy = 8 * math.sin(2 * math.pi * (t + offset) / 3.0)
-                            return (base_x, base_y + dy)
-                        return breathing_position
-                        
-                    fallback_clip = fallback_clip.with_position(make_breathing(global_time_offset, ax, ay))
-                    composite_layers.append(fallback_clip)
+                fallback_clip = fallback_clip.with_position(make_breathing(global_time_offset, ax, ay))
+                composite_layers.append(fallback_clip)
             
             global_time_offset += duration
             
