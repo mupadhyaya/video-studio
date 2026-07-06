@@ -64,7 +64,9 @@ async def build_video_for_language(lesson_data, lang, theme, output_path, input_
                 print(f"  [THUMBNAIL] Extracting Title Slide as Thumbnail...")
                 thumb_path = os.path.join(input_dir, f"thumbnail_{lang}.png")
                 avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
-                generate_thumbnail(title, thumb_path, avatar_path)
+                yt_meta = raw_data.get(f"youtube_metadata_{lang}", {}) if isinstance(raw_data, dict) else {}
+                thumb_text = yt_meta.get("thumbnail_text", title)
+                generate_thumbnail(thumb_text, thumb_path, avatar_path)
                 print(f"  [THUMBNAIL] Saved custom thumbnail to: {thumb_path}")
                 thumbnail_generated = True
 
@@ -72,7 +74,9 @@ async def build_video_for_language(lesson_data, lang, theme, output_path, input_
             print(f"  [THUMBNAIL] No title slide found. Falling back to slide 0 for thumbnail...")
             thumb_path = os.path.join(input_dir, f"thumbnail_{lang}.png")
             avatar_path = "assets/masked_hindi_rest.png" if lang == "hi" else "assets/masked_avatar_0.png"
-            generate_thumbnail(lesson_data[0].get("title", ""), thumb_path, avatar_path)
+            yt_meta = raw_data.get(f"youtube_metadata_{lang}", {}) if isinstance(raw_data, dict) else {}
+            thumb_text = yt_meta.get("thumbnail_text", lesson_data[0].get("title", ""))
+            generate_thumbnail(thumb_text, thumb_path, avatar_path)
             print(f"  [THUMBNAIL] Saved fallback thumbnail to: {thumb_path}")
 
         # --- Step 2: Synthesize narrations ---
