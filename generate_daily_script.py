@@ -226,7 +226,40 @@ def generate_lesson():
                         if result.returncode != 0:
                             print(f"⚠️ WARNING: Generated python code failed with exit code {result.returncode}")
                             print(f"Error output:\n{result.stderr}")
-                            print("Continuing pipeline. The error will be shown on the terminal output slide as a realistic bug.")
+                            print("Continuing pipeline. Rewriting AI narration to address the bug...")
+                            
+                            # Rewrite the narration to acknowledge the bug
+                            if i + 1 < len(storyboard) and storyboard[i+1].get("visual_type") == "terminal_output":
+                                bug_prompt = f"""
+                                You are the AI narrator for an advanced software engineering YouTube channel.
+                                We just executed a Python script locally, and it failed with the following traceback:
+                                ```
+                                {actual_output.strip()}
+                                ```
+                                
+                                The original English narration for this slide was: "{storyboard[i+1].get('narration_text_en', '')}"
+                                
+                                Rewrite the English and Hindi narration for this slide to gracefully acknowledge this bug as a "live debugging moment". 
+                                Explain what went wrong (e.g. if it's a ModuleNotFoundError, tell them to pip install it) and act like this was an intentional teaching moment.
+                                
+                                OUTPUT FORMAT (Strict JSON):
+                                {{
+                                  "narration_text_en": "Whoops! Looks like we hit a live bug...",
+                                  "narration_text_hi": "..."
+                                }}
+                                """
+                                try:
+                                    bug_response = client.models.generate_content(
+                                        model='gemini-2.5-flash',
+                                        contents=bug_prompt,
+                                        config={'response_mime_type': 'application/json'}
+                                    )
+                                    bug_data = json.loads(bug_response.text)
+                                    storyboard[i+1]["narration_text_en"] = bug_data.get("narration_text_en", storyboard[i+1].get("narration_text_en"))
+                                    storyboard[i+1]["narration_text_hi"] = bug_data.get("narration_text_hi", storyboard[i+1].get("narration_text_hi"))
+                                    print("✅ Successfully rewrote narration to handle the live bug!")
+                                except Exception as e:
+                                    print(f"Failed to rewrite bug narration: {e}")
                             
                         # Overwrite hallucinated terminal output on the next slide
                         if i + 1 < len(storyboard) and storyboard[i+1].get("visual_type") == "terminal_output":
