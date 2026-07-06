@@ -7,10 +7,11 @@ from google import genai
 
 def fetch_inspiration(topic):
     print(f"🔍 Researching YouTube for topic: {topic}")
+    api_key = os.environ.get("YOUTUBE_API_KEY")
     token_str = os.environ.get("YOUTUBE_OAUTH_TOKEN")
     
-    if not token_str:
-        print("⚠️ YOUTUBE_OAUTH_TOKEN not found. Skipping automated YouTube research.")
+    if not api_key and not token_str:
+        print("⚠️ Neither YOUTUBE_API_KEY nor YOUTUBE_OAUTH_TOKEN found. Skipping automated YouTube research.")
         # Write a generic fallback inspiration to unblock the pipeline
         fallback = f"Focus on delivering a high-quality, dense tutorial about {topic}. Use standard technical hooks."
         with open("inspiration.txt", "w", encoding="utf-8") as f:
@@ -18,9 +19,14 @@ def fetch_inspiration(topic):
         return
         
     try:
-        creds_info = json.loads(token_str)
-        credentials = Credentials.from_authorized_user_info(creds_info)
-        youtube = build("youtube", "v3", credentials=credentials)
+        if api_key:
+            print("🔑 Using YOUTUBE_API_KEY for authentication.")
+            youtube = build("youtube", "v3", developerKey=api_key)
+        else:
+            print("🔑 Using YOUTUBE_OAUTH_TOKEN for authentication.")
+            creds_info = json.loads(token_str)
+            credentials = Credentials.from_authorized_user_info(creds_info)
+            youtube = build("youtube", "v3", credentials=credentials)
         
         # Search for top videos
         request = youtube.search().list(

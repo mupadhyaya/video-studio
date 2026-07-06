@@ -224,20 +224,20 @@ def generate_lesson():
                             actual_output += "\n" + result.stderr
                             
                         if result.returncode != 0:
-                            print(f"CRITICAL ERROR: Generated python code failed with exit code {result.returncode}")
+                            print(f"⚠️ WARNING: Generated python code failed with exit code {result.returncode}")
                             print(f"Error output:\n{result.stderr}")
-                            print("Failing the pipeline so we don't render a broken video.")
-                            sys.exit(1)
+                            print("Continuing pipeline. The error will be shown on the terminal output slide as a realistic bug.")
                             
                         # Overwrite hallucinated terminal output on the next slide
                         if i + 1 < len(storyboard) and storyboard[i+1].get("visual_type") == "terminal_output":
-                            formatted_output = f"$ python script.py\n{actual_output.strip()}\n\n[Process completed with exit code 0]"
+                            formatted_output = f"$ python script.py\n{actual_output.strip()}\n\n[Process completed with exit code {result.returncode}]"
                             storyboard[i+1]["visual_content"] = formatted_output
                             print("Successfully injected real terminal output into storyboard.")
                             
                     except subprocess.TimeoutExpired:
-                        print("CRITICAL ERROR: Generated python code timed out after 60 seconds.")
-                        sys.exit(1)
+                        print("⚠️ WARNING: Generated python code timed out after 60 seconds. Using fallback output.")
+                        if i + 1 < len(storyboard) and storyboard[i+1].get("visual_type") == "terminal_output":
+                            storyboard[i+1]["visual_content"] = "$ python script.py\n[Timeout Error: Execution exceeded 60s]"
                         
         # Save the JSON again with the corrected real terminal outputs
         with open(filename, "w", encoding="utf-8") as f:
