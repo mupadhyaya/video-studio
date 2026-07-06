@@ -13,7 +13,7 @@ import urllib.request
 from moviepy import AudioFileClip
 
 
-async def build_video_for_language(lesson_data, lang, theme, output_path, input_path, video_id):
+async def build_video_for_language(lesson_data, lang, theme, output_path, input_path, video_id, raw_data):
     """
     Builds the video for a specific language (en or hi).
     Steps:
@@ -297,10 +297,10 @@ def main():
 
         # 2. Build for requested languages
         if args.lang in ["en", "all"]:
-            await build_video_for_language(lesson_data, "en", args.theme, en_path, args.input, args.video_id)
+            await build_video_for_language(lesson_data, "en", args.theme, en_path, args.input, args.video_id, raw_data)
             
         if args.lang in ["hi", "all"]:
-            await build_video_for_language(lesson_data, "hi", args.theme, hi_path, args.input, args.video_id)
+            await build_video_for_language(lesson_data, "hi", args.theme, hi_path, args.input, args.video_id, raw_data)
 
         print(f"\n{'='*60}")
         print("  All builds complete!")
