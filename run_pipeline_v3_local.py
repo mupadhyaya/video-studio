@@ -229,22 +229,35 @@ def compile_final_video(
     # ── Load face clip for PiP overlay ───────────────────────────────────
     face_path = str(REPO_ROOT / "assets" / "my_face_idle.mp4")
     has_face = Path(face_path).exists()
-    face_loop = None
+    face_clip_full = None
     if has_face:
         try:
-            face_loop = VideoFileClip(face_path).resized(height=FACE_H).loop()
-            print(f"  [compile] 👤 Face PiP loaded (height={FACE_H}px)")
+            face_clip_full = VideoFileClip(face_path).resized(height=FACE_H)
+            print(f"  [compile] 👤 Face PiP loaded (height={FACE_H}px, duration={face_clip_full.duration:.1f}s)")
         except Exception as e:
             print(f"  [compile] ⚠️  Could not load face: {e}")
             has_face = False
 
+    def make_face_pip(duration: float):
+        """Return a face PiP clip trimmed/looped to the required duration."""
+        if not has_face or face_clip_full is None:
+            return None
+        # Trim or loop manually
+        if face_clip_full.duration >= duration:
+            return face_clip_full.subclipped(0, duration).with_position((30, H - FACE_H - 30))
+        else:
+            # Repeat the clip to fill duration
+            from moviepy import concatenate_videoclips
+            repeats = int(duration / face_clip_full.duration) + 1
+            looped = concatenate_videoclips([face_clip_full] * repeats).subclipped(0, duration)
+            return looped.with_position((30, H - FACE_H - 30))
+
     def add_face_pip(base_clip, duration: float):
         """Add face PiP to bottom-left corner of any clip."""
-        if not has_face or face_loop is None:
+        face_pip = make_face_pip(duration)
+        if face_pip is None:
             return base_clip
-        face_clip = face_loop.subclipped(0, min(duration, face_loop.duration))
-        face_clip = face_clip.with_position((30, H - FACE_H - 30))  # bottom-left
-        return CompositeVideoClip([base_clip, face_clip])
+        return CompositeVideoClip([base_clip, face_pip])
 
     # ── Compile slides ────────────────────────────────────────────────────
     for i, slide in enumerate(slides):
@@ -287,8 +300,8 @@ def compile_final_video(
         base_clip = add_face_pip(base_clip, clip_duration)
         clips.append(base_clip.with_fps(FPS))
 
-    if face_loop:
-        face_loop.close()
+    if face_clip_full:
+        face_clip_full.close()
 
     if not clips:
         print("[compile] ❌ No clips to compile!")
@@ -308,15 +321,16 @@ def compile_final_video(
 
 
 def _render_slide_image(slide: dict, index: int, lang: str) -> str | None:
-    """Use the V2 image engine to render a single slide as a PNG."""
+    """Render a single slide to PNG using the V3 self-contained slide renderer."""
     try:
-        from core.image_engine import render_slide
+        from v3_engine.slide_renderer import render_slide
         out_path = f"/tmp/v3_slide_{index:02d}_{lang}.png"
         render_slide(slide, out_path, lang=lang)
         return out_path
     except Exception as e:
         print(f"  [compile] ⚠️  Could not render slide {index}: {e}")
         return None
+
 
 
 # ─── Step 4: Gist Publishing ─────────────────────────────────────────────────

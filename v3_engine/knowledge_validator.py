@@ -15,7 +15,8 @@ import json
 import os
 from pathlib import Path
 
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 REPO_ROOT = Path(__file__).parent.parent
 
@@ -38,8 +39,8 @@ def validate_lesson(lesson_json_path: str) -> dict:
         print("[validator] ⚠️  No GEMINI_API_KEY found — skipping validation.")
         return {"passed": True, "issues": [], "summary": "Skipped (no API key)"}
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    client = genai.Client(api_key=api_key)
+    model_name = "gemini-2.0-flash"
 
     with open(lesson_json_path) as f:
         lesson = json.load(f)
@@ -90,7 +91,10 @@ Here is the storyboard:
 """
 
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+        )
         raw = response.text.strip()
 
         # Strip markdown code fences if present
@@ -138,8 +142,8 @@ def apply_fixes(lesson_json_path: str, issues: list) -> bool:
     if not api_key:
         return False
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.0-flash")
+    client = genai.Client(api_key=api_key)
+    model_name = "gemini-2.0-flash"
 
     with open(lesson_json_path) as f:
         lesson = json.load(f)
@@ -169,7 +173,10 @@ Fix ONLY the identified issue — don't change anything else.
 Return valid JSON only, no markdown.
 """
         try:
-            resp = model.generate_content(fix_prompt)
+            resp = client.models.generate_content(
+                model=model_name,
+                contents=fix_prompt,
+            )
             raw = resp.text.strip()
             if raw.startswith("```"):
                 raw = raw.split("```")[1]
