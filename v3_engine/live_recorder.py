@@ -5,20 +5,71 @@ Live Terminal Screen Recorder for V3 pipeline.
 
 This module:
 1. Opens a new Terminal window via osascript
-2. Types and runs the lesson's Python code
-3. Screen-records the execution using macOS screencapture
-4. Returns the path to the recorded .mov clip
-
-The recording is a real, authentic terminal execution — no faking.
+2. Runs the lesson's Python code (auto-installing missing deps first)
+3. Screen-records the full execution using macOS screencapture
+4. Closes the Terminal window automatically after completion
+5. Returns the path to the recorded .mov clip
 """
 
 import os
+import re
 import subprocess
+import sys
 import time
 import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
+
+# Map common import names to pip package names where they differ
+IMPORT_TO_PKG = {
+    "langchain_core": "langchain-core",
+    "langchain_community": "langchain-community",
+    "langchain": "langchain",
+    "langchain_openai": "langchain-openai",
+    "langchain_anthropic": "langchain-anthropic",
+    "faiss": "faiss-cpu",
+    "sklearn": "scikit-learn",
+    "cv2": "opencv-python",
+    "PIL": "Pillow",
+    "bs4": "beautifulsoup4",
+    "yaml": "pyyaml",
+    "dotenv": "python-dotenv",
+    "google.generativeai": "google-generativeai",
+}
+
+
+def _detect_and_install_missing(code: str, python_bin: str, pip_bin: str) -> list[str]:
+    """
+    Scan code for import statements. Try importing each module.
+    If missing, auto-install the corresponding pip package.
+    Returns list of packages that were installed.
+    """
+    # Extract all imported module names
+    pattern = re.compile(r"^\s*(?:import|from)\s+([\w\.]+)", re.MULTILINE)
+    modules = set(m.split(".")[0] for m in pattern.findall(code))
+
+    installed = []
+    for module in modules:
+        # Check if module is importable
+        check = subprocess.run(
+            [python_bin, "-c", f"import {module}"],
+            capture_output=True
+        )
+        if check.returncode != 0:
+            # Determine pip package name
+            pkg = IMPORT_TO_PKG.get(module, module.replace("_", "-"))
+            print(f"  [live_recorder] 📦 Installing missing: {pkg} ...")
+            result = subprocess.run(
+                [pip_bin, "install", pkg, "-q"],
+                capture_output=True, text=True, timeout=120
+            )
+            if result.returncode == 0:
+                installed.append(pkg)
+            else:
+                print(f"  [live_recorder] ⚠️  Could not install {pkg}: {result.stderr[:100]}")
+
+    return installed
 
 
 def record_code_execution(
@@ -31,11 +82,13 @@ def record_code_execution(
 ) -> bool:
     """
     Opens a Terminal window, runs code, and screen-records the execution.
+    Auto-installs any missing Python packages before running.
+    Terminal window closes automatically after execution.
 
     Args:
         code: The Python code string to execute.
         lesson_title: Descriptive title shown in terminal window.
-        output_path: Path to save the .mov recording.
+        output_path: Absolute path to save the .mov recording.
         python_bin: Python executable to use. Defaults to venv python.
         pre_run_delay: Seconds to pause before typing starts (for camera-ready look).
         post_run_delay: Seconds to keep recording after execution completes.
@@ -46,23 +99,49 @@ def record_code_execution(
     if python_bin is None:
         python_bin = str(REPO_ROOT / ".venv" / "bin" / "python")
 
-    # Write code to a temp file
+    pip_bin = str(Path(python_bin).parent / "pip3")
+
+    # ── Step 1: Auto-detect and install missing imports ──────────────────
+    print(f"  [live_recorder] 🔍 Checking dependencies...")
+    missing_packages = _detect_and_install_missing(code, python_bin, pip_bin)
+    if missing_packages:
+        print(f"  [live_recorder] ✅ Auto-installed: {', '.join(missing_packages)}")
+
+    # ── Step 2: Write code to a temp file ────────────────────────────────
     with tempfile.NamedTemporaryFile(
         mode="w", suffix=".py", prefix="v3_lesson_", delete=False
     ) as f:
         f.write(code)
         temp_script = f.name
 
-    # Estimate execution time to size the recording
+    # Estimate recording duration based on code complexity
     line_count = len(code.splitlines())
-    estimated_duration = max(10, pre_run_delay + line_count * 0.5 + post_run_delay)
+    estimated_duration = max(12, pre_run_delay + line_count * 0.4 + post_run_delay)
 
-    # AppleScript to open Terminal, set title, and run the script
+    # ── Step 3: Build shell command ───────────────────────────────────────
+    # The terminal will:
+    #   - clear screen for a clean look
+    #   - print a colored title header
+    #   - run the Python script
+    #   - print [✓ Done] in green
+    #   - wait 4 seconds so the viewer can read the output
+    #   - exit (closes the Terminal tab/window automatically)
+    safe_title = lesson_title.replace("'", "").replace('"', "")
+    shell_cmd = (
+        f"clear; "
+        f"printf '\\033[1;36m=== {safe_title} ===\\033[0m\\n\\n'; "
+        f"{python_bin} {temp_script}; "
+        f"printf '\\n\\033[1;32m[✓ Execution complete]\\033[0m\\n'; "
+        f"sleep 4; "
+        f"exit 0"
+    )
+
+    # AppleScript: open a new Terminal window and run the command
     applescript = f"""
 tell application "Terminal"
     activate
-    set newTab to do script "clear && echo '=== {lesson_title} ===' && echo '' && {python_bin} {temp_script}; echo ''; echo '[Done. Press Ctrl-C to close]'"
-    set custom title of newTab to "{lesson_title}"
+    set newTab to do script "{shell_cmd}"
+    set custom title of newTab to "{safe_title}"
 end tell
 """
 

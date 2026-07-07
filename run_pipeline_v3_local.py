@@ -46,8 +46,61 @@ def load_lesson(json_path: str) -> dict:
         return json.load(f)
 
 
-# ─── Step 1: Voice Synthesis ──────────────────────────────────────────────────
+def get_slides(lesson: dict) -> list:
+    """Normalize lesson JSON to a list of slides regardless of schema version."""
+    # V2+ schema uses 'storyboard'
+    if "storyboard" in lesson:
+        return lesson["storyboard"]
+    # Legacy schema uses 'slides'
+    return lesson.get("slides", [])
 
+
+def get_narration(slide: dict, lang: str = "en") -> str:
+    """Extract narration text for a slide, supporting multiple field name conventions."""
+    if lang == "hi":
+        return (
+            slide.get("narration_text_hi")
+            or slide.get("narration_hi")
+            or slide.get("narration")
+            or ""
+        )
+    return (
+        slide.get("narration_text_en")
+        or slide.get("narration_en")
+        or slide.get("narration")
+        or ""
+    )
+
+
+def get_code(slide: dict) -> str:
+    """Extract runnable Python code from a slide."""
+    vtype = slide.get("visual_type", "")
+    if vtype not in ("code_snippet", "code_demo"):
+        return ""
+    content = slide.get("visual_content") or slide.get("content_code") or slide.get("content") or ""
+    # Filter out non-Python terminal output style content
+    if isinstance(content, dict):
+        return content.get("code", "")
+    return str(content)
+
+
+def is_code_slide(slide: dict) -> bool:
+    return slide.get("visual_type") in ("code_snippet", "code_demo")
+
+
+# ─── Step 0: Knowledge Validation ───────────────────────────────────────────
+
+def validate_and_fix(lesson_json_path: str) -> dict:
+    """Run Gemini knowledge validation and auto-fix critical issues."""
+    from v3_engine.knowledge_validator import validate_lesson, apply_fixes
+    result = validate_lesson(lesson_json_path)
+    if not result["passed"] and result.get("issues"):
+        print("  [validate] 🔧 Applying auto-fixes for critical issues...")
+        apply_fixes(lesson_json_path, result["issues"])
+    return result
+
+
+# ─── Step 1: Voice Synthesis ──────────────────────────────────────────────────
 def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> list[Path]:
     """
     Generate voice narration for each slide using F5-TTS (your cloned voice).
@@ -57,13 +110,10 @@ def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> l
     from v3_engine.voice_clone import synthesize_speech
 
     audio_paths = []
-    slides = lesson.get("slides", [])
+    slides = get_slides(lesson)
 
     for i, slide in enumerate(slides):
-        narration = slide.get("narration_hi" if lang == "hi" else "narration", "")
-        if not narration:
-            narration = slide.get("narration", "")
-
+        narration = get_narration(slide, lang)
         if not narration:
             audio_paths.append(None)
             continue
@@ -76,36 +126,41 @@ def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> l
     return audio_paths
 
 
-# ─── Step 2: Live Code Recording ─────────────────────────────────────────────
+# ─── Step 2: Visual Recording (VS Code) ─────────────────────────────────────
 
 def record_code_slides(lesson: dict, output_dir: Path) -> dict[int, Path]:
     """
-    For each code_demo slide, open a Terminal window, run the code live,
+    For each code_snippet slide, open VS Code, run the code live,
     and screen-record the execution. Returns {slide_index: recording_path}.
     """
-    from v3_engine.live_recorder import record_code_execution
+    from v3_engine.vscode_recorder import record_vscode_session
 
     recordings = {}
-    slides = lesson.get("slides", [])
-    lesson_title = lesson.get("title", "Lesson")
+    slides = get_slides(lesson)
+    lesson_title = lesson.get("meta_title") or lesson.get("title", "Lesson")
 
     for i, slide in enumerate(slides):
-        if slide.get("type") != "code_demo":
+        if not is_code_slide(slide):
             continue
 
-        code = slide.get("content", "")
+        code = get_code(slide)
         if not code:
             continue
 
-        slide_title = slide.get("title", f"Code Demo {i}")
+        slide_title = slide.get("title_en") or slide.get("title", f"Code Demo {i}")
         recording_path = str(output_dir / f"slide_{i:02d}_recording.mov")
 
+        # Skip if already recorded
+        if Path(recording_path).exists():
+            print(f"  [Recorder] ⏭️  Slide {i+1} already recorded, skipping.")
+            recordings[i] = Path(recording_path)
+            continue
+
         print(f"  [Recorder] Slide {i+1}: {slide_title}")
-        success = record_code_execution(
+        success = record_vscode_session(
             code=code,
             lesson_title=f"{lesson_title} — {slide_title}",
             output_path=recording_path,
-            python_bin=PYTHON_BIN,
         )
 
         if success:
@@ -116,70 +171,131 @@ def record_code_slides(lesson: dict, output_dir: Path) -> dict[int, Path]:
     return recordings
 
 
-# ─── Step 3: Compile Final Video ─────────────────────────────────────────────
+# ─── Step 2b: Diagram Generation ─────────────────────────────────────────────
+
+def generate_diagrams(lesson: dict, output_dir: Path) -> dict[int, Path]:
+    """Generate Gemini Imagen diagrams for architecture/sequence slides."""
+    from v3_engine.diagram_generator import generate_diagram
+
+    diagrams = {}
+    slides = get_slides(lesson)
+    lesson_title = lesson.get("meta_title") or lesson.get("title", "")
+    DIAGRAM_TYPES = {"architecture_diagram", "sequence_diagram", "concept_box"}
+
+    for i, slide in enumerate(slides):
+        if slide.get("visual_type") not in DIAGRAM_TYPES:
+            continue
+        out_path = str(output_dir / f"slide_{i:02d}_diagram.png")
+        if Path(out_path).exists():
+            diagrams[i] = Path(out_path)
+            continue
+        success = generate_diagram(slide, out_path, lesson_title)
+        if success:
+            diagrams[i] = Path(out_path)
+
+    return diagrams
+
+
+# ─── Step 3: Compile Final Video (with face PiP) ──────────────────────────────
 
 def compile_final_video(
     lesson: dict,
     audio_paths: list,
     recordings: dict,
+    diagrams: dict,
     output_path: str,
     lang: str = "en",
 ) -> bool:
     """
-    Compile the final video by merging:
-    - For code slides: the live terminal recording + narration audio
-    - For other slides: rendered slide image + narration audio (V2 style)
+    Compile the final video:
+    - Intro: user face (full) + cloned voice
+    - Code slides: VS Code recording + narration audio + face PiP corner
+    - Other slides: rendered slide + narration + face PiP corner
+    - Outro: user face (full) + call to action
     """
     from moviepy import (
         VideoFileClip, AudioFileClip, ImageClip,
         concatenate_videoclips,
     )
+    from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 
-    slides = lesson.get("slides", [])
+    slides = get_slides(lesson)
     clips = []
     FPS = 24
+    DEFAULT_DURATION = 7.0
+    W, H = 1920, 1080
+    FACE_H = 280  # height of PiP face overlay
 
+    # ── Load face clip for PiP overlay ───────────────────────────────────
+    face_path = str(REPO_ROOT / "assets" / "my_face_idle.mp4")
+    has_face = Path(face_path).exists()
+    face_loop = None
+    if has_face:
+        try:
+            face_loop = VideoFileClip(face_path).resized(height=FACE_H).loop()
+            print(f"  [compile] 👤 Face PiP loaded (height={FACE_H}px)")
+        except Exception as e:
+            print(f"  [compile] ⚠️  Could not load face: {e}")
+            has_face = False
+
+    def add_face_pip(base_clip, duration: float):
+        """Add face PiP to bottom-left corner of any clip."""
+        if not has_face or face_loop is None:
+            return base_clip
+        face_clip = face_loop.subclipped(0, min(duration, face_loop.duration))
+        face_clip = face_clip.with_position((30, H - FACE_H - 30))  # bottom-left
+        return CompositeVideoClip([base_clip, face_clip])
+
+    # ── Compile slides ────────────────────────────────────────────────────
     for i, slide in enumerate(slides):
         audio_path = audio_paths[i] if i < len(audio_paths) else None
-        slide_type = slide.get("type", "")
 
-        # Get audio duration to know clip length
-        clip_duration = 6.0  # default
+        clip_duration = DEFAULT_DURATION
         audio_clip = None
-        if audio_path and audio_path.exists():
+        if audio_path and Path(str(audio_path)).exists():
             audio_clip = AudioFileClip(str(audio_path))
             clip_duration = audio_clip.duration
 
-        if slide_type == "code_demo" and i in recordings:
-            # Use the real terminal recording
-            rec_path = recordings[i]
-            video_clip = VideoFileClip(str(rec_path)).resized((1920, 1080))
+        base_clip = None
 
-            # Trim/pad to match audio duration
-            if video_clip.duration > clip_duration:
-                video_clip = video_clip.subclipped(0, clip_duration)
+        if is_code_slide(slide) and i in recordings:
+            # Real VS Code recording
+            rec = VideoFileClip(str(recordings[i])).resized((W, H))
+            if rec.duration > clip_duration:
+                rec = rec.subclipped(0, clip_duration)
+            base_clip = rec
 
-            if audio_clip:
-                video_clip = video_clip.with_audio(audio_clip)
+        elif i in diagrams:
+            # Gemini-generated diagram image
+            base_clip = ImageClip(str(diagrams[i]), duration=clip_duration).resized((W, H))
 
-            clips.append(video_clip)
         else:
-            # Render slide using V2 compiler for non-code slides
-            slide_img_path = _render_slide_image(slide, i, lang)
-            if slide_img_path:
-                img_clip = ImageClip(slide_img_path, duration=clip_duration)
-                if audio_clip:
-                    img_clip = img_clip.with_audio(audio_clip)
-                clips.append(img_clip)
+            # Render slide with V2 image engine
+            img_path = _render_slide_image(slide, i, lang)
+            if img_path:
+                base_clip = ImageClip(img_path, duration=clip_duration).resized((W, H))
+
+        if base_clip is None:
+            print(f"  [compile] ⏭️  Skipping slide {i} (no content)")
+            continue
+
+        # Add audio
+        if audio_clip:
+            base_clip = base_clip.with_audio(audio_clip)
+
+        # Add face PiP to every slide
+        base_clip = add_face_pip(base_clip, clip_duration)
+        clips.append(base_clip.with_fps(FPS))
+
+    if face_loop:
+        face_loop.close()
 
     if not clips:
         print("[compile] ❌ No clips to compile!")
         return False
 
     final = concatenate_videoclips(clips, method="compose")
-    print(f"[compile] 🎬 Writing final video: {output_path}")
-    print(f"[compile]    Total duration: {final.duration:.1f}s")
-
+    print(f"[compile] 🎬 Writing: {output_path} ({final.duration:.1f}s)")
     final.write_videofile(
         output_path,
         fps=FPS,
@@ -216,8 +332,10 @@ def main():
     parser = argparse.ArgumentParser(description="V3 Local Creator Mode Pipeline")
     parser.add_argument("--input", required=True, help="Path to lesson JSON")
     parser.add_argument("--lang", default="en", choices=["en", "hi"], help="Language")
-    parser.add_argument("--skip-voice", action="store_true", help="Skip voice synthesis (use edge-tts)")
+    parser.add_argument("--skip-validate", action="store_true", help="Skip Gemini knowledge validation")
+    parser.add_argument("--skip-voice", action="store_true", help="Skip voice synthesis")
     parser.add_argument("--skip-record", action="store_true", help="Skip live code recording")
+    parser.add_argument("--skip-diagrams", action="store_true", help="Skip Gemini diagram generation")
     parser.add_argument("--skip-gist", action="store_true", help="Skip Gist publishing")
     args = parser.parse_args()
 
@@ -227,7 +345,7 @@ def main():
         sys.exit(1)
 
     lesson = load_lesson(str(lesson_path))
-    lesson_title = lesson.get("title", lesson_path.stem)
+    lesson_title = lesson.get("meta_title") or lesson.get("title") or lesson_path.stem
     output_dir = lesson_path.parent
     build_dir = output_dir / "v3_build"
     build_dir.mkdir(exist_ok=True)
@@ -236,17 +354,29 @@ def main():
 
     banner(f"V3 Pipeline: {lesson_title} [{args.lang.upper()}]")
 
+    # ── Step 0: Knowledge Validation ─────────────────────────────────────
+    banner("Step 0: Validating Lesson Content (Gemini)")
+    if not args.skip_validate:
+        result = validate_and_fix(str(lesson_path))
+        # Reload lesson in case fixes were applied
+        lesson = load_lesson(str(lesson_path))
+    else:
+        print("  ⏭️  Skipped (--skip-validate)")
+
+    slides = get_slides(lesson)
+    slide_count = len(slides)
+
     # ── Step 1: Voice Synthesis ──────────────────────────────────────────
-    banner("Step 1: Synthesizing Voice Narrations")
+    banner("Step 1: Synthesizing Voice Narrations (F5-TTS)")
     if not args.skip_voice:
         audio_paths = synthesize_narrations(lesson, build_dir, lang=args.lang)
-        print(f"  ✅ Generated {sum(1 for a in audio_paths if a)} audio clips")
+        print(f"  ✅ Generated {sum(1 for a in audio_paths if a)}/{slide_count} audio clips")
     else:
         print("  ⏭️  Skipped (--skip-voice)")
-        audio_paths = [None] * len(lesson.get("slides", []))
+        audio_paths = [None] * slide_count
 
-    # ── Step 2: Live Code Recording ──────────────────────────────────────
-    banner("Step 2: Recording Live Code Execution")
+    # ── Step 2: VS Code Recording ────────────────────────────────────────
+    banner("Step 2: Recording Code Demos in VS Code")
     if not args.skip_record:
         recordings = record_code_slides(lesson, build_dir)
         print(f"  ✅ Recorded {len(recordings)} code demo(s)")
@@ -254,12 +384,22 @@ def main():
         print("  ⏭️  Skipped (--skip-record)")
         recordings = {}
 
+    # ── Step 2b: Diagram Generation ──────────────────────────────────────
+    banner("Step 2b: Generating Diagrams (Gemini Imagen)")
+    if not args.skip_diagrams:
+        diagrams = generate_diagrams(lesson, build_dir)
+        print(f"  ✅ Generated {len(diagrams)} diagram(s)")
+    else:
+        print("  ⏭️  Skipped (--skip-diagrams)")
+        diagrams = {}
+
     # ── Step 3: Compile Video ────────────────────────────────────────────
-    banner("Step 3: Compiling Final Video")
+    banner("Step 3: Compiling Final Video (with Face PiP)")
     success = compile_final_video(
         lesson=lesson,
         audio_paths=audio_paths,
         recordings=recordings,
+        diagrams=diagrams,
         output_path=final_output,
         lang=args.lang,
     )
