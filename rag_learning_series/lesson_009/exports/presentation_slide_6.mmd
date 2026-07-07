@@ -1,0 +1,13 @@
+graph TD
+    S1["Sentence 1 Embed"]
+    S2["Sentence 2 Embed"]
+    S3["Sentence 3 Embed (New Topic)"]
+    
+    S1 -- "High Cosine Sim: 0.89" --> S2
+    S2 -- "Low Cosine Sim: 0.35" --> S3
+    
+    S1 & S2 --> ChunkA["Chunk A: Topic Introduction"]
+    S3 --> ChunkB["Chunk B: Technical Specification"]
+    
+    style ChunkA fill:#fdf,stroke:#333
+    style ChunkB fill:#ffd,stroke:#333

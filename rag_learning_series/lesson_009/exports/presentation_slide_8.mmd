@@ -1,0 +1,9 @@
+graph TD
+    Doc["Document Type"]
+    Doc -->|"Plain / TXT"| Rec["Recursive Splitter"]
+    Doc -->|"Multi-topic/Contracts"| Sem["Semantic Chunking"]
+    Doc -->|"Highly Structured PDFs"| Markdown["Markdown / Hierarchy Splitter"]
+    style Doc fill:#f96,stroke:#333
+    style Rec fill:#9cf,stroke:#333
+    style Sem fill:#9f9,stroke:#333
+    style Markdown fill:#f9f,stroke:#333

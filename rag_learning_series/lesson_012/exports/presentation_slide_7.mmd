@@ -1,0 +1,12 @@
+sequenceDiagram
+    autonumber
+    User->>Hybrid Retriever: Invoke("Optimize memory usage")
+    par Parallel Search Processes
+        Hybrid Retriever->>Vector DB: Semantic Vector Query
+        Hybrid Retriever->>BM25 Index: Term-Based Keyword Match
+    end
+    Vector DB-->>Hybrid Retriever: Top 10 Vector Chunks
+    BM25 Index-->>Hybrid Retriever: Top 10 Keyword Chunks
+    Hybrid Retriever->>Reranker Engine: Combine & De-duplicate Chunks
+    Reranker Engine-->>Hybrid Retriever: High-Precision Top 3 Re-ordered Chunks
+    Hybrid Retriever->>User: Deliver Optimized Context Blocks

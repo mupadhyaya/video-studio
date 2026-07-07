@@ -1,0 +1,7 @@
+graph TD
+    A["User Query"] --> B["Retriever Chain Engine"]
+    B --> C["Vector Store Index (FAISS/Chroma)"]
+    C --> D["Document Filter (Score Threshold >= 0.70)"]
+    D --> E["Relevant Chunks Only"]
+    E --> F["Synthesized Prompt Assembly"]
+    F --> G["LLM Generation Block"]
