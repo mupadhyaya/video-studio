@@ -25,8 +25,8 @@ REFERENCE_VOICE = REPO_ROOT / "assets" / "my_voice.wav"
 
 # Voice map per language for edge-tts
 EDGE_VOICES = {
-    "en": "en-IN-PrabhatNeural",   # Indian English male
-    "hi": "hi-IN-MadhurNeural",    # Hindi male
+    "en": "en-US-AndrewMultilingualNeural",   # More conversational, neutral US male
+    "hi": "hi-IN-MadhurNeural",               # Hindi male
 }
 
 
@@ -100,7 +100,8 @@ def _try_edge_tts(text: str, output_path: str, lang: str) -> bool:
             if not mp3_path.endswith(".mp3"):
                 mp3_path = output_path + ".mp3"
 
-            communicate = edge_tts.Communicate(text, voice)
+            # Use faster rate and slightly lower pitch for a more natural feel
+            communicate = edge_tts.Communicate(text, voice, rate="+15%", pitch="-5Hz")
             await communicate.save(mp3_path)
 
             # Convert mp3 → wav for MoviePy compatibility

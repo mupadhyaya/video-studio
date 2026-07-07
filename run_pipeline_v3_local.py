@@ -233,49 +233,64 @@ def compile_final_video(
     W, H = 1920, 1080
     FACE_H = 280  # height of PiP face overlay
 
-    # ── Load and crop face for PiP overlay ───────────────────────────────
+    # ── Load face for PiP overlay ───────────────────────────────
     face_path = str(REPO_ROOT / "assets" / "my_face_idle.mp4")
     has_face = Path(face_path).exists()
     face_clip_full = None
     if has_face:
         try:
-            from moviepy.video.fx import Crop
-            raw_face = VideoFileClip(face_path)  # 1280x720
-            # Crop to centered 400x400 portrait square (face is typically centered)
-            fw, fh = raw_face.w, raw_face.h
-            crop_size = min(fh, int(fw * 0.4))   # ~512px square from center
-            cx = fw // 2
-            cy = int(fh * 0.45)   # slightly above center to catch face
-            x1 = max(0, cx - crop_size // 2)
-            y1 = max(0, cy - crop_size // 2)
-            x2 = min(fw, x1 + crop_size)
-            y2 = min(fh, y1 + crop_size)
-            face_clip_full = raw_face.with_effects([Crop(x1=x1, y1=y1, x2=x2, y2=y2)]).resized(height=FACE_H)
-            print(f"  [compile] 👤 Face PiP: crop {crop_size}x{crop_size} → height={FACE_H}px, duration={face_clip_full.duration:.1f}s")
+            # Removed the square crop because it was cutting the face for the user.
+            # Just resize maintaining aspect ratio.
+            face_clip_full = VideoFileClip(face_path).resized(height=FACE_H)
+            print(f"  [compile] 👤 Face PiP base loaded (height={FACE_H}px, duration={face_clip_full.duration:.1f}s)")
         except Exception as e:
-            print(f"  [compile] ⚠️  Could not load/crop face: {e}")
+            print(f"  [compile] ⚠️  Could not load face: {e}")
             has_face = False
 
-    def make_face_pip(duration: float):
-        """Return a face PiP clip trimmed/looped to the required duration."""
+    def add_face_pip(base_clip, duration: float, audio_path: str | None, visual_type: str, slide_index: int):
+        """Add face PiP with lip-sync to smart corner of any clip."""
         if not has_face or face_clip_full is None:
-            return None
-        # Trim or loop manually
-        if face_clip_full.duration >= duration:
-            return face_clip_full.subclipped(0, duration).with_position((30, H - FACE_H - 30))
-        else:
-            # Repeat the clip to fill duration
-            from moviepy import concatenate_videoclips
-            repeats = int(duration / face_clip_full.duration) + 1
-            looped = concatenate_videoclips([face_clip_full] * repeats).subclipped(0, duration)
-            return looped.with_position((30, H - FACE_H - 30))
-
-    def add_face_pip(base_clip, duration: float):
-        """Add face PiP to bottom-left corner of any clip."""
-        face_pip = make_face_pip(duration)
-        if face_pip is None:
             return base_clip
-        return CompositeVideoClip([base_clip, face_pip])
+
+        # Smart positioning based on slide content to prevent overlapping
+        right_aligned = {"code_snippet", "sequence_diagram", "curriculum_map"}
+        if visual_type in right_aligned:
+            # Bottom Right
+            pos = (W - face_clip_full.w - 30, H - FACE_H - 30)
+        else:
+            # Bottom Left
+            pos = (30, H - FACE_H - 30)
+
+        pip_clip = None
+
+        # Attempt to run Wav2Lip for lip-sync if audio is available
+        if audio_path and Path(str(audio_path)).exists():
+            synced_face_path = str(Path(audio_path).parent / f"slide_{slide_index:02d}_synced_face.mp4")
+            if not Path(synced_face_path).exists():
+                print(f"  [compile] 👄 Running Wav2Lip for slide {slide_index}...")
+                from v3_engine.wav2lip_runner import run_inference
+                ok = run_inference(face_path, str(audio_path), synced_face_path)
+                if not ok and Path(synced_face_path).exists():
+                    os.remove(synced_face_path)
+
+            if Path(synced_face_path).exists():
+                try:
+                    pip_clip = VideoFileClip(synced_face_path).resized(height=FACE_H)
+                    if pip_clip.duration > duration:
+                        pip_clip = pip_clip.subclipped(0, duration)
+                except Exception as e:
+                    print(f"  [compile] ⚠️ Failed to load synced face: {e}")
+
+        # Fallback to idle loop if lip-sync failed or no audio
+        if pip_clip is None:
+            if face_clip_full.duration >= duration:
+                pip_clip = face_clip_full.subclipped(0, duration)
+            else:
+                from moviepy import concatenate_videoclips
+                repeats = int(duration / face_clip_full.duration) + 1
+                pip_clip = concatenate_videoclips([face_clip_full] * repeats).subclipped(0, duration)
+
+        return CompositeVideoClip([base_clip, pip_clip.with_position(pos)])
 
     # ── Compile slides ────────────────────────────────────────────────────
     for i, slide in enumerate(slides):
@@ -315,7 +330,8 @@ def compile_final_video(
             base_clip = base_clip.with_audio(audio_clip)
 
         # Add face PiP to every slide
-        base_clip = add_face_pip(base_clip, clip_duration)
+        visual_type = slide.get("visual_type", "")
+        base_clip = add_face_pip(base_clip, clip_duration, audio_path, visual_type, i)
         clips.append(base_clip.with_fps(FPS))
 
     if face_clip_full:
