@@ -294,53 +294,252 @@ def _render_terminal_output(img: Image.Image, slide: dict, lang: str) -> None:
         ty += lh
 
 
-def _render_text_slide(img: Image.Image, slide: dict, lang: str) -> None:
-    """Generic fallback renderer for concept_box, curriculum_map, etc."""
+def _render_architecture_diagram(img: Image.Image, slide: dict, lang: str) -> None:
+    """Render a visual box-and-arrow architecture diagram."""
     draw = ImageDraw.Draw(img)
     title = slide.get(f"title_{lang}") or slide.get("title_en", "")
-    content = slide.get(f"content_text_{lang}") or slide.get("content_text_en", "")
-    visual_content = slide.get("visual_content", "")
+    visual_content = slide.get("visual_content", {})
 
     _draw_title_bar(draw, title)
 
-    # Content text area
-    body_font = _font(36)
-    bullet_font = _font(32)
-    y = 250
-    max_w = W - 200
-
-    if content:
-        lines = _wrap(content, body_font, max_w, draw)
-        for line in lines[:12]:
-            draw.text((100, y), line, font=body_font, fill=TEXT_WHITE)
-            y += 50
-
-    y += 20
-
-    # Visual content (if dict with list items, render as bullets)
+    # Extract steps / components from visual_content
+    steps = []
     if isinstance(visual_content, dict):
-        items = []
-        for v in visual_content.values():
-            if isinstance(v, list):
-                items = v
+        for key in ("steps", "stages", "components", "nodes", "flow"):
+            if key in visual_content:
+                steps = visual_content[key]
                 break
-        for item in items[:8]:
-            txt = f"  ▸  {item}" if isinstance(item, str) else f"  ▸  {str(item)[:80]}"
-            draw.text((100, y), txt, font=bullet_font, fill=ACCENT)
-            y += 48
+        if not steps:
+            steps = [f"{k}: {v}" for k, v in visual_content.items() if isinstance(v, str)]
     elif isinstance(visual_content, list):
-        for item in visual_content[:8]:
-            txt = f"  ▸  {str(item)[:90]}"
-            draw.text((100, y), txt, font=bullet_font, fill=ACCENT)
-            y += 48
-    elif isinstance(visual_content, str) and visual_content:
-        lines = _wrap(visual_content, bullet_font, max_w, draw)
-        for line in lines[:6]:
-            draw.text((100, y), f"  ▸  {line}", font=bullet_font, fill=TEXT_DIM)
-            y += 48
+        steps = visual_content
+    elif isinstance(visual_content, str):
+        steps = [line.strip() for line in visual_content.splitlines() if line.strip()]
+
+    if not steps:
+        # Nothing to draw — show narration as text instead
+        content = slide.get(f"narration_text_{lang}") or slide.get("narration_text_en", "")
+        bf = _font(36)
+        y = 270
+        for line in _wrap(content, bf, W - 200, draw)[:10]:
+            draw.text((100, y), line, font=bf, fill=TEXT_WHITE)
+            y += 52
+        return
+
+    # Layout: horizontal pipeline boxes with arrows
+    n = min(len(steps), 6)
+    steps = steps[:n]
+
+    box_w = min(280, (W - 200) // n - 30)
+    box_h = 140
+    spacing = (W - 160 - n * box_w) // (n + 1)
+    start_x = 80 + spacing
+    cy = 550  # vertical center
+
+    COLORS = [ACCENT, ACCENT2, GREEN, AMBER, RED, (251, 113, 133)]
+
+    for i, step in enumerate(steps):
+        bx = start_x + i * (box_w + spacing)
+        by = cy - box_h // 2
+        color = COLORS[i % len(COLORS)]
+
+        # Shadow
+        shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        sd = ImageDraw.Draw(shadow)
+        sd.rounded_rectangle([(bx + 5, by + 5), (bx + box_w + 5, by + box_h + 5)], radius=12, fill=(0, 0, 0, 100))
+        img.paste(shadow, mask=shadow)
+
+        # Box
+        panel = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        pd = ImageDraw.Draw(panel)
+        pd.rounded_rectangle([(bx, by), (bx + box_w, by + box_h)], radius=12, fill=(*CODE_BG, 230))
+        pd.rounded_rectangle([(bx, by), (bx + box_w, by + box_h)], radius=12, outline=(*color, 200), width=2)
+        # Top color bar
+        pd.rounded_rectangle([(bx, by), (bx + box_w, by + 8)], radius=4, fill=(*color, 220))
+        img.paste(panel, mask=panel)
+
+        # Number badge
+        draw.ellipse([(bx + 14, by + 18), (bx + 38, by + 42)], fill=color)
+        nf = _font(18)
+        draw.text((bx + 21, by + 20), str(i + 1), font=nf, fill=(0, 0, 0))
+
+        # Step text
+        tf = _font(24)
+        label = str(step)[:60]
+        lines = _wrap(label, tf, box_w - 20, draw)
+        ty = by + 52
+        for line in lines[:3]:
+            draw.text((bx + 10, ty), line, font=tf, fill=TEXT_WHITE)
+            ty += 30
+
+        # Arrow → next box
+        if i < n - 1:
+            ax = bx + box_w + 8
+            ay = cy
+            draw.line([(ax, ay), (ax + spacing - 8, ay)], fill=(*ACCENT, 200), width=3)
+            # Arrowhead
+            draw.polygon([
+                (ax + spacing - 6, ay - 8),
+                (ax + spacing + 6, ay),
+                (ax + spacing - 6, ay + 8),
+            ], fill=(*ACCENT, 200))
+
+    # Label below boxes
+    lf = _font(26)
+    content = slide.get(f"content_text_{lang}") or slide.get("content_text_en", "")
+    if content:
+        lines = _wrap(content, lf, W - 200, draw)[:3]
+        y = cy + box_h // 2 + 30
+        for line in lines:
+            bbox = draw.textbbox((0, 0), line, font=lf)
+            x = (W - (bbox[2] - bbox[0])) // 2
+            draw.text((x, y), line, font=lf, fill=TEXT_DIM)
+            y += 38
 
 
-# ─── Main Entry Point ───────────────────────────────────────────────────────────
+def _render_sequence_diagram(img: Image.Image, slide: dict, lang: str) -> None:
+    """Render a vertical sequence of steps with numbered items and icons."""
+    draw = ImageDraw.Draw(img)
+    title = slide.get(f"title_{lang}") or slide.get("title_en", "")
+    visual_content = slide.get("visual_content", {})
+    content = slide.get(f"content_text_{lang}") or slide.get("content_text_en", "")
+
+    _draw_title_bar(draw, title)
+
+    steps = []
+    if isinstance(visual_content, dict):
+        for key in ("steps", "sequence", "flow", "stages"):
+            if key in visual_content:
+                steps = visual_content[key]
+                break
+        if not steps:
+            steps = [f"{k}: {v}" for k, v in visual_content.items() if isinstance(v, str)]
+    elif isinstance(visual_content, list):
+        steps = visual_content
+    elif isinstance(visual_content, str):
+        steps = [l.strip() for l in visual_content.splitlines() if l.strip()]
+
+    if not steps and content:
+        steps = [l.strip("- •* ") for l in content.splitlines() if l.strip()]
+
+    sf = _font(32)
+    nf = _font(26)
+    COLORS = [ACCENT, GREEN, ACCENT2, AMBER, RED]
+    px, py = 200, 240
+    step_h = min(100, (H - 320) // max(len(steps), 1))
+    lx = px + 30  # vertical timeline x
+
+    # Vertical line
+    draw.line([(lx, py), (lx, py + len(steps[:8]) * step_h)], fill=(*TEXT_DIM, 100), width=2)
+
+    for i, step in enumerate(steps[:8]):
+        y = py + i * step_h
+        color = COLORS[i % len(COLORS)]
+
+        # Circle on timeline
+        draw.ellipse([(lx - 12, y + 4), (lx + 12, y + 28)], fill=color)
+        draw.text((lx - 6, y + 6), str(i + 1), font=_font(18), fill=(0, 0, 0))
+
+        # Step label
+        label = str(step)
+        lines = _wrap(label, sf, W - 400, draw)[:2]
+        ty = y + 4
+        for line in lines:
+            draw.text((lx + 30, ty), line, font=sf, fill=TEXT_WHITE)
+            ty += 36
+
+        # Connector
+        if i < len(steps) - 1:
+            draw.line([(lx, y + 28), (lx, y + step_h)], fill=(*TEXT_DIM, 80), width=2)
+
+
+def _render_curriculum_map(img: Image.Image, slide: dict, lang: str) -> None:
+    """Render a curriculum map as a two-column grid of lesson cards."""
+    draw = ImageDraw.Draw(img)
+    title = slide.get(f"title_{lang}") or slide.get("title_en", "")
+    visual_content = slide.get("visual_content", {})
+    content = slide.get(f"content_text_{lang}") or slide.get("content_text_en", "")
+
+    _draw_title_bar(draw, title)
+
+    items = []
+    if isinstance(visual_content, dict):
+        items = [f"{k}: {v}" for k, v in visual_content.items()]
+    elif isinstance(visual_content, list):
+        items = [str(i) for i in visual_content]
+    elif isinstance(visual_content, str):
+        items = [l.strip() for l in visual_content.splitlines() if l.strip()]
+    if not items and content:
+        items = [l.strip("- •*") for l in content.splitlines() if l.strip()]
+
+    # 2-column grid
+    cols = 2
+    col_w = (W - 200) // cols - 20
+    card_h = 90
+    pad_x, pad_y = 90, 250
+    COLORS = [ACCENT, ACCENT2, GREEN, AMBER, RED, (251, 113, 133)]
+
+    for i, item in enumerate(items[:8]):
+        col = i % cols
+        row = i // cols
+        bx = pad_x + col * (col_w + 30)
+        by = pad_y + row * (card_h + 20)
+        color = COLORS[i % len(COLORS)]
+
+        # Card
+        panel = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        pd = ImageDraw.Draw(panel)
+        pd.rounded_rectangle([(bx, by), (bx + col_w, by + card_h)], radius=10, fill=(*CODE_BG, 220))
+        pd.rounded_rectangle([(bx, by), (bx + 6, by + card_h)], radius=4, fill=(*color, 220))
+        img.paste(panel, mask=panel)
+
+        draw.text((bx + 20, by + 12), str(item)[:80], font=_font(28), fill=TEXT_WHITE)
+        # Index
+        draw.text((bx + col_w - 40, by + 12), f"#{i+1:02d}", font=_font(24), fill=color)
+
+
+def _render_concept_box(img: Image.Image, slide: dict, lang: str) -> None:
+    """Render a concept explanation with highlighted box and bullet points."""
+    draw = ImageDraw.Draw(img)
+    title = slide.get(f"title_{lang}") or slide.get("title_en", "")
+    content = slide.get(f"content_text_{lang}") or slide.get("content_text_en", "")
+    visual_content = slide.get("visual_content", {})
+
+    _draw_title_bar(draw, title)
+
+    # Main explanation box
+    if content:
+        panel = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        pd = ImageDraw.Draw(panel)
+        pd.rounded_rectangle([(80, 240), (W - 80, 420)], radius=14, fill=(*CODE_BG, 220))
+        pd.rounded_rectangle([(80, 240), (86, 420)], radius=4, fill=(*ACCENT, 240))
+        img.paste(panel, mask=panel)
+
+        cf = _font(34)
+        lines = _wrap(content, cf, W - 200, draw)
+        y = 260
+        for line in lines[:4]:
+            draw.text((100, y), line, font=cf, fill=TEXT_WHITE)
+            y += 44
+
+    # Bullet points below
+    bullets = []
+    if isinstance(visual_content, dict):
+        for k, v in visual_content.items():
+            bullets.append(f"{k}: {v}" if isinstance(v, str) else str(v)[:80])
+    elif isinstance(visual_content, list):
+        bullets = [str(b) for b in visual_content]
+    elif isinstance(visual_content, str):
+        bullets = [l.strip("- •*") for l in visual_content.splitlines() if l.strip()]
+
+    bf = _font(30)
+    y = 450
+    for b in bullets[:6]:
+        # Bullet marker
+        draw.ellipse([(90, y + 12), (104, y + 26)], fill=ACCENT)
+        draw.text((118, y), str(b)[:100], font=bf, fill=TEXT_DIM)
+        y += 50
+
 
 def render_slide(slide: dict, output_path: str, lang: str = "en") -> bool:
     """
@@ -366,9 +565,16 @@ def render_slide(slide: dict, output_path: str, lang: str = "en") -> bool:
             _render_code_snippet(img, slide, lang)
         elif visual_type == "terminal_output":
             _render_terminal_output(img, slide, lang)
+        elif visual_type == "architecture_diagram":
+            _render_architecture_diagram(img, slide, lang)
+        elif visual_type == "sequence_diagram":
+            _render_sequence_diagram(img, slide, lang)
+        elif visual_type == "curriculum_map":
+            _render_curriculum_map(img, slide, lang)
+        elif visual_type == "concept_box":
+            _render_concept_box(img, slide, lang)
         else:
-            # curriculum_map, architecture_diagram (no Imagen), concept_box, sequence_diagram
-            _render_text_slide(img, slide, lang)
+            _render_concept_box(img, slide, lang)  # best generic fallback
 
         img.convert("RGB").save(output_path)
         return True

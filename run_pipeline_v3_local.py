@@ -101,13 +101,13 @@ def validate_and_fix(lesson_json_path: str) -> dict:
 
 
 # ─── Step 1: Voice Synthesis ──────────────────────────────────────────────────
-def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> list[Path]:
+def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> list[Path | None]:
     """
-    Generate voice narration for each slide using F5-TTS (your cloned voice).
-    Falls back to edge-tts if F5-TTS model download hasn't happened yet.
+    Generate voice narration for each slide using tts_engine.
+    Uses F5-TTS (cloned voice) if model is present, otherwise edge-tts.
     Returns list of audio file paths in slide order.
     """
-    from v3_engine.voice_clone import synthesize_speech
+    from v3_engine.tts_engine import synthesize
 
     audio_paths = []
     slides = get_slides(lesson)
@@ -118,9 +118,16 @@ def synthesize_narrations(lesson: dict, output_dir: Path, lang: str = "en") -> l
             audio_paths.append(None)
             continue
 
-        out_path = str(output_dir / f"slide_{i:02d}_audio.wav")
-        print(f"  [Voice] Slide {i+1}/{len(slides)}: '{narration[:50]}...'")
-        success = synthesize_speech(narration, out_path)
+        out_path = str(output_dir / f"slide_{i:02d}_audio.mp3")
+
+        # Skip if already synthesized
+        if Path(out_path).exists():
+            print(f"  [Voice] ⏭️  Slide {i+1} already synthesized, skipping.")
+            audio_paths.append(Path(out_path))
+            continue
+
+        print(f"  [Voice] Slide {i+1}/{len(slides)}: '{narration[:60]}...'")
+        success = synthesize(narration, out_path, lang=lang)
         audio_paths.append(Path(out_path) if success else None)
 
     return audio_paths
@@ -226,16 +233,27 @@ def compile_final_video(
     W, H = 1920, 1080
     FACE_H = 280  # height of PiP face overlay
 
-    # ── Load face clip for PiP overlay ───────────────────────────────────
+    # ── Load and crop face for PiP overlay ───────────────────────────────
     face_path = str(REPO_ROOT / "assets" / "my_face_idle.mp4")
     has_face = Path(face_path).exists()
     face_clip_full = None
     if has_face:
         try:
-            face_clip_full = VideoFileClip(face_path).resized(height=FACE_H)
-            print(f"  [compile] 👤 Face PiP loaded (height={FACE_H}px, duration={face_clip_full.duration:.1f}s)")
+            from moviepy.video.fx import Crop
+            raw_face = VideoFileClip(face_path)  # 1280x720
+            # Crop to centered 400x400 portrait square (face is typically centered)
+            fw, fh = raw_face.w, raw_face.h
+            crop_size = min(fh, int(fw * 0.4))   # ~512px square from center
+            cx = fw // 2
+            cy = int(fh * 0.45)   # slightly above center to catch face
+            x1 = max(0, cx - crop_size // 2)
+            y1 = max(0, cy - crop_size // 2)
+            x2 = min(fw, x1 + crop_size)
+            y2 = min(fh, y1 + crop_size)
+            face_clip_full = raw_face.with_effects([Crop(x1=x1, y1=y1, x2=x2, y2=y2)]).resized(height=FACE_H)
+            print(f"  [compile] 👤 Face PiP: crop {crop_size}x{crop_size} → height={FACE_H}px, duration={face_clip_full.duration:.1f}s")
         except Exception as e:
-            print(f"  [compile] ⚠️  Could not load face: {e}")
+            print(f"  [compile] ⚠️  Could not load/crop face: {e}")
             has_face = False
 
     def make_face_pip(duration: float):
