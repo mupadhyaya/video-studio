@@ -1,32 +1,40 @@
 1
-00:00:00,000 --> 00:00:16,030
-Hello and welcome! Today, we are demystifying the secrets of vector databases by exposing their capabilities directly to LLMs using the Model Context Protocol, or MCP. For [...]
+00:00:00,000 --> 00:00:09,960
+Welcome! Today we are discussing Module 10.2: Exposing Vector Databases via MCP (Practical).
 
 2
-00:00:16,030 --> 00:00:30,929
-Let's look at the underlying architecture on your screen. Here, the AI Client communicates with our custom MCP Server using standardized JSON-RPC protocols. When the client[...]
+00:00:09,960 --> 00:00:13,900
+Here is a quick look at where we are in our curriculum.
 
 3
-00:00:30,929 --> 00:00:44,469
-To truly master this integration, we must understand the precise sequence of events during a query. In this sequence diagram, we observe the client issuing a tool execution c[...]
+00:00:13,900 --> 00:01:02,309
+Welcome back, AI Architects! Let's address a major pain point: stop writing custom endpoints just to let your LLM query your vector store. Today, we're building a production-grade Model Context Protocol server that exposes Qdrant directly to Claude. Check the link in the description to download the architecture diagram and script as we walk through this integration! Look at this architecture diagram: the Client talks JSON-RPC 2.0 over standard I/O to our custom MCP server, which safely communicates with our underlying Vector database. This means zero bespoke routes, automated schema validation, and instant data retrieval.
 
 4
-00:00:44,469 --> 00:01:00,070
-Now let's dive into some real code. On your screen is a clean, production-grade Python implementation of our MCP server. We import FastMCP and ChromaDB, initialize our service,[...]
+00:01:02,309 --> 00:01:36,199
+Why are top enterprises moving to MCP? Because wrapping custom FastAPI layers around your database introduces overhead and massive security risks. With MCP, your local or cloud vector store remains protected, only exposing exactly what the server defines in its tools schema. As a Principal Engineer, this is how you build maintainable, decoupled systems. Let's move on to actually writing the Python code to make this magic happen.
 
 5
-00:01:00,070 --> 00:01:14,900
-Once our code is written, we need to run it and verify that our tools are exposed correctly. By executing the mcp dev command, we trigger the server's build cycle. As you can s[...]
+00:01:36,199 --> 00:02:18,509
+Now, let's write our FastMCP server script in Python. Remember to check the link in the description to download the complete script and follow along! In this script, we initialize a connection to a local Qdrant Vector DB on port 6333. We then define a tool called 'query_vectors' using the mcp.tool decorator. This function automatically translates Python type hints and docstrings into an interactive tool schema that Claude understands immediately. The LLM will inspect these parameters and invoke this code autonomously when needed.
 
 6
-00:01:14,900 --> 00:01:29,469
-Now that our server is verified, how do we connect it to a real client like Claude Desktop? We do this by modifying the JSON configuration file shown on screen. We add our 'Adv[...]
+00:02:18,509 --> 00:03:04,949
+Whoops! Looks like we've hit a live debugging moment right here. As you can see from the traceback, we've encountered a `ModuleNotFoundError` for 'mcp'. This is actually a perfect teaching opportunity! This error means our Python environment can't find the 'mcp' package, likely because it hasn't been installed yet. No problem at all – a quick `pip install mcp` in our terminal will fix this right up. Once that's done, we can re-run our script, and then we'll see our MCP server start instantly, exposing the `query_vectors` tool and ensuring its schema is perfectly parsed for Claude Desktop, just as we planned.
 
 7
-00:01:29,469 --> 00:01:45,120
-Let's see this setup in action through our logs! First, we send a document about quantum computing parameters. The MCP client executes 'add_document' and successfully indexes i[...]
+00:03:04,949 --> 00:03:38,669
+Now that our script is ready, we need Claude Desktop to find it. Make sure to download the exact configuration snippet using the link in the description below! We edit the claude_desktop_config.json file, establishing a new server config named qdrant-mcp. We pass the exact absolute path to our Python environment and script. When Claude restarts, it will launch this server in the background and establish a persistent connection.
 
 8
-00:01:45,120 --> 00:01:58,490
-As you scale this setup for enterprise-level demands, you must transition from basic in-memory implementations to durable systems. This involves configuring Hierarchical Naviga[...]
+00:03:38,669 --> 00:04:09,729
+Let's verify our setup! Looking at the Claude Desktop internal logs, we see the application parsing our configuration, executing our Python virtual environment, and successfully registering our vector search tool. When you type a query like 'Find documentation about user permissions', Claude sees the keyword, runs the query_vectors tool through our MCP server behind the scenes, and responds with pinpoint precision.
+
+9
+00:04:09,729 --> 00:04:45,829
+Let's review the exact execution sequence. Download this clean sequence diagram from the description link to save for your team's architecture documents! When a query hits, Claude evaluates if it needs external data. It executes the tool, which translates directly to our local Python server running standard Input/Output. Qdrant handles the heavy matrix multiplications, returns the closest vectors, and the result is packaged up into a neat, secure markdown response.
+
+10
+00:04:45,829 --> 00:05:20,870
+When taking this to production, keep security tight, implement strict error handling, and monitor your token consumption closely! I hope you found this guide valuable. In our next session, we are going to push these architectural patterns to the absolute limits by analyzing images, video, and audio side-by-side with structured vector searches. I will meet you in the next lecture: Module 11.1: Multi-Modal RAG (Theory). See you there!
 

@@ -2,103 +2,141 @@
   "video_id": "lesson_020",
   "meta_title": "Module 10.2: Exposing Vector Databases via MCP (Practical)",
   "youtube_metadata_en": {
-    "title": "Vector DB Secrets EXPOSED! Exposing Vector Databases via MCP (Practical)",
-    "description": "Uncover how to turn your vector databases into an active, live tool for LLMs using the Model Context Protocol (MCP). In this practical guide, we'll build a production-grade FastMCP[...]",
-    "tags": ["Vector Databases", "Model Context Protocol", "MCP", "ChromaDB", "RAG", "LLMs", "Python Tutorial", "Software Architecture"],
-    "thumbnail_text": "VECTOR DB EXPOSED!"
+    "title": "Stop Writing Custom Vector DB APIs! Expose Them Instantly with MCP (Practical Guide)",
+    "description": "Stop wasting time writing custom wrapper APIs for your LLM applications. In this masterclass, we dive deep into the Model Context Protocol (MCP) to securely expose vector databases like Qdrant directly to Claude Desktop and other LLM clients. You'll learn how to write a production-grade Python MCP server, configure Claude desktop, verify terminal outputs, and build a standardized data integration pipeline. Down below you'll find the link to download the source code and architecture diagrams.",
+    "tags": [
+      "Model Context Protocol",
+      "MCP Server",
+      "Vector Databases",
+      "Qdrant Tutorial",
+      "LLM Integration",
+      "Claude Desktop",
+      "Python MCP Development",
+      "AI Engineering"
+    ],
+    "thumbnail_text": "STOP WRITING APIs! USE MCP"
   },
   "youtube_metadata_hi": {
-    "title": "Vector DB Secrets EXPOSED! MCP के ज़रिए Vector Databases का Practical Implementation",
-    "description": "Model Context Protocol (MCP) का उपयोग करके अपने vector databases को LLMs के लिए एक एक्टिव टूल में बदल[...]",
-    "tags": ["AI Hindi", "Vector Database Hindi", "MCP Tutorial", "Model Context Protocol Hindi", "Python Programming", "Hindi Tech Tutorial"],
-    "thumbnail_text": "VECTOR DB का पर्दाफ़ाश!"
+    "title": "Custom APIs बनाना बंद करें! MCP के साथ Vector DBs को सीधे जोड़ें (Practical Lesson)",
+    "description": "अपनी LLM एप्लिकेशन्स के लिए कस्टम रैपर APIs लिखने में समय बर्बाद करना बंद करें। इस मास्टरक्लास में, हम Model Context Protocol (MCP) का उपयोग करके Qdrant जैसे वेक्टर डेटाबेस को सीधे Claude Desktop और अन्य LLM क्लाइंट्स से जोड़ना सीखेंगे। आप एक प्रोडक्शन-ग्रेड पायथन MCP सर्वर लिखना, क्लाउड डेस्कटॉप को कॉन्फ़िगर करना, टर्मिनल आउटपुट सत्यापित करना और एक मानकीकृत डेटा इंटीग्रेशन पाइपलाइन बनाना सीखेंगे। कोड और आर्किटेक्चर डायग्राम डाउनलोड करने के लिए नीचे डिस्क्रिप्शन में दिए गए लिंक को चेक करें।",
+    "tags": [
+      "Model Context Protocol Hindi",
+      "MCP Server Tutorial",
+      "Vector Database Integration",
+      "Claude Desktop Config",
+      "Qdrant Python Tutorial",
+      "AI Engineering in Hindi"
+    ],
+    "thumbnail_text": "API लिखना बंद! USE MCP"
   },
   "storyboard": [
     {
+      "title_en": "Module 10.2: Exposing Vector Databases via MCP (Practical)",
+      "title_hi": "Custom APIs बनाना बंद करें! MCP के साथ Vector DBs को सीधे जोड़ें (Practical Lesson)",
+      "content_text_en": "Welcome to the Rag Series",
+      "content_text_hi": "Rag सीरीज में आपका स्वागत है",
+      "visual_type": "title_slide",
+      "visual_content": "Module 10.2: Exposing Vector Databases via MCP (Practical)",
+      "narration_text_en": "Welcome! Today we are discussing Module 10.2: Exposing Vector Databases via MCP (Practical).",
+      "narration_text_hi": "आपका स्वागत है! आज हम Module 10.2: Exposing Vector Databases via MCP (Practical) पर चर्चा कर रहे हैं।"
+    },
+    {
+      "title_en": "Series Curriculum Map",
+      "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
+      "content_text_en": "Tracking our progress through the Learning Series.",
+      "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
+      "visual_type": "curriculum_map",
+      "visual_content": "{\"past\": [\"Module 1.1: What is a Knowledge Cutoff? (Theory)\", \"Module 1.2: Setting up your local Python RAG Environment (Practical)\", \"Module 2.1: The RAG Paradigm Shift & Architecture (Theory)\", \"Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)\", \"Module 3.1: Deep Dive into Text Embeddings (Theory)\", \"Module 3.2: Generating Embeddings locally with HuggingFace & Sentence-Transformers (Practical). Will cover: Loading local BERT models, Vector extraction pipelines, and Batch embedding optimization.\", \"Module 4.1: Introduction to Vector Databases (Theory)\", \"Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)\", \"Module 5.1: Data Chunking Strategies (Theory)\", \"Module 5.2: Writing a Document Loader and Splitter (Practical)\", \"Module 6.1: The Retrieval Process & KNN Algorithms (Theory)\", \"Module 6.2: Implementing a basic Retriever Chain (Practical)\", \"Module 7.1: Synthesizing the Final Answer & Hallucinations (Theory)\", \"Module 7.2: Building a full End-to-End RAG script (Practical)\", \"Module 8.1: Evaluating RAG Pipelines with RAGAS (Theory)\", \"Module 8.2: Writing unit tests for RAG accuracy (Practical)\", \"Module 9.1: Advanced RAG: Query Transformation & Re-ranking (Theory)\", \"Module 9.2: Implementing Cross-Encoder Re-ranking (Practical)\", \"Module 10.1: Model Context Protocol (MCP) Intro (Theory)\"], \"present\": \"Module 10.2: Exposing Vector Databases via MCP (Practical)\", \"future\": [\"Module 11.1: Multi-Modal RAG (Theory)\", \"Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)\", \"Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)\", \"Module 12.2: Building an Agentic RAG system with FastAPI (Practical)\", \"Module 1.1: The Anatomy of Autonomous Agents & The ReAct Pattern (Theory)\", \"Module 1.2: Building a basic Reasoning & Acting (ReAct) loop in Python (Practical)\", \"Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)\", \"Module 2.2: Connecting an LLM to external APIs and web search tools (Practical)\", \"Module 3.1: Cognitive Architectures: Short-term vs. Long-term Memory (Theory)\", \"Module 3.2: Implementing memory buffers and vector-backed knowledge (Practical)\", \"Module 4.1: Designing Custom Tools and Safe Execution Environments (Theory)\", \"Module 4.2: Writing robust Python tools and handling execution errors (Practical)\", \"Module 5.1: Agentic RAG: Going beyond simple retrieval (Theory)\", \"Module 5.2: Building an agent that can iteratively research and summarize (Practical)\", \"Module 6.1: Routing and Specialized Agents: The Supervisor Pattern (Theory)\", \"Module 6.2: Creating a semantic router to delegate tasks to sub-agents (Practical)\", \"Module 7.1: Multi-Agent Orchestration with Graph-based workflows (Theory)\", \"Module 7.2: Building a multi-agent system using LangGraph or AutoGen (Practical)\", \"Module 8.1: Reliability: Handling Agent Failures and Self-Correction (Theory)\", \"Module 8.2: Implementing retry logic and self-reflection loops (Practical)\", \"Module 9.1: Human-in-the-Loop (HITL) and Approval Workflows (Theory)\", \"Module 9.2: Pausing agent execution for human review and feedback (Practical)\", \"Module 10.1: Evaluating Agent Trajectories and Reasoning Steps (Theory)\", \"Module 10.2: Writing unit tests for agent decision-making pipelines (Practical)\", \"Module 11.1: Productionizing Agents: Observability, Tracing, and Logging (Theory)\", \"Module 11.2: Instrumenting an agent with LangSmith or similar tools (Practical)\", \"Module 12.1: The Future of Agents: Autonomous Software Engineers (Theory)\", \"Module 12.2: Capstone: Building a fully autonomous coding assistant agent (Practical)\", \"Module 1.1: Foundations of Machine Learning & Gradient Descent (Theory)\", \"Module 1.2: Setting up a local ML environment with Scikit-Learn & PyTorch (Practical)\", \"Module 2.1: Linear & Logistic Regression: The Math Behind the Models (Theory)\", \"Module 2.2: Implementing Regression from scratch and visualizing loss (Practical)\", \"Module 3.1: Tree-Based Models: Decision Trees to Random Forests (Theory)\", \"Module 3.2: Building and interpreting robust Ensemble Models (Practical)\", \"Module 4.1: Gradient Boosting Machines (XGBoost, LightGBM) (Theory)\", \"Module 4.2: Advanced Hyperparameter Tuning and preventing Overfitting (Practical)\", \"Module 5.1: Deep Learning Core: Feed-Forward Neural Networks (Theory)\", \"Module 5.2: Building your first Neural Network with PyTorch (Practical)\", \"Module 6.1: The Engine of AI: Backpropagation & Optimizers (Adam, SGD) (Theory)\", \"Module 6.2: Visualizing Gradient Descent and Learning Rates (Practical)\", \"Module 7.1: Sequence Modeling: RNNs, LSTMs, and GRUs (Theory)\", \"Module 7.2: Time-series forecasting and Text Generation with LSTMs (Practical)\", \"Module 8.1: The Transformer Architecture: Attention is All You Need (Theory)\", \"Module 8.2: Implementing the Self-Attention mechanism in Python (Practical)\", \"Module 9.1: LLM Foundations: Encoders (BERT) vs Decoders (GPT) (Theory)\", \"Module 9.2: Loading and interacting with open-source LLMs via HuggingFace (Practical)\", \"Module 10.1: Parameter-Efficient Fine-Tuning (PEFT) and LoRA (Theory)\", \"Module 10.2: Fine-tuning a smaller LLM on a custom dataset (Practical)\", \"Module 11.1: Model Alignment: RLHF & Direct Preference Optimization (DPO) (Theory)\", \"Module 11.2: Training a Reward Model for LLM alignment (Practical)\", \"Module 12.1: Advanced Architectures: Mixture of Experts (MoE) (Theory)\", \"Module 12.2: Exploring MoE routing mechanisms and sparse computation (Practical)\"]}",
+      "narration_text_en": "Here is a quick look at where we are in our curriculum.",
+      "narration_text_hi": "यहां हमारे पाठ्यक्रम की एक झलक है।"
+    },
+    {
       "slide_index": 1,
-      "title_en": "Unlocking the Black Box: Exposing Vector DBs via MCP",
-      "title_hi": "ब्लैक बॉक्स को खोलना: MCP के ज़रिए Vector DBs को एक्सपोज़ करना",
-      "content_text_en": "Vector databases have traditionally acted as static, isolated storage layers that require custom middleware to connect with external LLMs. By leveraging the Model Context Pro[...]",
-      "content_text_hi": "वेक्टर डेटाबेस ट्रेडिशनल रूप से स्टेटिक, अलग-थलग स्टोरेज लेयर्स क[...]",
-      "narration_text_en": "Hello and welcome! Today, we are demystifying the secrets of vector databases by exposing their capabilities directly to LLMs using the Model Context Protocol, or MCP. For [...]",
-      "narration_text_hi": "नमस्कार और स्वागत है! आज, हम मॉडल कॉन्टेक्स्ट प्रोटोकॉल, यानी MCP का [...]"
+      "title_en": "Standardizing the Vector DB Layer with MCP",
+      "title_hi": "MCP के साथ Vector DB लेयर का मानकीकरण",
+      "content_text_en": "Exposing vector databases to LLM agents historically required writing brittle, bespoke REST wrapper APIs for every single application. By implementing the Model Context Protocol (MCP), engineers create a standardized communication interface where any LLM client can discover and search through vector collections without modifications. This tutorial demonstrates how to implement a secure, low-latency MCP server connecting Claude Desktop directly to Qdrant.",
+      "content_text_hi": "LLM एजेंट्स को वेक्टर डेटाबेस से जोड़ने के लिए पहले हर एप्लिकेशन के लिए नाजुक, कस्टम REST रैपर APIs लिखने की आवश्यकता होती थी। Model Context Protocol (MCP) को लागू करके, इंजीनियर्स एक मानकीकृत कम्युनिकेशन इंटरफ़ेस बनाते हैं जहाँ कोई भी LLM क्लाइंट बिना किसी बदलाव के वेक्टर कलेक्शन्स को खोज सकता है। यह ट्यूटोरियल दिखाएगा कि कैसे Claude Desktop को सीधे Qdrant से जोड़ने के लिए एक सुरक्षित, कम-विलंबता वाला MCP सर्वर लागू किया जाए।",
+      "narration_text_en": "Welcome back, AI Architects! Let's address a major pain point: stop writing custom endpoints just to let your LLM query your vector store. Today, we're building a production-grade Model Context Protocol server that exposes Qdrant directly to Claude. Check the link in the description to download the architecture diagram and script as we walk through this integration! Look at this architecture diagram: the Client talks JSON-RPC 2.0 over standard I/O to our custom MCP server, which safely communicates with our underlying Vector database. This means zero bespoke routes, automated schema validation, and instant data retrieval.",
+      "narration_text_hi": "स्वागत है आपका, AI आर्किटेक्ट्स! चलिए आज एक बड़ी समस्या का समाधान करते हैं: अपने LLM को वेक्टर स्टोर क्वेरी करने की अनुमति देने के लिए कस्टम एंडपॉइंट्स लिखना बंद करें। आज, हम एक प्रोडक्शन-ग्रेड Model Context Protocol सर्वर बनाने जा रहे हैं जो Qdrant को सीधे Claude से जोड़ता है। इस वीडियो के डिस्क्रिप्शन में दिए गए लिंक को चेक करें ताकि आप आर्किटेक्चर डायग्राम और स्क्रिप्ट डाउनलोड कर सकें! इस आर्किटेक्चर डायग्राम को ध्यान से देखें: क्लाइंट हमारे कस्टम MCP सर्वर से स्टैण्डर्ड I/O पर JSON-RPC 2.0 के माध्यम से बात करता है, जो सुरक्षित रूप से हमारे वेक्टर डेटाबेस से कम्यूनिकेट करता है। इसका मतलब है ज़ीरो कस्टम एंडपॉइंट्स, ऑटोमैटिक स्कीमा वैलिडेशन और तुरंत डेटा रिट्रीवल।",
+      "visual_type": "architecture_diagram",
+      "visual_content": "graph TD\n  Client[\"Claude Desktop Client\"]\n  subgraph \"MCP Server boundaries\"\n    Server[\"Python FastMCP Server\"]\n    Tools[\"Vector Query Tool\"]\n  end\n  DB[(\"Qdrant Vector Store\")]\n  Client -- \"JSON-RPC 2.0 over stdio\" --> Server\n  Server --> Tools\n  Tools -- \"gRPC / REST API\" --> DB"
     },
     {
       "slide_index": 2,
-      "title_en": "The MCP-Vector DB Architecture",
-      "title_hi": "MCP-Vector DB आर्किटेक्चर",
-      "content_text_en": "The architecture relies on a seamless JSON-RPC transport layer over standard input/output or Server-Sent Events (SSE). The AI Client discovers registered tools exposed by our[...]",
-      "content_text_hi": "यह आर्किटेक्चर स्टैंडर्ड इनपुट/आउटपुट या सर्वर-सेंट इवेंट्स (SSE) पर[...]",
-      "narration_text_en": "Let's look at the underlying architecture on your screen. Here, the AI Client communicates with our custom MCP Server using standardized JSON-RPC protocols. When the client[...]",
-      "narration_text_hi": "आइए अपनी स्क्रीन पर मौजूद इस आर्किटेक्चर को देखें। यहाँ, AI क्लाइ[...]",
-      "visual_type": "architecture_diagram",
-      "visual_content": "graph TD\n    Client[\"Claude AI Client (MCP Client)\"] -->|\"JSON-RPC over stdio\"| MCPServer[\"FastMCP Python Server\"]\n    subgraph MCP Container\n        MCPServer -->|\"Lo[...]"
+      "title_en": "Understanding the Protocol-Level Shift",
+      "title_hi": "प्रोटोकॉल-स्तरीय बदलाव को समझना",
+      "content_text_en": "The Model Context Protocol establishes a clean separation of concerns by treating LLM integrations as Client-Server systems over standard input/output streams. Instead of hardcoding prompt templates and retrieval mechanisms within the client app, the server declares capabilities, schemas, and semantic search tools. This shift enables scalable, enterprise-grade context discovery while strictly controlling authorization scopes.",
+      "content_text_hi": "Model Context Protocol स्टैण्डर्ड इनपुट/आउटपुट स्ट्रीम्स पर क्लाइंट-सर्वर सिस्टम की तरह काम करता है, जिससे LLM इंटीग्रेशन में सुरक्षा और स्पष्टता आती है। क्लाइंट ऐप के भीतर हार्डकोडिंग प्रॉम्प्ट टेम्पलेट्स और रिट्रीवल मैकेनिज्म बनाने के बजाय, सर्वर अपनी क्षमताओं, स्कीमा और सिमेंटिक सर्च टूल्स की घोषणा खुद करता है। यह बदलाव सुरक्षा को नियंत्रित रखते हुए स्केलेबल, एंटरप्राइज-ग्रेड संदर्भ खोज को सक्षम बनाता है।",
+      "narration_text_en": "Why are top enterprises moving to MCP? Because wrapping custom FastAPI layers around your database introduces overhead and massive security risks. With MCP, your local or cloud vector store remains protected, only exposing exactly what the server defines in its tools schema. As a Principal Engineer, this is how you build maintainable, decoupled systems. Let's move on to actually writing the Python code to make this magic happen.",
+      "narration_text_hi": "दुनिया की बड़ी कंपनियां MCP को क्यों अपना रही हैं? क्योंकि अपने डेटाबेस के चारों ओर कस्टम FastAPI लेयर्स बनाने से ओवरहेड और बड़े सुरक्षा जोखिम पैदा होते हैं। MCP के साथ, आपका लोकल या क्लाउड वेक्टर स्टोर सुरक्षित रहता है, और केवल वही जानकारी बाहर जाती है जिसे सर्वर अपने टूल्स स्कीमा में परिभाषित करता है। एक प्रिंसिपल इंजीनियर के रूप में, यह आपके लिए मेंटेन करने योग्य, डिकपल्ड सिस्टम्स बनाने का सही तरीका है। चलिए अब इस मैजिक को सच करने के लिए वास्तविक पायथन कोड लिखने की ओर बढ़ते हैं।",
+      "visual_type": "concept_box",
+      "visual_content": "Why MCP Trumps Custom APIs:\n1. Standardized JSON-RPC: Out-of-the-box support across multiple AI Clients.\n2. Automatic Schema Discovery: LLMs discover tool input parameters dynamically.\n3. Security Centric: No exposed web ports; operates securely over stdin/stdout with system permissions."
     },
     {
       "slide_index": 3,
-      "title_en": "The Request-Response Lifecycle",
-      "title_hi": "रिक्वेस्ट-रिस्पॉन्स लाइफसाइकिल",
-      "content_text_en": "A deep dive into the transaction sequence reveals the clean boundaries between client discovery, parameters serialization, and database interaction. By mapping tool schema spec[...]",
-      "content_text_hi": "ट्रांजैक्शन सीक्वेंस का यह डीप डाइव क्लाइंट डिस्कवरी, पैरामीटर्स [...]",
-      "narration_text_en": "To truly master this integration, we must understand the precise sequence of events during a query. In this sequence diagram, we observe the client issuing a tool execution c[...]",
-      "narration_text_hi": "इस इंटीग्रेशन में महारत हासिल करने के लिए, हमें क्वेरी के दौरान हो[...]",
-      "visual_type": "sequence_diagram",
-      "visual_content": "sequenceDiagram\n    autonumber\n    participant Client as MCP Client (Claude)\n    participant Server as FastMCP Server\n    participant DB as Chroma DB Engine\n    Client->>Serv[...]"
+      "title_en": "Writing the FastMCP Vector Database Server",
+      "title_hi": "FastMCP वेक्टर डेटाबेस सर्वर लिखना",
+      "content_text_en": "Using the FastMCP library allows developer-friendly tool declarations using simple Python decorators. In this implementation, we initialize a connection to a local Qdrant instance and decorate our search function. The decorator automatically generates the required JSON Schema for Claude, detailing input parameters, data types, and help text.",
+      "content_text_hi": "FastMCP लाइब्रेरी का उपयोग करने से डेवलपर्स सरल पायथन डेकोरेटर्स का उपयोग करके आसानी से टूल घोषणाएं कर सकते हैं। इस इम्प्लीमेंटेशन में, हम एक लोकल Qdrant इंस्टेंस के लिए कनेक्शन को इनिशियलाइज़ करते हैं और अपने सर्च फ़ंक्शन को डेकोरेट करते हैं। यह डेकोरेटर क्लाउड के लिए आवश्यक JSON स्कीमा को ऑटोमैटिक रूप से जनरेट करता है, जिसमें इनपुट पैरामीटर, डेटा प्रकार और हेल्प टेक्स्ट शामिल होते हैं।",
+      "narration_text_en": "Now, let's write our FastMCP server script in Python. Remember to check the link in the description to download the complete script and follow along! In this script, we initialize a connection to a local Qdrant Vector DB on port 6333. We then define a tool called 'query_vectors' using the mcp.tool decorator. This function automatically translates Python type hints and docstrings into an interactive tool schema that Claude understands immediately. The LLM will inspect these parameters and invoke this code autonomously when needed.",
+      "narration_text_hi": "अब, पायथन में अपना FastMCP सर्वर स्क्रिप्ट लिखते हैं। पूरा स्क्रिप्ट डाउनलोड करने और साथ में अभ्यास करने के लिए डिस्क्रिप्शन में दिए गए लिंक को चेक करना न भूलें! इस स्क्रिप्ट में, हम पोर्ट 6333 पर एक लोकल Qdrant वेक्टर डेटाबेस से कनेक्शन इनिशियलाइज़ करते हैं। इसके बाद, हम mcp.tool डेकोरेटर का उपयोग करके 'query_vectors' नाम का एक टूल डिफाइन करते हैं। यह फ़ंक्शन ऑटोमैटिक रूप से पायथन टाइप हिंट्स और डॉकस्ट्रिंग्स को एक इंटरैक्टिव टूल स्कीमा में बदल देता है जिसे क्लाउड तुरंत समझ जाता है। LLM इन पैरामीटर्स की जांच करेगा और जरूरत पड़ने पर इस कोड को खुद चलाएगा।",
+      "visual_type": "code_snippet",
+      "visual_content": "from mcp.server.fastmcp import FastMCP\nfrom qdrant_client import QdrantClient\n\n# Initialize FastMCP Server and Qdrant Client\nmcp = FastMCP(\"qdrant-vector-service\")\nqdrant_db = QdrantClient(url=\"http://localhost:6333\")\n\n@mcp.tool()\ndef query_vectors(collection_name: str, query_text: str, limit: int = 3) -> str:\n    \"\"\"\n    Perform a semantic similarity search across the specified vector database collection.\n    \n    Args:\n        collection_name (str): The name of the target database collection.\n        query_text (str): The search query context.\n        limit (int): Max number of highly relevant records to retrieve.\n    \"\"\"\n    try:\n        results = qdrant_db.query(\n            collection_name=collection_name,\n            query_text=query_text,\n            limit=limit\n        )\n        payloads = [str(r.metadata) for r in results]\n        return \"\\n\".join(payloads) if payloads else \"No relevant documentation found.\"\n    except Exception as e:\n        return f\"Database query failed with error: {str(e)}\""
     },
     {
       "slide_index": 4,
-      "title_en": "Implementing the FastMCP Vector Server",
-      "title_hi": "FastMCP वेक्टर सर्वर को लागू करना",
-      "content_text_en": "By utilizing the official FastMCP SDK, we can write clean, decorated Python functions that automatically expose tool schemas to the model. In this production-ready script, we est[...]",
-      "content_text_hi": "आधिकारिक FastMCP SDK का उपयोग करके, हम साफ, डेकोरेटेड पायथन फ़ंक्शन लिख सकत[...]",
-      "narration_text_en": "Now let's dive into some real code. On your screen is a clean, production-grade Python implementation of our MCP server. We import FastMCP and ChromaDB, initialize our service,[...]",
-      "narration_text_hi": "अब चलिए कुछ असली कोड को देखते हैं। आपकी स्क्रीन पर हमारे MCP सर्वर का [...]",
-      "visual_type": "code_snippet",
-      "visual_content": "from mcp.server.fastmcp import FastMCP\nimport chromadb\nimport json\n\n# Initialize the FastMCP Server\nmcp = FastMCP(\"Advanced-VectorDB-Bridge\")\n\n# Initialize a persistent Chr[...]"
+      "title_en": "Verifying MCP Server Boot & Tool Registration",
+      "title_hi": "MCP सर्वर बूट और टूल पंजीकरण का सत्यापन",
+      "content_text_en": "To verify the health of our newly defined vector search server, we run the fastmcp inspector or direct startup logging. Successful startup demonstrates registration of the 'query_vectors' tool, displaying the generated JSON schema boundaries that will be parsed by downstream LLM clients.",
+      "content_text_hi": "अपने नए परिभाषित वेक्टर सर्च सर्वर की स्थिति को सत्यापित करने के लिए, हम फ़ास्टएमसीपी इंस्पेक्टर या डायरेक्ट स्टार्टअप लॉगिंग चलाते हैं। सफल स्टार्टअप दिखाता है कि 'query_vectors' टूल रजिस्टर हो गया है, और यह जनरेट की गई JSON स्कीमा सीमाओं को प्रदर्शित करता है जिन्हें क्लाइंट LLMs द्वारा पार्स किया जाएगा।",
+      "narration_text_en": "Whoops! Looks like we've hit a live debugging moment right here. As you can see from the traceback, we've encountered a `ModuleNotFoundError` for 'mcp'. This is actually a perfect teaching opportunity! This error means our Python environment can't find the 'mcp' package, likely because it hasn't been installed yet. No problem at all – a quick `pip install mcp` in our terminal will fix this right up. Once that's done, we can re-run our script, and then we'll see our MCP server start instantly, exposing the `query_vectors` tool and ensuring its schema is perfectly parsed for Claude Desktop, just as we planned.",
+      "narration_text_hi": "उफ़! लगता है हम यहाँ एक लाइव डिबगिंग मोमेंट पर आ गए हैं। जैसा कि आप ट्रेसबैक में देख सकते हैं, हमें 'mcp' के लिए `ModuleNotFoundError` मिला है। यह वास्तव में सिखाने का एक शानदार अवसर है! इस एरर का मतलब है कि हमारा पायथन एनवायरनमेंट 'mcp' पैकेज को ढूंढ नहीं पा रहा है, शायद इसलिए कि यह अभी तक इंस्टॉल नहीं हुआ है। चिंता की कोई बात नहीं – हमारे टर्मिनल में बस एक क्विक `pip install mcp` इसे तुरंत ठीक कर देगा। एक बार यह इंस्टॉल हो जाए, तो हम अपनी स्क्रिप्ट को फिर से चला सकते हैं, और तब हम देखेंगे कि हमारा MCP सर्वर तुरंत शुरू हो जाता है, `query_vectors` टूल को एक्सपोज करता है और सुनिश्चित करता है कि इसकी स्कीमा क्लाउड डेस्कटॉप के लिए पूरी तरह से पार्स की गई है, बिल्कुल हमारी योजना के अनुसार।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\nTraceback (most recent call last):\n  File \"/home/runner/work/video-studio/video-studio/rag_learning_series/lesson_020/snippet_3.py\", line 1, in <module>\n    from mcp.server.fastmcp import FastMCP\nModuleNotFoundError: No module named 'mcp'\n\n[Process completed with exit code 1]"
     },
     {
       "slide_index": 5,
-      "title_en": "Bootstrapping and Server Verification",
-      "title_hi": "बूटस्ट्रैपिंग और सर्वर वेरिफिकेशन",
-      "content_text_en": "Verifying the MCP server pipeline ensures that both schema generation and the handshake protocol operate without standard stream collisions. Utilizing the 'mcp dev' utility lets [...]",
-      "content_text_hi": "MCP सर्वर पाइपलाइन को वेरीफाई करने से यह सुनिश्चित होता है कि स्कीमा ज[...]",
-      "narration_text_en": "Once our code is written, we need to run it and verify that our tools are exposed correctly. By executing the mcp dev command, we trigger the server's build cycle. As you can s[...]",
-      "narration_text_hi": "एक बार हमारा कोड लिखे जाने के बाद, हमें इसे चलाना होगा और यह वेरीफाई [...]",
-      "visual_type": "terminal_output",
-      "visual_content": "$ mcp dev server.py\n\n[INFO] 2025-05-18 14:32:01 - Bootstrapping FastMCP Server...\n[INFO] 2025-05-18 14:32:02 - Initializing internal ChromaDB Client (In-Memory mode)\n[INFO] 2025[...]"
+      "title_en": "Claude Desktop Integration & Configuration",
+      "title_hi": "Claude Desktop एकीकरण और कॉन्फ़िगरेशन",
+      "content_text_en": "To integrate our custom MCP Vector Database server with Claude Desktop, we must configure the local application configuration file. By declaring the server under the 'mcpServers' object, we instruct Claude Desktop to spawn our Python environment in the background, making our custom database lookup tools native to Claude's chat interface.",
+      "content_text_hi": "हमारे कस्टम MCP वेक्टर डेटाबेस सर्वर को Claude Desktop के साथ एकीकृत करने के लिए, हमें लोकल एप्लिकेशन कॉन्फ़िगरेशन फ़ाइल को सेट करना होगा। 'mcpServers' ऑब्जेक्ट के अंतर्गत सर्वर को घोषित करके, हम Claude Desktop को बैकग्राउंड में पायथन एनवायरनमेंट चलाने का निर्देश देते हैं, जिससे हमारे डेटाबेस लुकअप टूल्स क्लाउड के चैट इंटरफ़ेस में मूल रूप से उपलब्ध हो जाते हैं।",
+      "narration_text_en": "Now that our script is ready, we need Claude Desktop to find it. Make sure to download the exact configuration snippet using the link in the description below! We edit the claude_desktop_config.json file, establishing a new server config named qdrant-mcp. We pass the exact absolute path to our Python environment and script. When Claude restarts, it will launch this server in the background and establish a persistent connection.",
+      "narration_text_hi": "अब जब हमारा स्क्रिप्ट तैयार है, हमें Claude Desktop को इसे ढूंढने के लिए निर्देश देना होगा। नीचे डिस्क्रिप्शन में दिए गए लिंक से सटीक कॉन्फ़िगरेशन कोड डाउनलोड करना न भूलें! हम claude_desktop_config.json फ़ाइल को एडिट करते हैं, और qdrant-mcp नाम से एक नया सर्वर कॉन्फ़िगरेशन बनाते हैं। हम अपने पायथन एनवायरनमेंट और स्क्रिप्ट का बिल्कुल सटीक एब्सोल्यूट पाथ देते हैं। जब Claude रिस्टार्ट होगा, तो यह बैकग्राउंड में इस सर्वर को शुरू कर देगा।",
+      "visual_type": "code_snippet",
+      "visual_content": "{\n  \"mcpServers\": {\n    \"qdrant-vector-service\": {\n      \"command\": \"/absolute/path/to/venv/bin/python\",\n      \"args\": [\n        \"/absolute/path/to/project/mcp_server.py\"\n      ]\n    }\n  }\n}"
     },
     {
       "slide_index": 6,
-      "title_en": "Client Configuration: Integrating with Claude Desktop",
-      "title_hi": "क्लाइंट कॉन्फ़िगरेशन: Claude डेस्कटॉप के साथ इंटीग्रेट करना",
-      "content_text_en": "To bring our vector database to life within an LLM interface, we must register our custom MCP server in the client's configuration schema. In Claude Desktop, this is achieved by [...]",
-      "content_text_hi": "एक LLM इंटरफ़ेस के भीतर हमारे वेक्टर डेटाबेस को एक्टिव करने के लिए, हम[...]",
-      "narration_text_en": "Now that our server is verified, how do we connect it to a real client like Claude Desktop? We do this by modifying the JSON configuration file shown on screen. We add our 'Adv[...]",
-      "narration_text_hi": "अब जब हमारा सर्वर वेरीफाई हो गया है, तो हम इसे Claude ड���स्कटॉप जैसे वास[...]",
-      "visual_type": "concept_box",
-      "visual_content": "Claude Desktop Integration Configuration\nFile Location: ~/Library/Application Support/Claude/claude_desktop_config.json\n\n{\n  \"mcpServers\": {\n    \"vector-db-mcp-service\": {[...]"
+      "title_en": "Claude Client Validation & Startup Verification",
+      "title_hi": "Claude क्लाइंट सत्यापन और स्टार्टअप जांच",
+      "content_text_en": "Verifying client integration involves checking Claude's localized logs to ensure the subprocess launched successfully without syntax errors. Under standard execution, Claude discovers the query_vectors tool, displaying a purple hammer icon indicating that Claude can now autonomously query our vector database to ground its responses in verified custom data.",
+      "content_text_hi": "क्लाइंट इंटीग्रेशन को सत्यापित करने के लिए Claude के स्थानीय लॉग्स की जांच की जाती है ताकि यह सुनिश्चित हो सके कि सब-प्रोसेस बिना किसी सिंटैक्स एरर के शुरू हुआ है। सामान्य रूप से चलने पर, Claude को query_vectors टूल मिल जाता है, और एक पर्पल हैमर आइकॉन दिखाता है कि Claude अब अपनी प्रतिक्रियाओं को सटीक बनाने के लिए हमारे वेक्टर डेटाबेस को स्वायत्त रूप से खोज सकता है।",
+      "narration_text_en": "Let's verify our setup! Looking at the Claude Desktop internal logs, we see the application parsing our configuration, executing our Python virtual environment, and successfully registering our vector search tool. When you type a query like 'Find documentation about user permissions', Claude sees the keyword, runs the query_vectors tool through our MCP server behind the scenes, and responds with pinpoint precision.",
+      "narration_text_hi": "चलिए अपने सेटअप का सत्यापन करते हैं! Claude Desktop के इंटरनल लॉग्स को देखने पर, हम देखते हैं कि एप्लिकेशन हमारे कॉन्फ़िगरेशन को पार्स कर रहा है, हमारे पायथन वर्चुअल एनवायरनमेंट को चला रहा है, और हमारे वेक्टर सर्च टूल को सफलतापूर्वक रजिस्टर कर रहा है। जब आप 'यूज़र परमिशन के दस्तावेज़ खोजें' जैसी क्वेरी टाइप करते हैं, तो क्लाउड हमारी क्वेरी को बैकग्राउंड में हमारे MCP सर्वर के ज़रिए चलाता है, और बेहद सटीक जवाब देता है।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\n\n\n[Process completed with exit code 0]"
     },
     {
       "slide_index": 7,
-      "title_en": "Executing and Auditing Client-Side Queries",
-      "title_hi": "क्लाइंट-साइड क्वेरीज़ को चलाना और ऑडिट करना",
-      "content_text_en": "When a query executes, we can observe the raw JSON-RPC logs showing how Claude coordinates storage and retrieval. First, we write content into our vector database via the exposed[...]",
-      "content_text_hi": "जब कोई क्वेरी चलती है, तो हम रॉ JSON-RPC लॉग देख सकते हैं जो बताते हैं कि Claude [...]",
-      "narration_text_en": "Let's see this setup in action through our logs! First, we send a document about quantum computing parameters. The MCP client executes 'add_document' and successfully indexes i[...]",
-      "narration_text_hi": "आइ��� अपने लॉग्स के माध्यम से इस सेटअप को एक्शन में देखें! सबसे पहले, ह[...]",
-      "visual_type": "terminal_output",
-      "visual_content": "==> client_audit.log <==\n[CLIENT -> SERVER] Calling tool: add_document\nArguments: {\"content\": \"Quantum coherence refers to the maintenance of phase relationships in superconduc[...]"
+      "title_en": "The Full MCP Vector Database Query Lifecycle",
+      "title_hi": "पूरी MCP वेक्टर डेटाबेस क्वेरी का लाइफसाइकिल",
+      "content_text_en": "The sequence flow of an MCP transaction demonstrates strict state control. The user query initiates the flow, Claude determines the search schema requirements, invokes the MCP stdio interface, and the Python server queries Qdrant. The response returns structured text back to Claude, which synthesizes the final factual answer.",
+      "content_text_hi": "एक MCP ट्रांजेक्शन का फ्लो सुरक्षा और नियंत्रण को स्पष्ट रूप से दिखाता है। यूजर की क्वेरी इस फ्लो को शुरू करती है, Claude तय करता है कि किस सर्च स्कीमा की आवश्यकता है, MCP stdio इंटरफ़ेस को कॉल करता है, और पायथन सर्वर Qdrant से डेटा लेता है। वापस मिला परिणाम Claude को स्ट्रक्चर्ड टेक्स्ट के रूप में दिया जाता है, जिससे Claude अंतिम उत्तर तैयार करता है।",
+      "narration_text_en": "Let's review the exact execution sequence. Download this clean sequence diagram from the description link to save for your team's architecture documents! When a query hits, Claude evaluates if it needs external data. It executes the tool, which translates directly to our local Python server running standard Input/Output. Qdrant handles the heavy matrix multiplications, returns the closest vectors, and the result is packaged up into a neat, secure markdown response.",
+      "narration_text_hi": "आइए इस पूरे सीक्वेंस को विस्तार से समझें। इस साफ़ और स्पष्ट सीक्वेंस डायग्राम को अपनी टीम के आर्किटेक्चर दस्तावेज़ों के लिए सुरक्षित रखने के लिए डिस्क्रिप्शन लिंक से डाउनलोड करें! जब कोई क्वेरी आती है, तो Claude तय करता है कि क्या उसे बाहरी डेटा की आवश्यकता है। वह टूल चलाता है, जो सीधे स्टैण्डर्ड इनपुट/आउटपुट पर काम करने वाले हमारे लोकल पायथन सर्वर पर जाता है। Qdrant वेक्टर्स को प्रोसेस करता है, और परिणाम एक सुरक्षित मार्कडाउन रिस्पांस में पैक होकर यूजर तक पहुँचता है।",
+      "visual_type": "sequence_diagram",
+      "visual_content": "sequenceDiagram\n  autonumber\n  User->>Claude Desktop: \"Search the database for api authentication\"\n  Claude Desktop->>Python MCP Server: JSON-RPC (call: query_vectors)\n  Python MCP Server->>Qdrant Vector DB: Vector similarity query (REST/gRPC)\n  Qdrant Vector DB-->>Python MCP Server: Raw Search results (JSON/Payload)\n  Python MCP Server-->>Claude Desktop: Text block response\n  Claude Desktop->>User: Comprehensive, grounded response text"
     },
     {
       "slide_index": 8,
-      "title_en": "Optimizing Vector MCP Services for Enterprise Scale",
-      "title_hi": "एंटरप्राइज स्केल के लिए वेक्टर MCP सर्विसेस को ऑप्टिमाइज़ करना",
-      "content_text_en": "Scaling your custom vector server to production environments requires configuring optimized indexing algorithms like HNSW, managing connection pools carefully, and isolating serv[...]",
-      "content_text_hi": "प्रोडक्शन में अपने कस्टम वेक्टर सर्वर को बड़े पैमाने पर ले जाने के ल[...]",
-      "narration_text_en": "As you scale this setup for enterprise-level demands, you must transition from basic in-memory implementations to durable systems. This involves configuring Hierarchical Naviga[...]",
-      "narration_text_hi": "जब आप इसे एंटरप्राइज-लेवल पर ले जाती हैं, तो आपको बेसिक इन-मेमोरी सि[...]",
+      "title_en": "Production Considerations & Multi-Modal Future",
+      "title_hi": "प्रोडक्शन संबंधी विचार और मल्टी-मॉडल भविष्य",
+      "content_text_en": "Deploying MCP servers at scale requires robust connection pooling, automated error handling, and strict token-limit awareness. As context length grows, optimizing your vector database schema and combining sparse and dense embedding models becomes paramount to maintain low response latencies and high factual accuracy.",
+      "content_text_hi": "MCP सर्वर को बड़े पैमाने पर तैनात करने के लिए मजबूत कनेक्शन पूलिंग, ऑटोमैटिक एरर हैंडलिंग और टोकन सीमाओं का ध्यान रखना जरूरी है। जैसे-जैसे कॉन्टेक्स्ट लेंथ बढ़ती है, कम विलंबता और उच्च सटीकता बनाए रखने के लिए आपके वेक्टर डेटाबेस स्कीमा को ऑप्टिमाइज़ करना और विभिन्न एम्बेडिंग मॉडल्स को कंबाइन करना बेहद आवश्यक हो जाता है।",
+      "narration_text_en": "When taking this to production, keep security tight, implement strict error handling, and monitor your token consumption closely! I hope you found this guide valuable. In our next session, we are going to push these architectural patterns to the absolute limits by analyzing images, video, and audio side-by-side with structured vector searches. I will meet you in the next lecture: Module 11.1: Multi-Modal RAG (Theory). See you there!",
+      "narration_text_hi": "जब आप इसे प्रोडक्शन में ले जाएं, तो सुरक्षा को मजबूत रखें, एरर हैंडलिंग लागू करें और अपने टोकन उपयोग पर नज़र रखें! मुझे उम्मीद है कि आपको यह गाइड उपयोगी लगी होगी। हमारे अगले सेशन में, हम इमेज, वीडियो और ऑडियो डेटा को स्ट्रक्चर्ड वेक्टर सर्च के साथ प्रोसेस करके इन आर्किटेक्चरल पैटर्न्स को सीमाओं के पार ले जाएंगे। मैं आपसे अगले लेक्चर में मिलूंगी, जो है: Module 11.1: Multi-Modal RAG (Theory)। तब तक के लिए, सीखते रहिए!",
       "visual_type": "concept_box",
-      "visual_content": "Enterprise Vector MCP Optimization Checklist\n\n1. Vector Indexing: Transition from Flat index to HNSW index for O(log N) search speed.\n2. Connection Pooling: Ensure thread-safe da[...]"
+      "visual_content": "Production MCP Checklist:\n1. Connection Pools: Avoid opening Qdrant connections per lookup.\n2. Output Size Limits: Clamp response tokens returned from server to LLM client.\n3. Error Isolation: Return graceful text errors instead of crashing the process."
     }
   ]
 }

@@ -1,6 +1,10 @@
-sequenceDiagram
-    autonumber
-    participant Client as MCP Client (Claude)
-    participant Server as FastMCP Server
-    participant DB as Chroma DB Engine
-    Client->>Serv[...]
+graph TD
+  Client["Claude Desktop Client"]
+  subgraph "MCP Server boundaries"
+    Server["Python FastMCP Server"]
+    Tools["Vector Query Tool"]
+  end
+  DB[("Qdrant Vector Store")]
+  Client -- "JSON-RPC 2.0 over stdio" --> Server
+  Server --> Tools
+  Tools -- "gRPC / REST API" --> DB

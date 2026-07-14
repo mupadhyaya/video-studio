@@ -1,0 +1,8 @@
+sequenceDiagram
+  autonumber
+  User->>Claude Desktop: "Search the database for api authentication"
+  Claude Desktop->>Python MCP Server: JSON-RPC (call: query_vectors)
+  Python MCP Server->>Qdrant Vector DB: Vector similarity query (REST/gRPC)
+  Qdrant Vector DB-->>Python MCP Server: Raw Search results (JSON/Payload)
+  Python MCP Server-->>Claude Desktop: Text block response
+  Claude Desktop->>User: Comprehensive, grounded response text
