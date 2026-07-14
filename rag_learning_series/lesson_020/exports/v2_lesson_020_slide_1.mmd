@@ -1,0 +1,4 @@
+graph TD
+    Client["Claude AI Client (MCP Client)"] -->|"JSON-RPC over stdio"| MCPServer["FastMCP Python Server"]
+    subgraph MCP Container
+        MCPServer -->|"Lo[...]

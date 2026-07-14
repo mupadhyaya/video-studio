@@ -1,0 +1,32 @@
+1
+00:00:00,000 --> 00:00:16,030
+Hello and welcome! Today, we are demystifying the secrets of vector databases by exposing their capabilities directly to LLMs using the Model Context Protocol, or MCP. For [...]
+
+2
+00:00:16,030 --> 00:00:30,929
+Let's look at the underlying architecture on your screen. Here, the AI Client communicates with our custom MCP Server using standardized JSON-RPC protocols. When the client[...]
+
+3
+00:00:30,929 --> 00:00:44,469
+To truly master this integration, we must understand the precise sequence of events during a query. In this sequence diagram, we observe the client issuing a tool execution c[...]
+
+4
+00:00:44,469 --> 00:01:00,070
+Now let's dive into some real code. On your screen is a clean, production-grade Python implementation of our MCP server. We import FastMCP and ChromaDB, initialize our service,[...]
+
+5
+00:01:00,070 --> 00:01:14,900
+Once our code is written, we need to run it and verify that our tools are exposed correctly. By executing the mcp dev command, we trigger the server's build cycle. As you can s[...]
+
+6
+00:01:14,900 --> 00:01:29,469
+Now that our server is verified, how do we connect it to a real client like Claude Desktop? We do this by modifying the JSON configuration file shown on screen. We add our 'Adv[...]
+
+7
+00:01:29,469 --> 00:01:45,120
+Let's see this setup in action through our logs! First, we send a document about quantum computing parameters. The MCP client executes 'add_document' and successfully indexes i[...]
+
+8
+00:01:45,120 --> 00:01:58,490
+As you scale this setup for enterprise-level demands, you must transition from basic in-memory implementations to durable systems. This involves configuring Hierarchical Naviga[...]
+
