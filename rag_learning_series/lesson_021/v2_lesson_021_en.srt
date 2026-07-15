@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:08,400
+Welcome! Today we are discussing Module 11.1: Multi-Modal RAG (Theory).
+
+2
+00:00:08,400 --> 00:00:12,339
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:12,339 --> 00:00:49,780
+Welcome back, engineers! If you are still relying on traditional OCR tools to extract raw text from complex PDFs, your RAG system is blind to half the context. Financial tables, architectural designs, infographics, and corporate slides don't fit into plain-text embeddings. In this lecture, I will show you how to transcend these limitations using Multi-Modal RAG architecture, where images and text live in structural harmony, unlocking next-gen reasoning capabilities.
+
+4
+00:00:49,780 --> 00:01:25,780
+To truly master multi-modal RAG, we have to look under the hood of Joint Embedding Spaces. Instead of translating images into text captions, we project both text and images into the exact same vector coordinate space using models like CLIP or SigLIP. This means when a user queries 'yearly sales chart', the query vector lies closer to the actual visual crop of the chart rather than just a dry textual description. It's an elegant mathematical solution to the alignment problem.
+
+5
+00:01:25,780 --> 00:01:58,349
+Let's put theory into action with a production-grade implementation concept. We'll use ChromaDB and a multi-vector storage pattern. By indexing both structured summaries and raw image visual embeddings, we gain the precision of text searching with the reasoning depth of vision LLMs. Pay close attention to how we link the summary to the raw image ID. Check the link in the description to download the architecture diagram and script so you can deploy this yourself.
+
+6
+00:01:58,349 --> 00:03:14,769
+Whoops! Well, isn't this a perfect live debugging moment right on cue? As you can see from the traceback, our script failed with a `ModuleNotFoundError: No module named 'chromadb'`. This is a classic setup issue, and honestly, a great teaching opportunity! It means that the `chromadb` library, which is crucial for our vector store operations, isn't installed in this Python environment. To fix this, we simply need to open our terminal and run `pip install chromadb`. This ensures all necessary dependencies are in place. Now, with that quick fix, let's re-examine the console logs when this indexing pipeline runs properly. As intended, the runtime dynamically loads the OpenCLIP models and initiates persistent storage. Each document page registers two distinct entries with identical semantic links: one textual chunk vector and one visual vector. This log verification ensures that when retrieval executes, both visual elements and structured text are reachable under a unified query namespace.
+
+7
+00:03:14,769 --> 00:03:50,509
+Now let's discuss a cutting-edge paradigm shifting the entire AI industry: ColPali. Built on the ColBERT late interaction strategy, ColPali processes the raw screenshot of a PDF page, dividing it into small visual patches. During query time, every single token of your text query is compared to every visual patch of the document page. This completely eliminates OCR errors, preserving mathematical formatting and intricate chart layouts with zero information loss.
+
+8
+00:03:50,509 --> 00:04:26,169
+To truly comprehend this, imagine trying to organize a museum of historical artifacts. If you break the exhibits into random fragments without labeling which glass case they belong to, you lose the historical context entirely. Similarly, in multi-modal pipelines, a table must always remain unified with its bounding box, headers, and description. Breaking down pages visually by semantic regions guarantees the embedding engine understands what the graphic is actually conveying.
+
+9
+00:04:26,169 --> 00:05:04,159
+Look at this orchestration sequence. The query triggers a dual retrieval over the shared database. Notice how we don't just fetch text; we resolve visual bounding boxes. The reranker filters out noisy visual components, and only the precise chart crops are compiled alongside historical text. Finally, our Multimodal LLM reads this structured input to generate an accurate answer. Make sure to download this complete workflow blueprint from the link below to optimize your enterprise pipelines.
+
+10
+00:05:04,159 --> 00:05:39,819
+We've covered the complete theoretical framework of Multi-Modal RAG, from shared embeddings to late interaction models like ColPali. In our next session, Module 11.2: Integrating Vision Models into your RAG pipeline (Practical), I will guide you step-by-step through writing production-grade code using vision APIs to build a fully working end-to-end pipeline. Don't forget to download today's blueprints from the description link. I will see you in the next lecture, and happy coding!
+

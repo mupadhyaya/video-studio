@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant User as "User Interface"
+    participant RAG as "RAG Orchestrator"
+    participant DB as "Vector DB (CLIP/SigLIP)"
+    participant Ranker as "Cross-Modal Reranker"
+    participant VLLM as "Vision LLM (e.g., GPT-4o)"
+
+    User->>RAG: Send Search Query
+    RAG->>DB: Query Vectors (Embeddings)
+    DB-->>RAG: Return Top-K Text summaries & Image IDs
+    RAG->>Ranker: Rank combined Text & Visual fragments
+    Ranker-->>RAG: Filtered high-precision nodes (Images + Texts)
+    RAG->>VLLM: Construct Prompt (Context Texts + Raw Images)
+    VLLM-->>User: Streaming Multi-Modal Synthesized Response

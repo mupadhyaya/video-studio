@@ -1,0 +1,10 @@
+graph LR
+    subgraph Joint Embedding Space
+        V1["Image Vector: Chart of 2024 Revenue"]
+        V2["Text Vector: 'Show me the financial gains'"]
+        V1 <-->|"High Cosine Similarity"| V2
+        V3["Unrelated Text Vector"]
+        V1 -.->|"Low Cosine Similarity"| V3
+    end
+    Image["Raw Chart Image"] -->|"Vision Encoder (ViT)"| V1
+    TextQuery["User Query Text"] -->|"Text Encoder (Transformer)"| V2

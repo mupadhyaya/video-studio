@@ -1,0 +1,9 @@
+graph TD
+    A["Complex PDF Document"] --> B["OCR Engine (Text Extraction Only)"]
+    A --> C["Multi-Modal Page Screenshot / Images"]
+    B --> D["Semantic Loss: Charts & Tables Discarded"]
+    C --> E["Visual & Layout Context Preserved"]
+    D --> F["Traditional Vector DB"]
+    E --> G["Multi-Modal Vector DB (CLIP/SigLIP/ColPali)"]
+    F --> H["Low Quality Retrieval / Hallucinations"]
+    G --> I["High Precision Multi-Modal Generation"]

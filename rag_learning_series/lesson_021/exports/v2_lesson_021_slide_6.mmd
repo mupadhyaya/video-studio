@@ -1,0 +1,6 @@
+graph TD
+    Query["User Query: 'What was the Q4 profit margin?'"]
+    Query -->|"Tokenized text"| ColPaliQuery["Text Token Embeddings (1 x L)"]
+    DocumentPage["PDF Page Screenshot (No OCR)"] -->|"Vision Model (PaliGemma)"| ColPaliDoc["Patch Visual Embeddings (H x W)"]
+    ColPaliQuery -.->|"Late Interaction: MaxSim Operator"| ColPaliDoc
+    ColPaliDoc --> Score["High-Precision Document Relevance Score"]
