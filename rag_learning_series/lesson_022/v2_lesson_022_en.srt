@@ -1,0 +1,24 @@
+1
+00:00:00,000 --> 00:00:23,039
+Welcome back, everyone! Today, we are taking our RAG architectures to the next level. If you have ever tried running a standard RAG pipeline on financial reports, medical papers, or research documents, you know the pain: critical insights hidden in charts and diagrams get completely missed.
+
+2
+00:00:23,039 --> 00:00:38,570
+Let's begin writing our python script. We initialize our Qdrant client to store text and image representations dynamically. We configure the SimpleDirectoryReader with a vision extraction function.
+
+3
+00:00:38,570 --> 00:00:54,359
+Now, let's take a look at what happens in your terminal when you execute this code. As you can see from the standard output logs on your screen, LlamaIndex automatically discovers all PDF files in your data directory.
+
+4
+00:00:54,359 --> 00:01:10,849
+With our index successfully populated, we can now build the multimodal query engine. Watch how we configure the retrieval layer. We initialize our OpenAIMultiModal model, set it to use GPT-4o.
+
+5
+00:01:10,849 --> 00:01:27,289
+Let's run the query script. As you can see from our terminal output, the retriever successfully matched both textual contexts from page 3 and visual context from chart_img_2.png.
+
+6
+00:01:27,289 --> 00:01:45,049
+When building multimodal systems for production, keep scaling in mind. Always optimize image compression to avoid massive latency overheads at the LLM level, use specialized vision encoders, and maintain separate vector indices.
+

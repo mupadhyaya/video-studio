@@ -1,0 +1,9 @@
+graph TD
+    A["Raw Document PDF"] --> B["MultiModal Parser"]
+    B --> C["Text Segments"]
+    B --> D["Extracted Images"]
+    C --> E["Text Vector Store (Qdrant)"]
+    D --> F["Image Vector Store (Qdrant)"]
+    E --> G["Query Engine"]
+    F --> G
+    G --> H["GPT-4o Synthesis"]
