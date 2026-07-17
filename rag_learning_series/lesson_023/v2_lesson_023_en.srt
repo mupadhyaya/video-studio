@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:10,460
+Welcome! Today we are discussing Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory).
+
+2
+00:00:10,460 --> 00:00:14,400
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:14,400 --> 00:01:06,480
+Welcome back, engineers! If you have built production RAG systems, you know they eventually hit a wall. Traditional RAG is exceptional at finding specific needles in a haystack, but when you ask it global, holistic questions like 'What are the main thematic trends across all our client documents?', it fails completely. This is because standard vector databases index data as disjointed text chunks, completely missing the relationships between key entities. Today, we are breaking down the theoretical foundations of the two revolutionary frameworks solving this: GraphRAG and Agentic RAG. Be sure to check the link in the description to download the architecture diagram and script as we go along!
+
+4
+00:01:06,480 --> 00:01:53,110
+Let's look at this architectural comparison. On the left, we see standard vector retrieval: your query computes cosine similarity, pulls top-k chunks, and feeds them directly to the LLM. It's fast, but structurally flat. On the right, we have GraphRAG. It doesn't just embed chunks; it extracts semantic entities like people, organizations, and technologies, linking them together with defined relationships in a Knowledge Graph. This structural abstraction allows you to answer complex relational questions that span across multiple documents without overloading your LLM context window.
+
+5
+00:01:53,110 --> 00:02:44,010
+To understand GraphRAG deeply, we must look at how Microsoft designed its core framework. It goes through two main phases: indexing and querying. During indexing, source texts are parsed, and LLMs extract entities and relationships. Next, we run graph partitioning algorithms, like Leiden, to detect community clusters. Each community cluster is pre-summarized by the LLM. When a query is initiated, the search system selects appropriate community levels, aggregates their summaries, and generates a highly accurate, structured global response. Check the link in the description to download the complete architecture diagram of this processing pipeline.
+
+6
+00:02:44,010 --> 00:03:26,490
+Let's translate these concepts into a concrete implementation design. On this slide, we have a complete, production-grade Python definition utilizing Pydantic to enforce the schema for our entities, relationships, and community groups. This structure is exactly how you validate LLM extractions from unstructured text before passing them to your graph storage engine like Neo4j. In the next slide, we will look at how this script behaves when running against raw text logs. I highly recommend checking the description link to download this complete script for your own projects.
+
+7
+00:03:26,490 --> 00:04:03,569
+Now, observe the terminal output of our execution. When the raw document is processed, you can clearly see the structured validation passing cleanly. Our mock database detects clusters, groups them, and routes the user query 'Tell me about the relation of FastAPI and Agentic systems' directly to Cluster 101, extraction targets matching perfectly. This precise runtime orchestration ensures that your LLM never consumes irrelevant noise, reducing costs and latency dramatically.
+
+8
+00:04:03,569 --> 00:04:51,569
+While GraphRAG restructures how knowledge is grouped, Agentic RAG reimagines how it is accessed. In traditional systems, if a query fails to yield results in the first vector search, the LLM just returns a generic failure response. In Agentic RAG, we employ a dynamic planning loop. The agent receives a complex query, decomposes it, and executes searches using different tools. If the initial retrieved data is insufficient, the agent evaluates the quality of the findings and decides to perform a secondary search or query a different database completely. Let's trace this flow directly in the next sequence diagram.
+
+9
+00:04:51,569 --> 00:05:37,430
+Let's examine how this logic works in actual Python code. On this slide, we define a structured agent loop containing multiple search tools, such as vector databases and web scrapers, alongside a self-correction function. When we execute the main function, the agent doesn't just return whatever comes up first; it runs a validation check on the confidence metric. If the confidence is below 0.7, it automatically triggers a fallback search using an alternate tool. This is the heart of autonomous self-correction! Remember to use the link in the description to download this Python script and experiment with it locally.
+
+10
+00:05:37,430 --> 00:06:14,850
+By studying the execution logs of our script, you can see how self-correction happens dynamically in real-time. The vector tool is queried first but fails to pass our defined safety threshold. The agent immediately halts, evaluates the gap, switches tools, and executes the fallback database retrieval. The final response is successfully constructed because our Agentic pipeline knew how to recover from its own failure. It's clean, reliable, and incredibly powerful for enterprise systems.
+
+11
+00:06:14,850 --> 00:07:04,870
+In summary, GraphRAG gives your LLM structured memory and holistic understanding, while Agentic RAG provides it with dynamic decision-making capabilities. Together, they form an elite standard for high-fidelity AI systems. But understanding the theory is just the first step. In our next lecture, 'Module 12.2: Building an Agentic RAG system with FastAPI (Practical)', I will guide you through writing code for a production FastAPI server running these advanced agentic loops in real-time! Make sure you check the description to download the complete slide architectures and scripts. I will meet you in the next session, so keep coding and stay curious!
+

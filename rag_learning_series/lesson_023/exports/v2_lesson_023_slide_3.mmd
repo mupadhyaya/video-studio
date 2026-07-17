@@ -1,0 +1,12 @@
+graph TD
+  subgraph "Traditional Vector RAG"
+    A["User Query"] --> B["Vector Search Engine"]
+    B --> C["Disjointed Text Chunks"]
+    C --> D["LLM Context Input"]
+  end
+  subgraph "GraphRAG System"
+    E["User Query"] --> F["Entity & Relation Extraction"]
+    F --> G["Knowledge Graph Database"]
+    G --> H["Sub-Graph & Community Summaries"]
+    H --> I["Synthesized Prompt Generation"]
+  end

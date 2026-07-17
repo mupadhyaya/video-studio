@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  actor User
+  participant Agent as "Agentic Loop Control"
+  participant Tools as "Dynamic Retrieval Tools"
+  participant Evaluator as "Self-Correction Engine"
+
+  User ->> Agent: "How does API performance impact Agent execution?"
+  Agent ->> Tools: "Retrieve documentation metrics (Vector Search)"
+  Tools -->> Agent: "Incomplete metrics: No direct latency stats found"
+  Agent ->> Evaluator: "Analyze if data is sufficient for answering"
+  Evaluator -->> Agent: "Insufficient data detected"
+  Agent ->> Tools: "Fallback Search: Query internal database logs (SQL Search)"
+  Tools -->> Agent: "Detailed query latency metadata retrieved"
+  Agent ->> User: "Synthesized final answer combining both search phases"
