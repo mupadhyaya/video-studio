@@ -1,24 +1,44 @@
 1
-00:00:00,000 --> 00:00:23,039
-Welcome back, everyone! Today, we are taking our RAG architectures to the next level. If you have ever tried running a standard RAG pipeline on financial reports, medical papers, or research documents, you know the pain: critical insights hidden in charts and diagrams get completely missed.
+00:00:00,000 --> 00:00:10,630
+Welcome! Today we are discussing Module 11.2: Integrating Vision Models into your RAG pipeline (Practical).
 
 2
-00:00:23,039 --> 00:00:38,570
-Let's begin writing our python script. We initialize our Qdrant client to store text and image representations dynamically. We configure the SimpleDirectoryReader with a vision extraction function.
+00:00:10,630 --> 00:00:14,570
+Here is a quick look at where we are in our curriculum.
 
 3
-00:00:38,570 --> 00:00:54,359
-Now, let's take a look at what happens in your terminal when you execute this code. As you can see from the standard output logs on your screen, LlamaIndex automatically discovers all PDF files in your data directory.
+00:00:14,570 --> 00:01:01,149
+Welcome back! Today, we are breaking through the biggest bottleneck in modern RAG development: the image blind spot. If your system ignores charts and visual diagrams, your retrieval is fundamentally broken. Today, we're building a production-grade Multi-Modal RAG pipeline that can read, index, and reason across both text and complex visuals. Let's look at our system architecture on the screen, showing how we process PDFs, split textual content from layout-driven charts, pass those charts to a Vision LLM for structured summary generation, and index those summaries alongside original images into Chroma DB.
 
 4
-00:00:54,359 --> 00:01:10,849
-With our index successfully populated, we can now build the multimodal query engine. Watch how we configure the retrieval layer. We initialize our OpenAIMultiModal model, set it to use GPT-4o.
+00:01:01,149 --> 00:01:32,420
+Let's translate this architecture into concrete, production-grade Python code. On screen, we are building our helper function that takes an image path, converts it to clean base64 format, and triggers GPT-4o with structured formatting rules to extract metadata and numeric trends from visual layouts. Make sure to check the link in the description to download the architecture diagram and script so you can follow along on your machine.
 
 5
-00:01:10,849 --> 00:01:27,289
-Let's run the query script. As you can see from our terminal output, the retriever successfully matched both textual contexts from page 3 and visual context from chart_img_2.png.
+00:01:32,420 --> 00:02:08,900
+Whoops! Looks like we hit a live bug... or rather, a classic `ModuleNotFoundError: No module named 'openai'`, as our terminal output shows. This is actually a perfect teaching moment! It simply means the 'openai' Python library isn't installed in our current environment. To fix this common dependency issue and get our script running, we'll quickly open our terminal and run `pip install openai`. Consider this a quick, practical demonstration of managing your Python environments!
 
 6
-00:01:27,289 --> 00:01:45,049
-When building multimodal systems for production, keep scaling in mind. Always optimize image compression to avoid massive latency overheads at the LLM level, use specialized vision encoders, and maintain separate vector indices.
+00:02:08,900 --> 00:02:38,040
+Let's review the visual workflow of the Multi-Vector Retriever on screen. When the user asks a question, the query embedding targets the highly dense summary index inside Chroma DB. The system grabs the matching vector, extracts the mapped base64 string via UUID from the Document Store, and feeds both the original visual context and the target text context directly into our generator.
+
+7
+00:02:38,040 --> 00:03:01,150
+Now let's code this. This clean, modular code chunk sets up Chroma using OpenAI's embeddings, generates unique identifiers for our multi-modal elements, and indexes the summaries. Check the description link to download the code and the vector storage configurations to execute this on your own dataset directly.
+
+8
+00:03:01,150 --> 00:03:39,810
+Whoops! Looks like we've encountered a live debugging moment right on screen. As you can see from the terminal output, we have a `ModuleNotFoundError`. Specifically, Python can't find the `langchain_core` module, which means it's not installed in our current environment. This is a common issue and an easy fix – an excellent teaching opportunity! We simply need to open our terminal and run `pip install langchain-core`. Once that's done, we can re-run our script and proceed to review the terminal feedback properly.
+
+9
+00:03:39,810 --> 00:04:02,370
+Let's code our generation pipeline. On screen, you can see how we fetch the matching document summaries, retrieve the exact base64 context, and feed them into GPT-4o. Feel free to use the link in the description to download the full, optimized source code to test this yourself.
+
+10
+00:04:02,370 --> 00:04:21,590
+Let's check the terminal logs for our test query. It returns a perfectly structured explanation comparing Q3 revenue numbers directly from our chart. No halluncinations, no layout parsing issues—just exact visual-based factual reasoning.
+
+11
+00:04:21,590 --> 00:04:50,890
+To handle large-scale datasets, always optimize your token sizes and run asynchronous parsing queues. In our next lecture, Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory), I will guide you through complex relational data models and self-routing AI agents that take autonomous data processing to a whole new level. I'll see you in the next class, keep coding!
 

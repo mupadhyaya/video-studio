@@ -1,0 +1,12 @@
+graph TD
+    A["Complex PDF Document"] --> B["Layout Parser / Segmenter"]
+    B --> C["Standard Text Content"]
+    B --> D["Extracted Chart/Image (JPEG)"]
+    D --> E["GPT-4o Summary Generator"]
+    E --> F["Image Summary Text"]
+    C --> G["Embeddings Generator"]
+    F --> G
+    G --> H["Chroma Vector DB (Summaries)"]
+    D --> I["Local Object Storage (Base64 Docs)"]
+    H --> J["Multi-Vector Search"]
+    I --> J

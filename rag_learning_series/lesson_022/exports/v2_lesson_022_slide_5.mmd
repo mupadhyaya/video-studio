@@ -1,0 +1,10 @@
+graph LR
+    UserQuery["User Query: 'Compare Q3 revenue growth'"] --> Embed["Embedding API"]
+    Embed --> QueryVec["Query Vector"]
+    QueryVec --> Chroma["Chroma Vector DB Search"]
+    Chroma --> Match["Top Match Summary Doc (UUID: 101a)"]
+    Match --> DocStore["Local Document Store"]
+    DocStore --> RetrieveImg["Retrieve Image 101a Base64"]
+    RetrieveImg --> Synthesizer["GPT-4o Vision Prompt"]
+    UserQuery --> Synthesizer
+    Synthesizer --> Output["Final Synthesis Output"]

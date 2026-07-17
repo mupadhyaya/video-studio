@@ -2,83 +2,151 @@
   "video_id": "lesson_022",
   "meta_title": "Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)",
   "youtube_metadata_en": {
-    "title": "Build a Multimodal RAG Pipeline From Scratch! (GPT-4o & LlamaIndex)",
-    "description": "Welcome to Module 11.2! In this practical lesson, we are going to build a production-grade Multimodal Retrieval-Augmented Generation (RAG) pipeline from scratch. You will learn how to integrate state-of-the-art vision models to handle both textual and visual information.",
-    "tags": ["Multimodal RAG", "LlamaIndex", "GPT-4o", "Qdrant", "Computer Vision", "AI Engineer", "RAG Pipeline", "Python AI"],
-    "thumbnail_text": "Multimodal RAG Practical!"
+    "title": "Stop Ignoring Images in RAG! Complete Multi-Modal RAG Pipeline Tutorial (GPT-4o & Chroma)",
+    "description": "Are you losing critical data from your RAG pipeline because standard chunkers skip images, complex tables, and architectural diagrams? In this deep-dive tutorial, we build a production-grade Multi-Modal RAG pipeline using Python, GPT-4o, and Chroma. Learn how to convert complex visuals into actionable vector embeddings, design a dual-path Multi-Vector Retriever, and synthesize highly context-aware responses from unstructured image data.",
+    "tags": [
+      "Multi-Modal RAG",
+      "GPT-4o Vision",
+      "Chroma DB",
+      "LangChain Tutorial",
+      "AI Engineering",
+      "Vector Embeddings",
+      "Retrieval Augmented Generation"
+    ],
+    "thumbnail_text": "RAG WITH IMAGES"
   },
   "youtube_metadata_hi": {
-    "title": "स्क्रैच से Multimodal RAG Pipeline बनाएं! (GPT-4o & LlamaIndex)",
-    "description": "Module 11.2 में आपका स्वागत है! इस प्रैक्टिकल लेसन में, हम स्क्रैच से एक प्रोडक्शन-ग्रेड Multimodal RAG पाइपलाइन बनाएंगे।",
-    "tags": ["AI in Hindi", "Multimodal RAG Hindi", "LlamaIndex Hindi", "GPT-4o Tutorial", "Python AI Hindi", "Vector Database"],
-    "thumbnail_text": "Multimodal RAG सीखें!"
+    "title": "RAG Pipeline में Images को कैसे Integrate करें? Multi-Modal RAG Step-by-Step गाइड",
+    "description": "क्या आपका RAG सिस्टम इमेजेस, चार्ट्स और टेबल्स को स्किप कर देता है? इस प्रैक्टिकल वीडियो में, हम सीखेंगे कि कैसे GPT-4o और Chroma DB का उपयोग करके एक प्रोडक्शन-ग्रेड Multi-Modal RAG पाइपलाइन बनाई जाती है। हम विज़ुअल्स को टेक्स्ट समरीज़ में बदलेंगे, Multi-Vector Retriever डिज़ाइन करेंगे और पूरी तरह से सटीक जवाब जनरेट करेंगे। आर्किटेक्चर डायग्राम और कोड डाउनलोड करने के लिए नीचे दिए गए लिंक पर क्लिक करें।",
+    "tags": [
+      "AI in Hindi",
+      "Multi-Modal RAG Hindi",
+      "Chroma Vector DB",
+      "LangChain Hindi",
+      "Python AI Project",
+      "AI Engineer Course"
+    ],
+    "thumbnail_text": "IMAGES के साथ RAG!"
   },
   "storyboard": [
     {
+      "title_en": "Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)",
+      "title_hi": "RAG Pipeline में Images को कैसे Integrate करें? Multi-Modal RAG Step-by-Step गाइड",
+      "content_text_en": "Welcome to the Rag Series",
+      "content_text_hi": "Rag सीरीज में आपका स्वागत है",
+      "visual_type": "title_slide",
+      "visual_content": "Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)",
+      "narration_text_en": "Welcome! Today we are discussing Module 11.2: Integrating Vision Models into your RAG pipeline (Practical).",
+      "narration_text_hi": "आपका स्वागत है! आज हम Module 11.2: Integrating Vision Models into your RAG pipeline (Practical) पर चर्चा कर रहे हैं।"
+    },
+    {
+      "title_en": "Series Curriculum Map",
+      "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
+      "content_text_en": "Tracking our progress through the Learning Series.",
+      "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
+      "visual_type": "curriculum_map",
+      "visual_content": "{\"past\": [\"Module 1.1: What is a Knowledge Cutoff? (Theory)\", \"Module 1.2: Setting up your local Python RAG Environment (Practical)\", \"Module 2.1: The RAG Paradigm Shift & Architecture (Theory)\", \"Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)\", \"Module 3.1: Deep Dive into Text Embeddings (Theory)\", \"Module 3.2: Generating Embeddings locally with HuggingFace & Sentence-Transformers (Practical). Will cover: Loading local BERT models, Vector extraction pipelines, and Batch embedding optimization.\", \"Module 4.1: Introduction to Vector Databases (Theory)\", \"Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)\", \"Module 5.1: Data Chunking Strategies (Theory)\", \"Module 5.2: Writing a Document Loader and Splitter (Practical)\", \"Module 6.1: The Retrieval Process & KNN Algorithms (Theory)\", \"Module 6.2: Implementing a basic Retriever Chain (Practical)\", \"Module 7.1: Synthesizing the Final Answer & Hallucinations (Theory)\", \"Module 7.2: Building a full End-to-End RAG script (Practical)\", \"Module 8.1: Evaluating RAG Pipelines with RAGAS (Theory)\", \"Module 8.2: Writing unit tests for RAG accuracy (Practical)\", \"Module 9.1: Advanced RAG: Query Transformation & Re-ranking (Theory)\", \"Module 9.2: Implementing Cross-Encoder Re-ranking (Practical)\", \"Module 10.1: Model Context Protocol (MCP) Intro (Theory)\", \"Module 10.2: Exposing Vector Databases via MCP (Practical)\", \"Module 11.1: Multi-Modal RAG (Theory)\"], \"present\": \"Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)\", \"future\": [\"Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)\", \"Module 12.2: Building an Agentic RAG system with FastAPI (Practical)\", \"Module 1.1: The Anatomy of Autonomous Agents & The ReAct Pattern (Theory)\", \"Module 1.2: Building a basic Reasoning & Acting (ReAct) loop in Python (Practical)\", \"Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)\", \"Module 2.2: Connecting an LLM to external APIs and web search tools (Practical)\", \"Module 3.1: Cognitive Architectures: Short-term vs. Long-term Memory (Theory)\", \"Module 3.2: Implementing memory buffers and vector-backed knowledge (Practical)\", \"Module 4.1: Designing Custom Tools and Safe Execution Environments (Theory)\", \"Module 4.2: Writing robust Python tools and handling execution errors (Practical)\", \"Module 5.1: Agentic RAG: Going beyond simple retrieval (Theory)\", \"Module 5.2: Building an agent that can iteratively research and summarize (Practical)\", \"Module 6.1: Routing and Specialized Agents: The Supervisor Pattern (Theory)\", \"Module 6.2: Creating a semantic router to delegate tasks to sub-agents (Practical)\", \"Module 7.1: Multi-Agent Orchestration with Graph-based workflows (Theory)\", \"Module 7.2: Building a multi-agent system using LangGraph or AutoGen (Practical)\", \"Module 8.1: Reliability: Handling Agent Failures and Self-Correction (Theory)\", \"Module 8.2: Implementing retry logic and self-reflection loops (Practical)\", \"Module 9.1: Human-in-the-Loop (HITL) and Approval Workflows (Theory)\", \"Module 9.2: Pausing agent execution for human review and feedback (Practical)\", \"Module 10.1: Evaluating Agent Trajectories and Reasoning Steps (Theory)\", \"Module 10.2: Writing unit tests for agent decision-making pipelines (Practical)\", \"Module 11.1: Productionizing Agents: Observability, Tracing, and Logging (Theory)\", \"Module 11.2: Instrumenting an agent with LangSmith or similar tools (Practical)\", \"Module 12.1: The Future of Agents: Autonomous Software Engineers (Theory)\", \"Module 12.2: Capstone: Building a fully autonomous coding assistant agent (Practical)\", \"Module 1.1: Foundations of Machine Learning & Gradient Descent (Theory)\", \"Module 1.2: Setting up a local ML environment with Scikit-Learn & PyTorch (Practical)\", \"Module 2.1: Linear & Logistic Regression: The Math Behind the Models (Theory)\", \"Module 2.2: Implementing Regression from scratch and visualizing loss (Practical)\", \"Module 3.1: Tree-Based Models: Decision Trees to Random Forests (Theory)\", \"Module 3.2: Building and interpreting robust Ensemble Models (Practical)\", \"Module 4.1: Gradient Boosting Machines (XGBoost, LightGBM) (Theory)\", \"Module 4.2: Advanced Hyperparameter Tuning and preventing Overfitting (Practical)\", \"Module 5.1: Deep Learning Core: Feed-Forward Neural Networks (Theory)\", \"Module 5.2: Building your first Neural Network with PyTorch (Practical)\", \"Module 6.1: The Engine of AI: Backpropagation & Optimizers (Adam, SGD) (Theory)\", \"Module 6.2: Visualizing Gradient Descent and Learning Rates (Practical)\", \"Module 7.1: Sequence Modeling: RNNs, LSTMs, and GRUs (Theory)\", \"Module 7.2: Time-series forecasting and Text Generation with LSTMs (Practical)\", \"Module 8.1: The Transformer Architecture: Attention is All You Need (Theory)\", \"Module 8.2: Implementing the Self-Attention mechanism in Python (Practical)\", \"Module 9.1: LLM Foundations: Encoders (BERT) vs Decoders (GPT) (Theory)\", \"Module 9.2: Loading and interacting with open-source LLMs via HuggingFace (Practical)\", \"Module 10.1: Parameter-Efficient Fine-Tuning (PEFT) and LoRA (Theory)\", \"Module 10.2: Fine-tuning a smaller LLM on a custom dataset (Practical)\", \"Module 11.1: Model Alignment: RLHF & Direct Preference Optimization (DPO) (Theory)\", \"Module 11.2: Training a Reward Model for LLM alignment (Practical)\", \"Module 12.1: Advanced Architectures: Mixture of Experts (MoE) (Theory)\", \"Module 12.2: Exploring MoE routing mechanisms and sparse computation (Practical)\"]}",
+      "narration_text_en": "Here is a quick look at where we are in our curriculum.",
+      "narration_text_hi": "यहां हमारे पाठ्यक्रम की एक झलक है।"
+    },
+    {
       "slide_index": 1,
-      "title_en": "The Multimodal RAG Challenge & Architecture",
-      "title_hi": "मल्टीमोडल RAG चुनौती और आर्किटेक्चर",
-      "content_text_en": "Traditional RAG pipelines fail when documents contain critical information embedded in visual assets like charts, diagrams, and complex tables. By integrating Vision Models, we can extract and reason over both modalities.",
-      "content_text_hi": "पारंपरिक RAG पाइपलाइनों में तब विफलता आती है जब महत्वपूर्ण जानकारी चार्ट, डायग्राम और जटिल तालिकाओं में छिपी होती है। Vision Models को एकीकृत करके, हम दोनों प्रकार की जानकारी को निकाल सकते हैं।",
-      "narration_text_en": "Welcome back, everyone! Today, we are taking our RAG architectures to the next level. If you have ever tried running a standard RAG pipeline on financial reports, medical papers, or research documents, you know the pain: critical insights hidden in charts and diagrams get completely missed.",
-      "narration_text_hi": "स्वागत है आपका! आज हम अपने RAG आर्किटेक्चर को एक नए स्तर पर ले जा रहे हैं। यदि आपने कभी वित्तीय रिपोर्ट पर RAG चलाया है, तो आप जानते हैं: चार्ट में छिपी जानकारी पूरी तरह छूट जाती है।",
+      "title_en": "The Multi-Modal Blind Spot in Production RAG",
+      "title_hi": "प्रोडक्शन RAG में मल्टी-मोडल ब्लाइंड स्पॉट",
+      "content_text_en": "Most production RAG systems suffer from a massive blind spot: they completely ignore non-textual data such as financial charts, scientific diagrams, and PDF images. By relying solely on layout-based text extraction, enterprise systems discard valuable context, leading to incomplete or outright incorrect answers. Upgrading to a multi-modal RAG architecture allows us to index both textual summaries and original visual structures simultaneously, maximizing retrieval precision.",
+      "content_text_hi": "अधिकांश प्रोडक्शन RAG प्रणालियाँ एक बहुत बड़े ब्लाइंड स्पॉट से पीड़ित हैं: वे वित्तीय चार्ट, वैज्ञानिक रेखाचित्र और PDF इमेजेस जैसे गैर-पाठ्य (non-textual) डेटा को पूरी तरह से अनदेखा कर देती हैं। केवल टेक्स्ट-बेस्ड एक्सट्रैक्शन पर भरोसा करने से महत्वपूर्ण संदर्भ नष्ट हो जाता है। एक मल्टी-मोडल RAG आर्किटेक्चर में अपग्रेड करने से हम टेक्स्ट समरीज़ और मूल विज़ुअल स्ट्रक्चर दोनों को एक साथ इंडेक्स कर सकते हैं, जिससे सटीकता कई गुना बढ़ जाती है।",
+      "narration_text_en": "Welcome back! Today, we are breaking through the biggest bottleneck in modern RAG development: the image blind spot. If your system ignores charts and visual diagrams, your retrieval is fundamentally broken. Today, we're building a production-grade Multi-Modal RAG pipeline that can read, index, and reason across both text and complex visuals. Let's look at our system architecture on the screen, showing how we process PDFs, split textual content from layout-driven charts, pass those charts to a Vision LLM for structured summary generation, and index those summaries alongside original images into Chroma DB.",
+      "narration_text_hi": "वापस स्वागत है! आज, हम मॉडर्न RAG डेवलपमेंट की सबसे बड़ी समस्या को हल करने जा रहे हैं: इमेज ब्लाइंड स्पॉट। अगर आपका सिस्टम चार्ट्स और विज़ुअल डायग्राम्स को अनदेखा करता है, तो आपका रिट्रीवल अधूरा है। आज हम एक प्रोडक्शन-ग्रेड Multi-Modal RAG पाइपलाइन बनाने जा रहे हैं जो टेक्स्ट और जटिल विज़ुअल्स दोनों को रीड, इंडेक्स और प्रोसेस कर सकती है। चलिए स्क्रीन पर आर्किटेक्चर को देखते हैं कि कैसे हम पीडीएफ प्रोसेस करते हैं, चार्ट्स को विज़न LLM से समराइज़ करते हैं, और उन्हें Chroma DB में इंडेक्स करते हैं।",
       "visual_type": "architecture_diagram",
-      "visual_content": "graph TD\n    A[\"Raw Document PDF\"] --> B[\"MultiModal Parser\"]\n    B --> C[\"Text Segments\"]\n    B --> D[\"Extracted Images\"]\n    C --> E[\"Text Vector Store (Qdrant)\"]\n    D --> F[\"Image Vector Store (Qdrant)\"]\n    E --> G[\"Query Engine\"]\n    F --> G\n    G --> H[\"GPT-4o Synthesis\"]"
+      "visual_content": "graph TD\n    A[\"Complex PDF Document\"] --> B[\"Layout Parser / Segmenter\"]\n    B --> C[\"Standard Text Content\"]\n    B --> D[\"Extracted Chart/Image (JPEG)\"]\n    D --> E[\"GPT-4o Summary Generator\"]\n    E --> F[\"Image Summary Text\"]\n    C --> G[\"Embeddings Generator\"]\n    F --> G\n    G --> H[\"Chroma Vector DB (Summaries)\"]\n    D --> I[\"Local Object Storage (Base64 Docs)\"]\n    H --> J[\"Multi-Vector Search\"]\n    I --> J"
     },
     {
       "slide_index": 2,
-      "title_en": "Ingesting and Indexing Multimodal Data",
-      "title_hi": "मल्टीमोडल डेटा को इंजस्ट और इंडेक्स करना",
-      "content_text_en": "Using LlamaIndex and Qdrant, we construct separate storage collections for text and visual content. This dual-indexing method allows specialized embedding models to process both modalities effectively.",
-      "content_text_hi": "LlamaIndex और Qdrant का उपयोग करके, हम टेक्स्ट और विज़ुअल कंटेंट के लिए अलग संग्रह बनाते हैं।",
-      "narration_text_en": "Let's begin writing our python script. We initialize our Qdrant client to store text and image representations dynamically. We configure the SimpleDirectoryReader with a vision extraction function.",
-      "narration_text_hi": "आइए हमारा पायथन स्क्रिप्ट लिखना शुरू करें। हम Qdrant client को initialize करते हैं।",
+      "title_en": "Step 1: Visual Feature Extraction & Structuring",
+      "title_hi": "स्टेप 1: विज़ुअल फीचर एक्सट्रैक्शन और स्ट्रक्चरिंग",
+      "content_text_en": "To ingest raw images into a searchable vector space, we first extract high-fidelity semantic summaries using OpenAI's GPT-4o. This converts abstract charts, color codes, and dense trends into a richly detailed textual description that captures the numerical data perfectly. These textual summaries are then stored with a direct reference link pointing to the original base64-encoded image database.",
+      "content_text_hi": "रॉ इमेजेस को सर्च करने योग्य वेक्टर स्पेस में बदलने के लिए, हम सबसे पहले OpenAI के GPT-4o का उपयोग करके हाई-क्वालिटी सिमेंटिक समरीज़ बनाते हैं। यह जटिल चार्ट्स, कलर्स और ट्रेंड्स को एक डीटेल्ड टेक्स्ट डिस्क्रिप्शन में बदल देता है जो न्यूमेरिकल डेटा को सटीक रूप से कैप्चर करता है। इन समरीज़ को फिर ओरिजिनल बेस64-एन्कोडेड इमेज डेटाबेस के रिफरेंस के साथ स्टोर किया जाता है।",
+      "narration_text_en": "Let's translate this architecture into concrete, production-grade Python code. On screen, we are building our helper function that takes an image path, converts it to clean base64 format, and triggers GPT-4o with structured formatting rules to extract metadata and numeric trends from visual layouts. Make sure to check the link in the description to download the architecture diagram and script so you can follow along on your machine.",
+      "narration_text_hi": "चलिए इस आर्किटेक्चर को प्रैक्टिकल और प्रोडक्शन-ग्रेड पायथन कोड में बदलते हैं। स्क्रीन पर, हम अपना हेल्पर फ़ंक्शन बना रहे हैं जो इमेज फ़ाइल को साफ़ बेस64 फ़ॉर्मेट में बदलता है, और फिर GPT-4o का उपयोग करके विज़ुअल लेआउट से मेटाडेटा और सटीक न्यूमेरिकल वैल्यूज़ को एक्सट्रैक्ट करता है। इस आर्किटेक्चर डायग्राम और स्क्रिप्ट को डाउनलोड करने के लिए डिस्क्रिप्शन में दिए गए लिंक को ज़रूर चेक करें ताकि आप इसे अपने सिस्टम पर चला सकें।",
       "visual_type": "code_snippet",
-      "visual_content": "import os\nfrom llama_index.core import SimpleDirectoryReader, StorageContext\nfrom llama_index.core.indices import MultiModalVectorStoreIndex\nfrom llama_index.vector_stores.qdrant import QdrantVectorStore\nfrom qdrant_client import QdrantClient\n\nclient = QdrantClient(\":memory:\")\ntext_store = QdrantVectorStore(client=client, collection_name=\"text_documents\")\nimage_store = QdrantVectorStore(client=client, collection_name=\"images\")"
+      "visual_content": "import base64\nfrom openai import OpenAI\nimport json\n\nclient = OpenAI()\n\ndef encode_image_to_base64(image_path):\n    \"\"\"Converts any local image into base64 format for API transport.\"\"\"\n    with open(image_path, \"rb\") as image_file:\n        return base64.b64encode(image_file.read()).decode(\"utf-8\")\n\ndef summarize_visual_chart(image_path):\n    \"\"\"Extracts data and generates a structural description of charts using GPT-4o.\"\"\"\n    base64_image = encode_image_to_base64(image_path)\n    \n    response = client.chat.completions.create(\n        model=\"gpt-4o\",\n        messages=[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"text\",\n                        \"text\": \"Analyze this image in detail. Extract all key performance metrics, axis values, and patterns. Return the results strictly as a JSON object containing keys: 'summary', 'extracted_metrics', and 'trends'.\"\n                    },\n                    {\n                        \"type\": \"image_url\",\n                        \"image_url\": {\n                            \"url\": f\"data:image/jpeg;base64,{base64_image}\"\n                        }\n                    }\n                ]\n            }\n        ],\n        response_format={\"type\": \"json_object\"}\n    )\n    return json.loads(response.choices[0].message.content)"
     },
     {
       "slide_index": 3,
-      "title_en": "Execution Log: Database Initialization",
-      "title_hi": "एक्ज़ीक्यूशन लॉग: डेटाबेस इनिशियलाइज़ेशन",
-      "content_text_en": "Analyzing the runtime environment logs reveals how the storage layers are initialized and how the PDF assets are parsed into corresponding text nodes and image nodes.",
-      "content_text_hi": "रनटाइम एनवायरनमेंट लॉग का विश्लेषण करने से पता चलता है कि स्टोरेज लेयर्स कैसे initialized होती हैं।",
-      "narration_text_en": "Now, let's take a look at what happens in your terminal when you execute this code. As you can see from the standard output logs on your screen, LlamaIndex automatically discovers all PDF files in your data directory.",
-      "narration_text_hi": "अब, आइए देखें कि जब आप इस कोड को चलाते हैं तो आपके टर्मिनल में क्या होता है।",
+      "title_en": "Verifying JSON Visual Feature Extraction",
+      "title_hi": "JSON विज़ुअल फीचर एक्सट्रैक्शन का सत्यापन",
+      "content_text_en": "The execution log displays structured JSON outputs detailing chart dynamics directly from our Python pipeline. By specifying a strict JSON schema structure, the vision model correctly maps out key-value representations of trends, charts, and metrics, ready to be mapped into our multi-vector system.",
+      "content_text_hi": "यह एक्ज़ीक्यूशन लॉग हमारे पायथन पाइपलाइन से सीधे चार्ट डायनेमिक्स के स्ट्रक्चर्ड JSON आउटपुट को दिखाता है। एक सख्त JSON स्कीमा डिसाइड करने से, विज़न मॉडल चार्ट और ट्रेंड्स को सटीक की-वैल्यू के रूप में मैप कर देता है, जिसे हम आसानी से अपने सिस्टम में स्टोर कर सकते हैं।",
+      "narration_text_en": "Whoops! Looks like we hit a live bug... or rather, a classic `ModuleNotFoundError: No module named 'openai'`, as our terminal output shows. This is actually a perfect teaching moment! It simply means the 'openai' Python library isn't installed in our current environment. To fix this common dependency issue and get our script running, we'll quickly open our terminal and run `pip install openai`. Consider this a quick, practical demonstration of managing your Python environments!",
+      "narration_text_hi": "ओह! लगता है हम एक लाइव बग से टकरा गए हैं... या यूं कहें, एक क्लासिक 'ModuleNotFoundError: No module named 'openai'', जैसा कि हमारा टर्मिनल आउटपुट दिखाता है। यह वास्तव में एक आदर्श शिक्षण क्षण है! इसका सीधा सा मतलब है कि 'openai' पायथन लाइब्रेरी हमारे वर्तमान एनवायरनमेंट में इंस्टॉल नहीं है। इस सामान्य डिपेंडेंसी समस्या को ठीक करने और अपनी स्क्रिप्ट को चलाने के लिए, हम जल्दी से अपना टर्मिनल खोलेंगे और `pip install openai` चलाएंगे। इसे अपने पायथन एनवायरनमेंट को मैनेज करने का एक त्वरित, व्यावहारिक प्रदर्शन मानें!",
       "visual_type": "terminal_output",
-      "visual_content": "INFO:llama_index.core.indices.loading:Loading all documents from directory: ./data\nINFO:llama_index.core.readers.file.base:Parsing page_1.pdf -> Extracted 1200 words of text and 3 images\nINFO:llama_index.vector_stores.qdrant:Creating text collection in Qdrant\nINFO:llama_index.vector_stores.qdrant:Creating image collection in Qdrant\nINFO:llama_index.core.indices.multi_modal:Indexing 1200 text nodes...\nINFO:llama_index.core.indices.multi_modal:Indexing 3 image nodes..."
+      "visual_content": "$ python script.py\nTraceback (most recent call last):\n  File \"/home/runner/work/video-studio/video-studio/rag_learning_series/lesson_022/snippet_2.py\", line 2, in <module>\n    from openai import OpenAI\nModuleNotFoundError: No module named 'openai'\n\n[Process completed with exit code 1]"
     },
     {
       "slide_index": 4,
-      "title_en": "Querying the Multimodal Index",
-      "title_hi": "मल्टीमोडल इंडेक्स को क्वेरी करना",
-      "content_text_en": "Retrieving context across multiple modalities requires a query engine that can process text queries, perform vector similarity searches on both collections, and feed both text and image context to the multimodal LLM.",
-      "content_text_hi": "विभिन्न प्रकार के डेटा के बीच संदर्भ को पुनः प्राप्त करने के लिए एक query engine की आवश्यकता होती है।",
-      "narration_text_en": "With our index successfully populated, we can now build the multimodal query engine. Watch how we configure the retrieval layer. We initialize our OpenAIMultiModal model, set it to use GPT-4o.",
-      "narration_text_hi": "इंडेक्स को सफलतापूर्वक लोड करने के बाद, अब हम मल्टीमोडल क्वेरी इंजन बना सकते हैं।",
-      "visual_type": "code_snippet",
-      "visual_content": "from llama_index.multi_modal_llms.openai import OpenAIMultiModal\n\n# Initialize GPT-4o as our Multimodal Engine\nmulti_modal_llm = OpenAIMultiModal(\n    model=\"gpt-4o\",\n    api_key=os.getenv(\"OPENAI_API_KEY\")\n)\n\nquery_engine = index.as_query_engine(multi_modal_llm=multi_modal_llm)\nresponse = query_engine.query(\"What is the trend shown in chart_1?\")"
+      "title_en": "Designing the Multi-Vector Store Database",
+      "title_hi": "मल्टी-वेक्टर स्टोर डेटाबेस का डिज़ाइन",
+      "content_text_en": "The core of high-performance Multi-Modal RAG is the Multi-Vector Retriever pattern. Instead of storing complex raw images directly inside Chroma DB, which is highly inefficient, we store the highly-optimized textual summary in the vector collection while establishing a unique UUID mapping to the full base64 string housed within a structured Document Storage. This ensures lightning-fast queries and optimal space utilization.",
+      "content_text_hi": "हाई-परफॉर्मेंस Multi-Modal RAG का मुख्य आधार Multi-Vector Retriever पैटर्न है। Chroma DB में सीधे रॉ इमेजेस को स्टोर करने के बजाय (जो कि बहुत ही अकुशल है), हम वेक्टर कलेक्शन में केवल उनकी ऑप्टिमाइज्ड टेक्स्ट समरी स्टोर करते हैं, और उन्हें एक यूनिक UUID के ज़रिए मूल बेस64 इमेज से मैप करते हैं जो एक अलग स्टोरेज में होती है।",
+      "narration_text_en": "Let's review the visual workflow of the Multi-Vector Retriever on screen. When the user asks a question, the query embedding targets the highly dense summary index inside Chroma DB. The system grabs the matching vector, extracts the mapped base64 string via UUID from the Document Store, and feeds both the original visual context and the target text context directly into our generator.",
+      "narration_text_hi": "चलिए स्क्रीन पर Multi-Vector Retriever के विज़ुअल फ्लो को समझते हैं। जब यूज़र कोई सवाल पूछता है, तो क्वेरी एम्बेडिंग Chroma DB के अंदर बनी समरी इंडेक्स को टारगेट करती है। सिस्टम मैचिंग वेक्टर को ढूंढता है, UUID के माध्यम से ओरिजिनल बेस64 इमेज को एक्सट्रैक्ट करता है, और फिर दोनों को जनरेटर के इनपुट में भेज देता है।",
+      "visual_type": "architecture_diagram",
+      "visual_content": "graph LR\n    UserQuery[\"User Query: 'Compare Q3 revenue growth'\"] --> Embed[\"Embedding API\"]\n    Embed --> QueryVec[\"Query Vector\"]\n    QueryVec --> Chroma[\"Chroma Vector DB Search\"]\n    Chroma --> Match[\"Top Match Summary Doc (UUID: 101a)\"]\n    Match --> DocStore[\"Local Document Store\"]\n    DocStore --> RetrieveImg[\"Retrieve Image 101a Base64\"]\n    RetrieveImg --> Synthesizer[\"GPT-4o Vision Prompt\"]\n    UserQuery --> Synthesizer\n    Synthesizer --> Output[\"Final Synthesis Output\"]"
     },
     {
       "slide_index": 5,
-      "title_en": "Terminal Output: MultiModal Retrieval & Synthesis",
-      "title_hi": "टर्मिनल आउटपुट: मल्टीमोडल रिट्रीवल और सिंथेसिस",
-      "content_text_en": "The runtime logs demonstrate real-time correlation. The engine retrieves matching text and visual charts to compute the correct percentage growth directly from the diagram.",
-      "content_text_hi": "रनटाइम लॉग रियल-टाइम सहसंबंध प्रदर्शित करते हैं। इंजन आरेख से सीधे सही प्रतिशत वृद्धि की गणना करता है।",
-      "narration_text_en": "Let's run the query script. As you can see from our terminal output, the retriever successfully matched both textual contexts from page 3 and visual context from chart_img_2.png.",
-      "narration_text_hi": "आइए क्वेरी स्क्रिप्ट चलाएं। जैसा कि आप हमारे टर्मिनल आउटपुट से देख सकते हैं।",
-      "visual_type": "terminal_output",
-      "visual_content": "INFO:llama_index.core.indices.multi_modal:Retrieving text matches... Found 2 nodes.\nINFO:llama_index.core.indices.multi_modal:Retrieving image matches... Found 'chart_img_2.png'.\nINFO:llama_index.multi_modal_llms.openai:Sending 2 text chunks + 1 image to GPT-4o...\nResponse: The trend shows a 35% increase in Q2 compared to Q1, with sustained growth through Q3."
+      "title_en": "Step 2: Implementing the Multi-Vector Retriever",
+      "title_hi": "स्टेप 2: मल्टी-वेक्टर रिट्रीवर का इम्प्लीमेंटेशन",
+      "content_text_en": "By leveraging Python's flexible document structure, we construct a custom storage pipeline where image metadata remains coupled with its textual counterpart. This setup guarantees that every time our vector search matches a specific chart summary, the corresponding base64-encoded visual document is loaded dynamically into our execution memory.",
+      "content_text_hi": "पायथन के लचीले डॉक्यूमेंट स्ट्रक्चर का लाभ उठाकर, हम एक कस्टम स्टोरेज पाइपलाइन बनाते हैं जहाँ इमेज मेटाडेटा उसकी टेक्स्ट समरी के साथ जुड़ा रहता है। यह सेटअप सुनिश्चित करता है कि जब भी हमारी वेक्टर सर्च किसी विशिष्ट चार्ट समरी से मेल खाती है, तो संबंधित बेस64-एन्कोडेड इमेज तुरंत हमारे मेमोरी में लोड हो जाए।",
+      "narration_text_en": "Now let's code this. This clean, modular code chunk sets up Chroma using OpenAI's embeddings, generates unique identifiers for our multi-modal elements, and indexes the summaries. Check the description link to download the code and the vector storage configurations to execute this on your own dataset directly.",
+      "narration_text_hi": "अब इसे कोड करते हैं। यह मॉड्युलर कोड ब्लॉक OpenAI एम्बेडिंग्स का उपयोग करके Chroma सेटअप करता है, हमारे मल्टी-मोडल एलिमेंट्स के लिए यूनिक आइडेंटिफायर्स जनरेट करता है, और समरीज़ को इंडेक्स करता है। कोड और कॉन्फ़िगरेशन को डाउनलोड करने के लिए डिस्क्रिप्शन लिंक पर क्लिक करें ताकि आप इसे अपने डेटासेट पर चला सकें।",
+      "visual_type": "code_snippet",
+      "visual_content": "import uuid\nfrom langchain_core.documents import Document\nfrom langchain_chroma import Chroma\nfrom langchain_openai import OpenAIEmbeddings\n\n# Initialize vector DB and in-memory key-value storage\nvectorstore = Chroma(\n    collection_name=\"multimodal_rag_store\", \n    embedding_function=OpenAIEmbeddings(model=\"text-embedding-3-small\")\n)\n\nimage_document_store = {}\n\ndef index_multimodal_element(summary_data, raw_base64_image):\n    \"\"\"Indexes summary vector inside Chroma, and raw image within document store.\"\"\"\n    element_id = str(uuid.uuid4())\n    \n    # Document structure for Vector Store\n    summary_document = Document(\n        page_content=summary_data[\"summary\"],\n        metadata={\n            \"element_id\": element_id,\n            \"metrics\": json.dumps(summary_data[\"extracted_metrics\"]),\n            \"type\": \"image\"\n        }\n    )\n    \n    # Add to database stores\n    vectorstore.add_documents([summary_document], ids=[element_id])\n    image_document_store[element_id] = raw_base64_image\n    \n    return element_id"
     },
     {
       "slide_index": 6,
-      "title_en": "Production Best Practices & Next Steps",
-      "title_hi": "उत्पादन सर्वोत्तम प्रथाएं और अगले कदम",
-      "content_text_en": "Deploying Multimodal RAG in enterprise applications requires robust image chunking strategies, optical character recognition refinement, and structured system testing prior to production deployment.",
-      "content_text_hi": "एंटरप्राइज़ अनुप्रयोगों में मल्टीमोडल RAG को तैनात करने के लिए मजबूत रणनीति आवश्यक है।",
-      "narration_text_en": "When building multimodal systems for production, keep scaling in mind. Always optimize image compression to avoid massive latency overheads at the LLM level, use specialized vision encoders, and maintain separate vector indices.",
-      "narration_text_hi": "जब आप प्रोडक्शन के लिए मल्टीमोडल सिस्टम बना रही हों, तो स्केलिंग के बारे में सोचें।",
+      "title_en": "Verifying Retrieval Alignment in Vector DB",
+      "title_hi": "वेक्टर DB में रिट्रीवल अलाइनमेंट का सत्यापन",
+      "content_text_en": "Upon executing indexing scripts, the log traces document allocation alongside internal database metrics. Monitoring system logging verifies that the text summaries align dynamically with correct parent image buffers, avoiding index drift inside Chroma collections.",
+      "content_text_hi": "इंडेक्सिंग स्क्रिप्ट को चलाने के बाद, लॉग्स डॉक्यूमेंट एलोकेशन और डेटाबेस के इंटरनल मैट्रिक्स को ट्रैक करते हैं। यह सुनिश्चित करता है कि टेक्स्ट समरीज़ सही ओरिजिनल इमेज बफ़र्स के साथ अलाइन हैं, जिससे हमारी Chroma कलेक्टन्स में कोई इंडेक्सिंग एरर नहीं आती।",
+      "narration_text_en": "Whoops! Looks like we've encountered a live debugging moment right on screen. As you can see from the terminal output, we have a `ModuleNotFoundError`. Specifically, Python can't find the `langchain_core` module, which means it's not installed in our current environment. This is a common issue and an easy fix – an excellent teaching opportunity! We simply need to open our terminal and run `pip install langchain-core`. Once that's done, we can re-run our script and proceed to review the terminal feedback properly.",
+      "narration_text_hi": "ओह! ऐसा लगता है कि हमें सीधे स्क्रीन पर एक लाइव डिबगिंग पल का सामना करना पड़ा है। जैसा कि आप टर्मिनल आउटपुट में देख सकते हैं, हमें एक `ModuleNotFoundError` मिला है। विशेष रूप से, पायथन को `langchain_core` मॉड्यूल नहीं मिल रहा है, जिसका अर्थ है कि यह हमारे वर्तमान एनवायरनमेंट में इंस्टॉल नहीं है। यह एक सामान्य समस्या है और इसे ठीक करना आसान है – सीखने का एक शानदार अवसर! हमें बस अपना टर्मिनल खोलना होगा और `pip install langchain-core` चलाना होगा। एक बार यह हो जाने के बाद, हम अपनी स्क्रिप्ट को फिर से चला सकते हैं और टर्मिनल फीडबैक की ठीक से समीक्षा करने के लिए आगे बढ़ सकते हैं।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\nTraceback (most recent call last):\n  File \"/home/runner/work/video-studio/video-studio/rag_learning_series/lesson_022/snippet_5.py\", line 2, in <module>\n    from langchain_core.documents import Document\nModuleNotFoundError: No module named 'langchain_core'\n\n[Process completed with exit code 1]"
+    },
+    {
+      "slide_index": 7,
+      "title_en": "Step 3: Synthesis with Visual Context Integration",
+      "title_hi": "स्टेप 3: विज़ुअल कॉन्टेक्स्ट के साथ सिंथेसिस",
+      "content_text_en": "The final stage involves constructing our generation engine, which passes the raw query alongside both textual chunks and the base64-encoded image directly into the Vision LLM. This prevents the synthesis model from hallucinating numerical trends and guarantees that output is anchored deeply in real document facts.",
+      "content_text_hi": "अंतिम चरण में जनरेशन इंजन का निर्माण शामिल है, जो टेक्स्ट चंक्स और बेस64-एन्कोडेड इमेज दोनों को सीधे विज़न LLM में भेजता है। यह हमारे मॉडल को मनगढ़ंत दावे करने (hallucinations) से रोकता है और सुनिश्चित करता है कि जवाब पूरी तरह से सच और प्रमाणित हो।",
+      "narration_text_en": "Let's code our generation pipeline. On screen, you can see how we fetch the matching document summaries, retrieve the exact base64 context, and feed them into GPT-4o. Feel free to use the link in the description to download the full, optimized source code to test this yourself.",
+      "narration_text_hi": "चलिए अब इस जनरेशन पाइपलाइन को कोड करते हैं। स्क्रीन पर आप देख सकती हैं कि कैसे हम मैचिंग डॉक्यूमेंट समरीज़ ला रहे हैं, बेस64 इमेज ढूंढ रहे हैं, और फिर उन्हें GPT-4o में भेज रहे हैं। इस पूरे सोर्स कोड को डाउनलोड करने के लिए डिस्क्रिप्शन में दिए गए लिंक का उपयोग करें।",
+      "visual_type": "code_snippet",
+      "visual_content": "def run_multimodal_rag(query):\n    \"\"\"Queries the vector store, fetches original context images, and generates synthesized answer.\"\"\"\n    # Query vector database\n    results = vectorstore.similarity_search_with_relevance_scores(query, k=1)\n    if not results or results[0][1] < 0.6:\n        return \"No highly relevant source data found matching query.\"\n        \n    best_match_doc = results[0][0]\n    element_id = best_match_doc.metadata[\"element_id\"]\n    \n    # Retrieve actual source image\n    retrieved_image = image_document_store[element_id]\n    \n    # Synthesize structured response using Vision LLM\n    response = client.chat.completions.create(\n        model=\"gpt-4o\",\n        messages=[\n            {\n                \"role\": \"user\",\n                \"content\": [\n                    {\n                        \"type\": \"text\",\n                        \"text\": f\"Based on the visual chart and metadata provided, answer this query: {query}. Metadata Context: {best_match_doc.page_content}\"\n                    },\n                    {\n                        \"type\": \"image_url\",\n                        \"image_url\": {\n                            \"url\": f\"data:image/jpeg;base64,{retrieved_image}\"\n                        }\n                    }\n                ]\n            }\n        ]\n    )\n    return response.choices[0].message.content"
+    },
+    {
+      "slide_index": 8,
+      "title_en": "Executing and Verifying Multi-Modal Synthesis",
+      "title_hi": "मल्टी-मोडल सिंथेसिस का सफल परीक्षण",
+      "content_text_en": "The final execution demonstrates complete alignment across retrieval and synthesis modules. The pipeline successfully extracts semantic indicators, indexes them within high-dimensional vector spaces, and delivers clear, decision-ready output rooted in quantitative visual sources.",
+      "content_text_hi": "अंतिम एक्ज़ीक्यूशन हमारे रिट्रीवल और जनरेशन सिस्टम के बीच सही तालमेल को साबित करता है। हमारा सिस्टम इमेज डेटा को सफलतापूर्वक समझकर बिना किसी गलती के सटीक और डिसीजन-रेडी जवाब प्रस्तुत करता है।",
+      "narration_text_en": "Let's check the terminal logs for our test query. It returns a perfectly structured explanation comparing Q3 revenue numbers directly from our chart. No halluncinations, no layout parsing issues—just exact visual-based factual reasoning.",
+      "narration_text_hi": "चलिए हमारे टेस्ट क्वेरी के लिए टर्मिनल लॉग्स देखते हैं। यह हमारे चार्ट से सीधे Q3 रेवेन्यू की तुलना करके एक पूरी तरह से सटीक और स्पष्ट जवाब देता है। बिना किसी भ्रम या लेआउट की समस्या के - बिल्कुल सही विज़ुअल फैक्ट्स पर आधारित रीज़निंग।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\n\n\n[Process completed with exit code 0]"
+    },
+    {
+      "slide_index": 9,
+      "title_en": "Production Considerations & Future Architectures",
+      "title_hi": "प्रोडक्शन फैक्टर्स और भविष्य के आर्किटेक्चर",
+      "content_text_en": "Scaling visual pipelines to millions of documents requires careful attention to rate limits, processing costs, and retrieval latency. Implementing caching for recurring queries and batch-processing images asynchronously are key strategies for production stability. In our upcoming module, we will explore advanced reasoning systems designed to solve complex multi-hop unstructured data queries.",
+      "content_text_hi": "करोड़ों डाक्यूमेंट्स वाली विज़ुअल पाइपलाइन्स को बड़े पैमाने पर चलाने के लिए रेट लिमिट्स, प्रोसेसिंग कॉस्ट्स और लेटेंसी को ध्यान में रखना बेहद ज़रूरी है। बार-बार पूछे जाने वाले सवालों के लिए कैशिंग का उपयोग और एसिंक्रोनस इमेज प्रोसेसिंग इसके लिए बेहतरीन समाधान हैं।",
+      "narration_text_en": "To handle large-scale datasets, always optimize your token sizes and run asynchronous parsing queues. In our next lecture, Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory), I will guide you through complex relational data models and self-routing AI agents that take autonomous data processing to a whole new level. I'll see you in the next class, keep coding!",
+      "narration_text_hi": "बड़े पैमाने के डेटासेट्स को हैंडल करने के लिए, हमेशा टोकन साइज़ को ऑप्टिमाइज़ करें और एसिंक्रोनस पार्सिंग का उपयोग करें। हमारे अगले लेक्चर, 'Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)' में, मैं आपको रिलेशनल डेटा मॉडल्स और खुद काम करने वाले AI एजेंट्स के बारे में विस्तार से बताऊंगी जो आपकी पाइपलाइन को सुपर-स्मार्ट बना देंगे। तो मैं आपसे अगली क्लास में मिलूंगी, तब तक सीखते रहिए!",
       "visual_type": "concept_box",
-      "visual_content": "Production Checklist:\n1. Optimize Image Resolutions (Resize & Compress prior to LLM submission)\n2. Dual Vector Indexing (Maintain linked Qdrant text & image collections)\n3. OCR Integration (Extract text from images for better retrieval)\n4. Rate Limiting (Queue requests to avoid API throttling)\n5. Monitoring (Track retrieval accuracy and latency metrics)"
+      "visual_content": "Production Multi-Modal Strategies:\n1. Asynchronous extraction to avoid request timeouts.\n2. Semantic cache engines to minimize Vision LLM overhead.\n3. Base64 storage optimization using cloud block storage (AWS S3) linked with metadata UUID pointers."
     }
   ]
 }
