@@ -1,0 +1,14 @@
+sequenceDiagram
+    autonumber
+    Client->>FastAPI Endpoint: POST /api/v1/agent/query (payload)
+    FastAPI Endpoint->>Agent Orchestrator: Init Async Agent loop
+    activate Agent Orchestrator
+    Agent Orchestrator->>LLM (Router): Determine routing intent
+    LLM (Router)-->>Agent Orchestrator: Use "Vector_DB" tool
+    Agent Orchestrator->>Vector Database: Query embeddings
+    Vector Database-->>Agent Orchestrator: Return matching documents
+    Agent Orchestrator->>LLM (Synthesis): Synthesize dynamic answer
+    LLM (Synthesis)-->>Agent Orchestrator: Generated response content
+    deactivate Agent Orchestrator
+    Agent Orchestrator-->>FastAPI Endpoint: Yield Stream Chunks
+    FastAPI Endpoint-->>Client: HTTP 200 (Streaming Response)

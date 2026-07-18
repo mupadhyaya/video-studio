@@ -1,0 +1,9 @@
+graph TD
+    UserQuery["User Query (FastAPI Endpoint)"] --> AgentRouter["Agentic Router (LLM decision)"]
+    AgentRouter -->|Route A| VectorDB["Vector DB Tool (Internal Knowledge)"]
+    AgentRouter -->|Route B| WebSearch["Web Search Tool (Real-time Info)"]
+    VectorDB --> Aggregator["Synthesis & Validation Engine"]
+    WebSearch --> Aggregator
+    Aggregator --> OutputResponse["Synthesized Async Stream Out"]
+    style AgentRouter fill:#2c3e50,stroke:#3498db,stroke-width:2px,color:#fff
+    style Aggregator fill:#27ae60,stroke:#2ecc71,stroke-width:2px,color:#fff

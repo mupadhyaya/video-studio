@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,779
+Welcome! Today we are discussing Module 12.2: Building an Agentic RAG system with FastAPI (Practical).
+
+2
+00:00:10,779 --> 00:00:14,719
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:14,719 --> 00:01:16,349
+Welcome back to the channel! Today, we are bridging the gap between theoretical agent concepts and actual, production-ready code. Traditional, linear RAG systems often fail because they lack reasoning; they simply embed a query, retrieve matches, and generate an answer. If the query requires combining multiple pieces of source documentation or checking live web data, classic RAG falls flat. That's where Agentic RAG comes in. We are going to design and implement a dynamic agent router that inspects a user request and uses specialized tools to fetch, evaluate, and synthesize data. To make this professional and ready for scale, we are packaging everything inside FastAPI. To follow along visually, you can check the link in the description to download the architecture diagram and script.
+
+4
+00:01:16,349 --> 00:02:04,969
+Before we write our Python code, we must understand the precise sequence of events. When a client hits our FastAPI endpoint, we cannot block the thread while the LLM deliberates or makes multiple downstream tool calls. Instead, we initiate an asynchronous orchestrator. The agent evaluates the query, uses a tool to fetch context from our Vector DB, evaluates if more data is needed, pulls it from external search API if necessary, synthesizes the final context, and streams the chunked response back to the client. Feel free to check the link in the description to download the architecture diagram and script so you have this visual blueprint ready on your machine.
+
+5
+00:02:04,969 --> 00:02:43,590
+Let's dive into the actual codebase! We will start by building our core tools interface using standard Python and Pydantic. We define a robust base tool structure where every tool has a clear name, dynamic description, and an executable async block. Here we create our VectorDBTool and WebSearchTool. Notice how we write clean, type-safe structures to prevent runtime mapping exceptions. Make sure to check the link in the description to download the architecture diagram and script to run this clean code directly.
+
+6
+00:02:43,590 --> 00:03:18,290
+Once we run our verification script, we can inspect the terminal output. It demonstrates that our tools spin up immediately and run completely asynchronously. The Vector DB retrieval takes around 0.5 seconds, whereas the mock external web lookup takes 0.7 seconds. Both return clean, contextual strings. This validation assures us that our async tool foundation is ready to be utilized by the core LLM decision engine.
+
+7
+00:03:18,290 --> 00:03:56,570
+Now let's build the central engine of our system: the Agent Orchestrator. This module handles state management, evaluates user queries, and decides which path to route. If a query contains words like 'latest' or 'news', it dynamically routes the request to our WebSearchTool. Otherwise, it defaults to the high-performance VectorDBTool. The output is then processed and wrapped cleanly. To review this implementation in detail, check the link in the description to download the architecture diagram and script.
+
+8
+00:03:56,570 --> 00:04:55,560
+Whoops! Looks like we've hit a classic live debugging moment, which is actually a perfect teaching opportunity. Our script just failed with a `NameError: name 'asyncio' is not defined`. This isn't a complex logic error; it simply means the `asyncio` module, crucial for running asynchronous code like our `test_orchestrator`, hasn't been explicitly imported at the top of our script. To fix this, we just need to add `import asyncio` at the very beginning of `snippet_5.py`. It's a great reminder that even core Python modules need explicit imports before they can be used. This kind of small oversight is common, especially when rapidly prototyping, and catching it live reinforces the importance of our import statements. Let's make that quick fix and re-run our Agentic Engine.
+
+9
+00:04:55,560 --> 00:05:35,279
+Now let's build our API delivery layer. We import FastAPI, setup our lifespan processes, define robust Pydantic structures for both request payloads and response messages, and instantiate our Agent Orchestrator. We implement a non-blocking asynchronous endpoint `/api/v1/agent/query` that handles runtime exceptions gracefully, avoiding API failures. Don't forget to check the link in the description to download the architecture diagram and script so you can deploy this code directly to your sandbox.
+
+10
+00:05:35,279 --> 00:07:04,439
+And just like that, we've encountered a classic live debugging moment! Notice the `ModuleNotFoundError: No module named 'fastapi'` in our traceback. This is a very common scenario when setting up a new Python project – it simply means the `fastapi` library isn't installed in our current environment. But this is actually a fantastic teachable moment! To fix this, all you need to do is open your terminal and run `pip install fastapi`. Once that's complete, our FastAPI server will indeed start flawlessly on localhost port 8000. When we trigger a query requesting documentation on API systems, the logs will then vividly show the agent actively making decision calls, dynamically selecting the vector database tool, and responding in mere milliseconds. This is precisely how you build real-world, enterprise-ready AI services! Make sure to check the link in the description to download the architecture diagram and script to run this service yourself. In our next session, we are going to dive deep into the theory with 'Module 1.1: The Anatomy of Autonomous Agents & The ReAct Pattern (Theory)'. I will meet you there to unpack how agents reason! Until then, keep coding and exploring!
+
