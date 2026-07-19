@@ -1,0 +1,6 @@
+graph LR
+    subgraph "Autonomous Agent"
+        P["Planning Component"] <--> M["Memory System"]
+        M <--> T["Tool Registry"]
+        T <--> E["Execution Loop"]
+    end

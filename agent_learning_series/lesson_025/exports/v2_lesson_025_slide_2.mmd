@@ -1,0 +1,7 @@
+graph TD
+    A["User Goal / Prompt"] --> B["LLM Brain (Planner)"]
+    B --> C["Memory System (State)"]
+    B --> D["Tool Executor (Action)"]
+    D --> E["External Environment / APIs"]
+    E --> F["Observation / Feedback"]
+    F --> B

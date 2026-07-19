@@ -1,0 +1,6 @@
+graph TD
+    A["Conversation Engine"] --> B["Short-Term Memory Buffer (Sliding Window)"]
+    A --> C["Long-Term Memory Store (Vector/KV)"]
+    B --> D["Context Synthesizer"]
+    C --> D
+    D --> E["LLM Context Input"]

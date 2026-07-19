@@ -1,0 +1,11 @@
+sequenceDiagram
+    autonumber
+    participant LLM as "LLM Brain"
+    participant App as "Orchestrator"
+    participant Tool as "External Tool"
+    App->>LLM: "User Query"
+    LLM->>App: "Thought: I need to check inventory + Action: search_inventory[id=101]"
+    App->>Tool: "Call search_inventory(101)"
+    Tool->>App: "Return: Out of Stock"
+    App->>LLM: "Observation: Out of Stock"
+    LLM->>App: "Thought: I must find alternative + Action: find_alternative[id=101]"
