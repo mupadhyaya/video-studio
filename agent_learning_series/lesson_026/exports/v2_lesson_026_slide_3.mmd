@@ -1,0 +1,10 @@
+sequenceDiagram
+  autonumber
+  User->>Agent: Send Query
+  loop ReAct Cycle
+    Agent->>LLM: Prompt with Tools & History
+    LLM-->>Agent: Thought + Action (Tool Call)
+    Agent->>Tool: Execute Function
+    Tool-->>Agent: Observation (Result)
+  end
+  Agent->>User: Final Answer

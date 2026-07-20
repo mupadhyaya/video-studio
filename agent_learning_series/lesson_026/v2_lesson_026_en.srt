@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:11,400
+Welcome! Today we are discussing Module 1.2: Building a basic Reasoning & Acting (ReAct) loop in Python (Practical).
+
+2
+00:00:11,400 --> 00:00:15,339
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:15,339 --> 00:01:09,680
+Welcome back to our advanced agent series! Today, we are demystifying the engine behind modern autonomous systems. In this practical module, we're not just looking at high-level abstractions or relying on complex frameworks like LangChain. Instead, we are building a raw, production-grade Reasoning and Acting—or ReAct—loop completely from scratch in pure Python. Understanding this sequence is vital if you want to master agentic workflows and debug the hidden errors that occur under the hood of production systems. By building it directly, you'll gain total control over the prompt structure, parsing mechanics, and action routing. Make sure to download the complete architecture diagram and codebase from the link provided in the description!
+
+4
+00:01:09,680 --> 00:02:06,870
+Let's inspect the underlying state machine of a standard ReAct execution context. The workflow begins when a user submits a complex query requiring real-time calculations or data retrieval. The agent orchestrator takes this prompt, packages it with tool definitions and running conversational history, and dispatches it to the LLM. The LLM must first reason about the task—this is the 'Thought' phase. It then outputs a specific 'Action' string identifying the tool and its arguments. Our Python loop intercepts this output, pauses LLM generation, runs the local helper tool, fetches the output as an 'Observation', and routes it back into the prompt history. This loop continues dynamically until the model decides it has sufficient information to emit the final answer.
+
+5
+00:02:06,870 --> 00:03:00,370
+Let's jump straight into the code to define our toolset. For an agent to be useful, it must have clear boundary interfaces with the outer world, implemented here as standard Python functions. We write clean, type-hinted methods like `get_word_count` to measure text lengths, and `calculate_hypotenuse` to perform exact mathematical operations that language models traditionally struggle with. By storing these functions inside a dictionary map, we create a registry pattern. This allows our central execution loop to perform rapid string lookups and invoke these python helpers dynamically on the fly based on the structured requests emitted by our reasoning model. Don't forget to grab the script using the download link in the description below!
+
+6
+00:03:00,370 --> 00:03:45,730
+In our terminal output slide, we can verify that our registered Python helper functions run with flawless deterministic accuracy. When validating complex agent frameworks, always test your modular components in isolation first to guarantee their inputs and outputs line up perfectly. Our lightweight test suite instantly returns exact values for both our string word counter and the geometric hypotenuse formula. This clean step ensures that when our agent loop dynamically calls these tools, any errors that arise can be isolated strictly to the LLM's reasoning or syntax generation, rather than faults in our local execution codebase.
+
+7
+00:03:45,730 --> 00:04:37,280
+Now, we construct the core loop that drives the entire agentic thought process. We write a detailed system prompt that establishes a strict format protocol: the model must always output a 'Thought' followed by an 'Action' structured precisely as tool name brackets parameter list. In Python, we utilize regular expressions with robust capture groups to extract the intended tool name and parse its parameters safely into native floating-point or clean string variables. This regex parser functions as the translation layer between the raw natural language outputs of the LLM and the strict syntax required by our local Python interpreter. Check the link in the description to download this entire loop script and start experimenting!
+
+8
+00:04:37,280 --> 00:05:26,940
+Let's look at the actual output of our agent running live in the console. When we ask it to combine tasks—calculating a hypotenuse and counting words—we can see the ReAct paradigm working beautifully in real time. The LLM first reasons that it must call the geometric function, parses the arguments, observes the outcome of thirteen, feeds that feedback back into its memory, and then makes a second dynamic step to calculate the word count. It evaluates both observations in context, realizes it has completed its primary goals, and exits the loop cleanly by presenting a combined final answer. This proves how simple logic can make a static LLM incredibly dynamic.
+
+9
+00:05:26,940 --> 00:06:09,200
+In real-world enterprise deployments, a basic loop written with standard regex is highly susceptible to critical edge cases. For instance, if an LLM hallucinates an invalid parameter format or gets stuck in a recursive loop calling a broken tool, your system can enter an expensive runaway execution spiral. To safeguard your architecture, you must engineer guardrails such as a hard counter on maximum allowable iterations, fallback parser blocks that gracefully catch formatted JSON errors, and automatic system context overrides that force the loop to terminate if execution limits are exceeded.
+
+10
+00:06:09,200 --> 00:06:52,110
+Transitioning from standard parsing loops to native APIs is where true production stability lies. Standardizing custom text parsing with regular expressions is historically fragile and difficult to maintain as your tool count grows. In our upcoming session, Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory), we will shift from raw text parsing to exploring how modern model providers expose standardized, schema-driven endpoints to guarantee reliable execution. I will see you in that next module to elevate our agent builds to absolute professional standards!
+

@@ -1,0 +1,11 @@
+graph TD
+  User["User Query"] --> Loop["ReAct Engine"]
+  subgraph Loop ["ReAct Engine Loop"]
+    Thought["Thought: Reason about the goal"]
+    Action["Action: Choose tool & parameters"]
+    Observation["Observation: Integrate real-world feedback"]
+    Thought --> Action
+    Action --> Observation
+    Observation --> Thought
+  end
+  Thought --> Final["Final Answer"]
