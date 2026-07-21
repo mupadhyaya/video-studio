@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant User as "Client Application"
+    participant LLM as "Large Language Model"
+    participant API as "External System/API"
+    User->>LLM: "Query + List of JSON Tool Schemas"
+    Note over LLM: "Decides which tool to use"
+    LLM-->>User: "Stop Reason: tool_calls (JSON String)"
+    rect rgb(30, 40, 50)
+        Note over User: "Parses JSON & Runs Tool Locally"
+        User->>API: "Execute Tool with Arguments"
+        API-->>User: "Return Raw Response"
+    end
+    User->>LLM: "Send Raw Tool Output back to Model"
+    LLM-->>User: "Generate Final Natural Language Answer"

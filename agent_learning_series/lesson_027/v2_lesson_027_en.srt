@@ -1,0 +1,44 @@
+1
+00:00:00,000 --> 00:00:10,320
+Welcome! Today we are discussing Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory).
+
+2
+00:00:10,320 --> 00:00:14,259
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:14,259 --> 00:01:05,239
+Welcome back, AI engineers! Today, we are diving deep into the architectural powerhouse of modern AI agents: Tool Calling and Structured Outputs. Think about it—as powerful as models like GPT-4 are, they cannot natively query your SQL database, check the live stock market, or send an email. If you ask an LLM to calculate a complex compound interest formula, it will often hallucinate the final decimal. But by the end of this lecture, you will master the theory of how we bridge this gap, transforming a stochastic text predictor into a reliable, enterprise-grade logic engine. Let's explore how this structural shift makes modern Agentic workflows possible.
+
+4
+00:01:05,239 --> 00:01:44,909
+One of the biggest misconceptions is that the LLM directly executes external APIs or runs python scripts. It absolutely does not! As you can see in this sequence diagram, the LLM only outputs a structured payload detailing *which* tool to call and *what* parameters to use. The client application—which is code *you* write—handles the actual execution and passes the results back to the LLM. Check the link in the description to download the architecture diagram and script so you can map this pattern to your production codebases.
+
+5
+00:01:44,909 --> 00:02:21,509
+To let an LLM know a tool exists, we must describe it in detail. In Python, Pydantic is the absolute gold standard for this. Look at this code snippet. By creating a class that inherits from BaseModel, we declare the precise data types and descriptions of each parameter. The LLM reads these descriptions to figure out *when* and *how* to construct the arguments. I highly recommend checking the link in the description to download this production-grade template for your own projects.
+
+6
+00:02:21,509 --> 00:03:22,039
+Whoops! Looks like we've stumbled upon a classic live debugging moment, which, as seasoned engineers know, is often the best kind of teaching opportunity. Our script, intended to showcase the JSON Schema generation, just failed with a `ModuleNotFoundError: No module named 'openai'`. This clearly indicates that the Python interpreter couldn't locate the `openai` package, a critical dependency for our snippet. It's a fundamental reminder of the importance of environment setup. To resolve this, we simply need to install the missing package. A quick `pip install openai` in our terminal will rectify this. Once that's complete, we can re-run the script and truly examine how Pydantic elegantly serializes Python types into a fully described JSON Schema, making those crucial descriptions visible to the model's attention mechanism.
+
+7
+00:03:22,039 --> 00:03:54,799
+Historically, developers had to write complex retry loops because models would sometimes output slightly malformed JSON, like a missing closing bracket. Today, providers offer 'Structured Outputs' through constrained decoding. At the sampling stage, the system rejects any token that would violate the specified schema, ensuring a zero-percent rate of malformed JSON structures. This is a game-changer for reliable backend system integration.
+
+8
+00:03:54,799 --> 00:04:29,189
+Let's visualize the architecture of this constrained decoding pipeline. When a user requests structured JSON, the vocabulary logits are dynamically modified at every single generation step. If the grammar expects a colon, all tokens other than a colon are temporarily assigned a probability of zero. This ensures the output is syntactically perfect. Download this entire architecture diagram using the link in the description to review it with your engineering team.
+
+9
+00:04:29,189 --> 00:05:03,509
+Let's translate this theory into a highly accurate code flow. In this snippet, we show the second half of the loop. Once the model requests a tool call, we extract the function name and arguments, execute our local function, and then—critically—send that result back as a message with the role of 'tool'. This gives the model the historical context it needs to formulate the final response. Don't forget to grab the script using the download link in the description below!
+
+10
+00:05:03,509 --> 00:06:16,449
+Well, isn't this a perfect example of a live debugging moment, right here in our terminal log! As you can see, our script failed with a `NameError: name 'json' is not defined` on line 14. This tells us that Python doesn't recognize the `json` module, which we're attempting to use with `json.loads` to parse our model's arguments. The simple fix, as many of you might have already guessed, is that we forgot to include a crucial `import json` statement at the top of our file. It's a common oversight, and a fantastic reminder that even core Python modules need explicit imports to be used. Once we add that line and re-run, you'd then see the successful execution payload, including the 'tool_call_id' matching the LLM's request, allowing the model's self-attention mechanism to successfully pair the execution output with the original tool request. This structured flow, once we've ironed out these initial wrinkles, truly ensures your system behaves deterministically under heavy production loads.
+
+11
+00:06:16,449 --> 00:07:00,199
+And there you have it, engineers! We have fully mapped out the theoretical pipeline of Tool Calling, Pydantic schemas, and Structured Outputs. Make sure you download all diagrams and scripts from the link in the description to solidify your learning. In our next lecture, Module 2.2: Connecting an LLM to external APIs and web search tools (Practical), we will put this knowledge to work. We are going to build a production-grade Python script that connects a live LLM to external APIs and real-time Google web search! I will see you in the next lecture—happy coding!
+

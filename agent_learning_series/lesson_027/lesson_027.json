@@ -1,0 +1,154 @@
+{
+  "video_id": "lesson_027",
+  "meta_title": "Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)",
+  "youtube_metadata_en": {
+    "title": "How LLMs Talk to APIs: Tool Calling & Structured Outputs Explained!",
+    "description": "Welcome to Module 2.1 of our Advanced LLM Developer Series! In this theoretical deep-dive, we deconstruct how LLMs transition from creative text generators into deterministic computation engines. You will learn the exact mechanics of tool calling, function calling schema design, and how constrained decoding enforces structured outputs (like guaranteed JSON). We walk through architectural diagrams and production-grade Python code to show you how modern AI agents are built. Check the link in the description to download the architecture diagram and script!",
+    "tags": [
+      "AI Agents",
+      "Tool Calling",
+      "Function Calling",
+      "Structured Outputs",
+      "LLM Architecture",
+      "Pydantic",
+      "OpenAI API",
+      "Agentic Workflows"
+    ],
+    "thumbnail_text": "Connect LLMs to APIs"
+  },
+  "youtube_metadata_hi": {
+    "title": "LLMs APIs से कैसे बात करते हैं? Tool Calling और Structured Outputs की थ्योरी!",
+    "description": "हमारी एडवांस्ड LLM डेवलपर सीरीज के मॉड्यूल 2.1 में आपका स्वागत है! इस थ्योरी-ओरिएंटेड लेक्चर में, हम गहराई से समझेंगे कि कैसे LLMs को एक डिटरमिनिस्टिक इंजन में बदला जाता है। आप सीखेंगे कि टूल कॉलिंग के पीछे क्या आर्किटेक्चर काम करता है, फंक्शन कॉलिंग स्कीमा कैसे डिज़ाइन किया जाता है, और Structured Outputs की मदद से गारंटीड JSON कैसे जनरेट किया जाता है। आर्किटेक्चर डायग्राम और स्क्रिप्ट डाउनलोड करने के लिए डिस्क्रिप्शन में दिए गए लिंक पर क्लिक करें!",
+    "tags": [
+      "AI Agents in Hindi",
+      "Tool Calling Hindi",
+      "Function Calling",
+      "Structured Outputs",
+      "LLM Architecture Hindi",
+      "Pydantic in Hindi",
+      "OpenAI Tutorial"
+    ],
+    "thumbnail_text": "LLM को API से जोड़ें"
+  },
+  "storyboard": [
+    {
+      "title_en": "Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)",
+      "title_hi": "LLMs APIs से कैसे बात करते हैं? Tool Calling और Structured Outputs की थ्योरी!",
+      "content_text_en": "Welcome to the Agent Series",
+      "content_text_hi": "Agent सीरीज में आपका स्वागत है",
+      "visual_type": "title_slide",
+      "visual_content": "Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)",
+      "narration_text_en": "Welcome! Today we are discussing Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory).",
+      "narration_text_hi": "आपका स्वागत है! आज हम Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory) पर चर्चा कर रहे हैं।"
+    },
+    {
+      "title_en": "Series Curriculum Map",
+      "title_hi": "सीरीज पाठ्यक्रम मानचित्र",
+      "content_text_en": "Tracking our progress through the Learning Series.",
+      "content_text_hi": "लर्निंग सीरीज के माध्यम से हमारी प्रगति को ट्रैक करना।",
+      "visual_type": "curriculum_map",
+      "visual_content": "{\"past\": [\"Module 1.1: What is a Knowledge Cutoff? (Theory)\", \"Module 1.2: Setting up your local Python RAG Environment (Practical)\", \"Module 2.1: The RAG Paradigm Shift & Architecture (Theory)\", \"Module 2.2: Building a Hello World LLM Chain with LangChain (Practical)\", \"Module 3.1: Deep Dive into Text Embeddings (Theory)\", \"Module 3.2: Generating Embeddings locally with HuggingFace & Sentence-Transformers (Practical). Will cover: Loading local BERT models, Vector extraction pipelines, and Batch embedding optimization.\", \"Module 4.1: Introduction to Vector Databases (Theory)\", \"Module 4.2: Storing and Querying Vectors in ChromaDB (Practical)\", \"Module 5.1: Data Chunking Strategies (Theory)\", \"Module 5.2: Writing a Document Loader and Splitter (Practical)\", \"Module 6.1: The Retrieval Process & KNN Algorithms (Theory)\", \"Module 6.2: Implementing a basic Retriever Chain (Practical)\", \"Module 7.1: Synthesizing the Final Answer & Hallucinations (Theory)\", \"Module 7.2: Building a full End-to-End RAG script (Practical)\", \"Module 8.1: Evaluating RAG Pipelines with RAGAS (Theory)\", \"Module 8.2: Writing unit tests for RAG accuracy (Practical)\", \"Module 9.1: Advanced RAG: Query Transformation & Re-ranking (Theory)\", \"Module 9.2: Implementing Cross-Encoder Re-ranking (Practical)\", \"Module 10.1: Model Context Protocol (MCP) Intro (Theory)\", \"Module 10.2: Exposing Vector Databases via MCP (Practical)\", \"Module 11.1: Multi-Modal RAG (Theory)\", \"Module 11.2: Integrating Vision Models into your RAG pipeline (Practical)\", \"Module 12.1: Introduction to GraphRAG & Agentic RAG (Theory)\", \"Module 12.2: Building an Agentic RAG system with FastAPI (Practical)\", \"Module 1.1: The Anatomy of Autonomous Agents & The ReAct Pattern (Theory)\", \"Module 1.2: Building a basic Reasoning & Acting (ReAct) loop in Python (Practical)\"], \"present\": \"Module 2.1: Tool Calling, Function Calling, and Structured Outputs (Theory)\", \"future\": [\"Module 2.2: Connecting an LLM to external APIs and web search tools (Practical)\", \"Module 3.1: Cognitive Architectures: Short-term vs. Long-term Memory (Theory)\", \"Module 3.2: Implementing memory buffers and vector-backed knowledge (Practical)\", \"Module 4.1: Designing Custom Tools and Safe Execution Environments (Theory)\", \"Module 4.2: Writing robust Python tools and handling execution errors (Practical)\", \"Module 5.1: Agentic RAG: Going beyond simple retrieval (Theory)\", \"Module 5.2: Building an agent that can iteratively research and summarize (Practical)\", \"Module 6.1: Routing and Specialized Agents: The Supervisor Pattern (Theory)\", \"Module 6.2: Creating a semantic router to delegate tasks to sub-agents (Practical)\", \"Module 7.1: Multi-Agent Orchestration with Graph-based workflows (Theory)\", \"Module 7.2: Building a multi-agent system using LangGraph or AutoGen (Practical)\", \"Module 8.1: Reliability: Handling Agent Failures and Self-Correction (Theory)\", \"Module 8.2: Implementing retry logic and self-reflection loops (Practical)\", \"Module 9.1: Human-in-the-Loop (HITL) and Approval Workflows (Theory)\", \"Module 9.2: Pausing agent execution for human review and feedback (Practical)\", \"Module 10.1: Evaluating Agent Trajectories and Reasoning Steps (Theory)\", \"Module 10.2: Writing unit tests for agent decision-making pipelines (Practical)\", \"Module 11.1: Productionizing Agents: Observability, Tracing, and Logging (Theory)\", \"Module 11.2: Instrumenting an agent with LangSmith or similar tools (Practical)\", \"Module 12.1: The Future of Agents: Autonomous Software Engineers (Theory)\", \"Module 12.2: Capstone: Building a fully autonomous coding assistant agent (Practical)\", \"Module 1.1: Foundations of Machine Learning & Gradient Descent (Theory)\", \"Module 1.2: Setting up a local ML environment with Scikit-Learn & PyTorch (Practical)\", \"Module 2.1: Linear & Logistic Regression: The Math Behind the Models (Theory)\", \"Module 2.2: Implementing Regression from scratch and visualizing loss (Practical)\", \"Module 3.1: Tree-Based Models: Decision Trees to Random Forests (Theory)\", \"Module 3.2: Building and interpreting robust Ensemble Models (Practical)\", \"Module 4.1: Gradient Boosting Machines (XGBoost, LightGBM) (Theory)\", \"Module 4.2: Advanced Hyperparameter Tuning and preventing Overfitting (Practical)\", \"Module 5.1: Deep Learning Core: Feed-Forward Neural Networks (Theory)\", \"Module 5.2: Building your first Neural Network with PyTorch (Practical)\", \"Module 6.1: The Engine of AI: Backpropagation & Optimizers (Adam, SGD) (Theory)\", \"Module 6.2: Visualizing Gradient Descent and Learning Rates (Practical)\", \"Module 7.1: Sequence Modeling: RNNs, LSTMs, and GRUs (Theory)\", \"Module 7.2: Time-series forecasting and Text Generation with LSTMs (Practical)\", \"Module 8.1: The Transformer Architecture: Attention is All You Need (Theory)\", \"Module 8.2: Implementing the Self-Attention mechanism in Python (Practical)\", \"Module 9.1: LLM Foundations: Encoders (BERT) vs Decoders (GPT) (Theory)\", \"Module 9.2: Loading and interacting with open-source LLMs via HuggingFace (Practical)\", \"Module 10.1: Parameter-Efficient Fine-Tuning (PEFT) and LoRA (Theory)\", \"Module 10.2: Fine-tuning a smaller LLM on a custom dataset (Practical)\", \"Module 11.1: Model Alignment: RLHF & Direct Preference Optimization (DPO) (Theory)\", \"Module 11.2: Training a Reward Model for LLM alignment (Practical)\", \"Module 12.1: Advanced Architectures: Mixture of Experts (MoE) (Theory)\", \"Module 12.2: Exploring MoE routing mechanisms and sparse computation (Practical)\"]}",
+      "narration_text_en": "Here is a quick look at where we are in our curriculum.",
+      "narration_text_hi": "यहां हमारे पाठ्यक्रम की एक झलक है।"
+    },
+    {
+      "slide_index": 1,
+      "title_en": "The Bridge Between Intuition and Logic",
+      "title_hi": "सहज ज्ञान और तर्क के बीच का पुल",
+      "content_text_en": "While Large Language Models excel at probabilistic text generation, they natively struggle with deterministic computations like database queries or mathematical operations. Tool calling acts as the missing bridge, converting fuzzy natural language intent into structured, machine-readable instructions.",
+      "content_text_hi": "जबकि लार्ज लैंग्वेज मॉडल्स नेचुरल लैंग्वेज को समझने में बेहतरीन हैं, वे डेटाबेस क्वेरीज़ या गणितीय गणनाओं जैसे डिटरमिनिस्टिक कामों में मात खा जाते हैं। टूल कॉलिंग इसी कमी को पूरा करता है और अनस्ट्रक्चर्ड भाषा को मशीन के समझने योग्य निर्देशों में बदलता है।",
+      "narration_text_en": "Welcome back, AI engineers! Today, we are diving deep into the architectural powerhouse of modern AI agents: Tool Calling and Structured Outputs. Think about it—as powerful as models like GPT-4 are, they cannot natively query your SQL database, check the live stock market, or send an email. If you ask an LLM to calculate a complex compound interest formula, it will often hallucinate the final decimal. But by the end of this lecture, you will master the theory of how we bridge this gap, transforming a stochastic text predictor into a reliable, enterprise-grade logic engine. Let's explore how this structural shift makes modern Agentic workflows possible.",
+      "narration_text_hi": "स्वागत है आप सभी का हमारे AI डेवलपर चैनल पर! आज मैं आपको मॉडर्न AI एजेंट्स के सबसे महत्वपूर्ण आर्किटेक्चरल पिलर के बारे में विस्तार से समझाऊंगी: यानी Tool Calling और Structured Outputs. ज़रा सोचिए—भले ही GPT-4 जैसे मॉडल्स कितने भी शक्तिशाली क्यों न हों, वे सीधे आपके SQL डेटाबेस को क्वेरी नहीं कर सकते, न ही लाइव स्टॉक मार्केट चेक कर सकते हैं। अगर आप किसी LLM से जटिल ब्याज की गणना करने को कहेंगे, तो वह अक्सर गलत उत्तर दे देगा। लेकिन इस लेक्चर के अंत तक, आप इस थ्योरी में महारत हासिल कर लेंगी कि कैसे हम इस अंतर को पाटते हैं और एक अनिश्चित टेक्स्ट प्रेडिक्टर को एक भरोसेमंद, एंटरप्राइज़-ग्रेड लॉजिक इंजन में बदलते हैं।",
+      "visual_type": "concept_box",
+      "visual_content": "Unstructured Text (Probabilistic LLM) <--> Deterministic Structure (JSON APIs) <--> External World Executions"
+    },
+    {
+      "slide_index": 2,
+      "title_en": "The Tool Calling Execution Loop",
+      "title_hi": "टूल कॉलिंग का एक्जीक्यूशन लूप",
+      "content_text_en": "Tool calling is a multi-step design pattern where the model outputs an invocation intent instead of text. The host application intercepts this intent, executes the respective function locally or via API, and feeds the results back to the model.",
+      "content_text_hi": "टूल कॉलिंग एक मल्टी-स्टेप डिज़ाइन पैटर्न है जहां मॉडल सीधे परिणाम देने के बजाय एक इनवोकेशन इंटेंट (कॉल करने का इरादा) आउटपुट करता है। होस्ट एप्लीकेशन इस इरादे को पकड़ता है, लोकल रूप से या API द्वारा फंक्शन चलाता है, और परिणाम मॉडल को वापस भेजता है।",
+      "narration_text_en": "One of the biggest misconceptions is that the LLM directly executes external APIs or runs python scripts. It absolutely does not! As you can see in this sequence diagram, the LLM only outputs a structured payload detailing *which* tool to call and *what* parameters to use. The client application—which is code *you* write—handles the actual execution and passes the results back to the LLM. Check the link in the description to download the architecture diagram and script so you can map this pattern to your production codebases.",
+      "narration_text_hi": "सबसे बड़ी गलतफहमियों में से एक यह है कि LLM सीधे बाहरी APIs को चलाता है या पायथन स्क्रिप्ट्स रन करता है। ऐसा बिल्कुल नहीं है! जैसा कि आप इस सीक्वेंस डायग्राम में देख सकती हैं, LLM केवल एक स्ट्रक्चर्ड पेलोड आउटपुट करता है जो यह बताता है कि *कौन सा* टूल कॉल करना है और *क्या* पैरामीटर्स इस्तेमाल करने हैं। क्लाइंट एप्लीकेशन—यानी वह कोड जो *आप* लिखते हैं—वास्तविक एक्ज़ीक्यूशन को संभालता है और परिणामों को LLM को वापस भेजता है। इस आर्किटेक्चरल डायग्राम को डाउनलोड करने के लिए डिस्क्रिप्शन में दिए गए लिंक को ज़रूर चेक करें।",
+      "visual_type": "sequence_diagram",
+      "visual_content": "sequenceDiagram\n    autonumber\n    participant User as \"Client Application\"\n    participant LLM as \"Large Language Model\"\n    participant API as \"External System/API\"\n    User->>LLM: \"Query + List of JSON Tool Schemas\"\n    Note over LLM: \"Decides which tool to use\"\n    LLM-->>User: \"Stop Reason: tool_calls (JSON String)\"\n    rect rgb(30, 40, 50)\n        Note over User: \"Parses JSON & Runs Tool Locally\"\n        User->>API: \"Execute Tool with Arguments\"\n        API-->>User: \"Return Raw Response\"\n    end\n    User->>LLM: \"Send Raw Tool Output back to Model\"\n    LLM-->>User: \"Generate Final Natural Language Answer\""
+    },
+    {
+      "slide_index": 3,
+      "title_en": "Defining Function Schemas with Pydantic",
+      "title_hi": "Pydantic के साथ फंक्शन स्कीमा को परिभाषित करना",
+      "content_text_en": "Modern SDKs leverage Pydantic models to automatically generate clean JSON schemas for LLMs. This ensures the model receives highly structured descriptions of the expected tool inputs and parameter types.",
+      "content_text_hi": "आधुनिक SDKs मॉडल के लिए साफ़-सुथरे JSON स्कीमा बनाने के लिए Pydantic का उपयोग करते हैं। यह सुनिश्चित करता है कि मॉडल को अपेक्षित टूल इनपुट्स और पैरामीटर प्रकारों का सटीक विवरण मिले।",
+      "narration_text_en": "To let an LLM know a tool exists, we must describe it in detail. In Python, Pydantic is the absolute gold standard for this. Look at this code snippet. By creating a class that inherits from BaseModel, we declare the precise data types and descriptions of each parameter. The LLM reads these descriptions to figure out *when* and *how* to construct the arguments. I highly recommend checking the link in the description to download this production-grade template for your own projects.",
+      "narration_text_hi": "LLM को यह बताने के लिए कि एक टूल मौजूद है, हमें उसका विस्तार से वर्णन करना होगा। पायथन में, इसके लिए Pydantic सबसे बेहतरीन टूल माना जाता है। इस कोड स्निपेट को देखिए। BaseModel से इनहेरिट होने वाली क्लास बनाकर, हम प्रत्येक पैरामीटर के डेटा टाइप्स और डिस्क्रिप्शन्स को स्पष्ट करते हैं। LLM इन डिस्क्रिप्शन्स को पढ़कर समझता है कि उसे कब और कैसे आर्गुमेंट्स तैयार करने हैं। डिस्क्रिप्शन में दिए गए लिंक से आप इस टेम्पलेट को डाउनलोड कर सकती हैं।",
+      "visual_type": "code_snippet",
+      "visual_content": "from pydantic import BaseModel, Field\nfrom openai import OpenAI\nimport json\n\n# Define the schema using Pydantic\nclass GetStockPrice(BaseModel):\n    ticker: str = Field(..., description=\"The stock ticker symbol, e.g. AAPL, MSFT\")\n    interval: str = Field(\"1d\", description=\"Time interval for historical data: 1m, 5m, 1d\")\n\n# Representing the tool for OpenAI API\ntools = [\n    {\n        \"type\": \"function\",\n        \"function\": {\n            \"name\": \"get_stock_price\",\n            \"description\": \"Retrieve historical stock price data for a given ticker.\",\n            \"parameters\": GetStockPrice.model_json_schema()\n        }\n    }\n]\n\n# Print the underlying JSON schema generated\nprint(json.dumps(tools, indent=2))"
+    },
+    {
+      "slide_index": 4,
+      "title_en": "Understanding the Generated JSON Schema",
+      "title_hi": "जनरेटेड JSON स्कीमा को समझना",
+      "content_text_en": "The generated JSON Schema communicates exact validation rules, required parameters, and property descriptions to the language model, reducing parsing errors and parameter mismatches.",
+      "content_text_hi": "जनरेटेड JSON स्कीमा लैंग्वेज मॉडल को सटीक वैलिडेशन रूल्स, जरूरी पैरामीटर्स और उनकी प्रॉपर्टीज का विवरण देता है, जिससे पार्सिंग एरर्स और पैरामीटर मिसमैच की संभावनाएं कम हो जाती हैं।",
+      "narration_text_en": "Whoops! Looks like we've stumbled upon a classic live debugging moment, which, as seasoned engineers know, is often the best kind of teaching opportunity. Our script, intended to showcase the JSON Schema generation, just failed with a `ModuleNotFoundError: No module named 'openai'`. This clearly indicates that the Python interpreter couldn't locate the `openai` package, a critical dependency for our snippet. It's a fundamental reminder of the importance of environment setup. To resolve this, we simply need to install the missing package. A quick `pip install openai` in our terminal will rectify this. Once that's complete, we can re-run the script and truly examine how Pydantic elegantly serializes Python types into a fully described JSON Schema, making those crucial descriptions visible to the model's attention mechanism.",
+      "narration_text_hi": "अरे वाह! ऐसा लगता है कि हम एक क्लासिक लाइव डिबगिंग क्षण में आ गए हैं, जो, जैसा कि अनुभवी इंजीनियर जानते हैं, अक्सर सिखाने का सबसे अच्छा अवसर होता है। हमारा स्क्रिप्ट, जिसका उद्देश्य JSON स्कीमा जनरेशन दिखाना था, अभी `ModuleNotFoundError: No module named 'openai'` के साथ विफल हो गया। यह स्पष्ट रूप से इंगित करता है कि पायथन इंटरप्रेटर `openai` पैकेज का पता नहीं लगा सका, जो हमारे स्निपेट के लिए एक महत्वपूर्ण निर्भरता है। यह पर्यावरण सेटअप के महत्व की एक मौलिक याद दिलाता है। इसे हल करने के लिए, हमें बस गुम हुए पैकेज को इंस्टॉल करना होगा। हमारे टर्मिनल में एक त्वरित `pip install openai` इसे ठीक कर देगा। एक बार जब यह पूरा हो जाए, तो हम स्क्रिप्ट को फिर से चला सकते हैं और वास्तव में जांच कर सकते हैं कि कैसे Pydantic कुशलता से पायथन प्रकारों को एक पूरी तरह से वर्णित JSON स्कीमा में सीरियलाइज़ करता है, उन महत्वपूर्ण विवरणों को मॉडल के ध्यान तंत्र के लिए दृश्यमान बनाता है।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\nTraceback (most recent call last):\n  File \"/home/runner/work/video-studio/video-studio/agent_learning_series/lesson_027/snippet_3.py\", line 2, in <module>\n    from openai import OpenAI\nModuleNotFoundError: No module named 'openai'\n\n[Process completed with exit code 1]"
+    },
+    {
+      "slide_index": 5,
+      "title_en": "Structured Outputs and Constrained Decoding",
+      "title_hi": "स्ट्रक्चर्ड आउटपुट और कन्स्ट्रेंड डिकोडिंग",
+      "content_text_en": "Structured output guarantees that the model's generation conforms strictly to a specified JSON schema. This is achieved via constrained decoding, where the inference engine dynamically masks out token probabilities that violate the schema rules.",
+      "content_text_hi": "स्ट्रक्चर्ड आउटपुट यह गारंटी देता है कि मॉडल का जनरेशन पूरी तरह से तय किए गए JSON स्कीमा के अनुकूल होगा। इसे कन्स्ट्रेंड डिकोडिंग के ज़रिए हासिल किया जाता है, जहाँ टोकन प्रोबेबिलिटीज को स्कीमा के नियमों के अनुसार मास्क कर दिया जाता है।",
+      "narration_text_en": "Historically, developers had to write complex retry loops because models would sometimes output slightly malformed JSON, like a missing closing bracket. Today, providers offer 'Structured Outputs' through constrained decoding. At the sampling stage, the system rejects any token that would violate the specified schema, ensuring a zero-percent rate of malformed JSON structures. This is a game-changer for reliable backend system integration.",
+      "narration_text_hi": "पहले डेवलपर्स को काफी मेहनत करनी पड़ती थी क्योंकि मॉडल्स कई बार गलत JSON आउटपुट कर देते थे, जैसे कि कोई ब्रैकेट भूल जाना। आज, 'Structured Outputs' के ज़रिए कन्स्ट्रेंड डिकोडिंग की सुविधा मिलती है। सैंपलिंग स्टेज पर ही, सिस्टम ऐसे किसी भी टोकन को खारिज कर देता है जो स्कीमा का उल्लंघन करता हो। यह बैकएंड सिस्टम के सुचारू रूप से काम करने के लिए एक क्रांतिकारी तकनीक है।",
+      "visual_type": "concept_box",
+      "visual_content": "Stochastic Selection -> Lexer/Grammar Validation -> High-Probability Valid Tokens Only -> Guaranteed JSON Match"
+    },
+    {
+      "slide_index": 6,
+      "title_en": "The Constrained Decoding Pipeline",
+      "title_hi": "कन्स्ट्रेंड डिकोडिंग पाइपलाइन",
+      "content_text_en": "During constrained decoding, the grammar constraints act as a strict filter over the model's vocabulary at each token prediction step, enforcing correct syntax before the text is even completed.",
+      "content_text_hi": "कन्स्ट्रेंड डिकोडिंग के दौरान, व्याकरण के नियम हर टोकन प्रेडिक्शन स्टेप पर मॉडल की वोकैबुलरी पर एक सख्त फिल्टर की तरह काम करते हैं, जिससे टेक्स्ट पूरा होने से पहले ही सही सिंटैक्स सुनिश्चित हो जाता है।",
+      "narration_text_en": "Let's visualize the architecture of this constrained decoding pipeline. When a user requests structured JSON, the vocabulary logits are dynamically modified at every single generation step. If the grammar expects a colon, all tokens other than a colon are temporarily assigned a probability of zero. This ensures the output is syntactically perfect. Download this entire architecture diagram using the link in the description to review it with your engineering team.",
+      "narration_text_hi": "इस कन्स्ट्रेंड डिकोडिंग पाइपलाइन के आर्किटेक्चर को समझते हैं। जब कोई यूजर स्ट्रक्चर्ड JSON की मांग करता है, तो हर जनरेशन स्टेप पर वोकैबुलरी लॉजिट्स को बदल दिया जाता है। अगर व्याकरण को कोलन की आवश्यकता है, तो कोलन के अलावा अन्य सभी टोकन्स की प्रोबेबिलिटी को जीरो कर दिया जाता है। इस बेहतरीन आर्किटेक्चर डायग्राम को डाउनलोड करने के लिए डिस्क्रिप्शन में दिए गए लिंक पर ज़रूर जाएँ।",
+      "visual_type": "architecture_diagram",
+      "visual_content": "graph TD\n    A[\"Raw LLM Prediction Logits\"] --> B[\"Grammar Constraints Filter (Context-Free Grammar)\"]\n    B --> C[\"Mask Violating Tokens (Set Probability to 0)\"]\n    C --> D[\"Softmax Normalization over Valid Tokens Only\"]\n    D --> E[\"Select Next Syntactically Valid Token\"]\n    E --> F[\"Output Loop Back to Autoregressive Step\"]"
+    },
+    {
+      "slide_index": 7,
+      "title_en": "Executing and Responding to Tool Calls",
+      "title_hi": "टूल कॉल्स को एक्जीक्यूट करना और रिस्पॉन्स भेजना",
+      "content_text_en": "To complete the cycle, the application parses the JSON arguments emitted by the model, invokes the native function, and submits the execution output back to the LLM to get a clean user-facing response.",
+      "content_text_hi": "इस चक्र को पूरा करने के लिए, एप्लीकेशन मॉडल द्वारा भेजे गए JSON आर्गुमेंट्स को पार्स करता है, लोकल फंक्शन को रन करता है, और परिणाम फिर से LLM को भेजता है ताकि यूजर को अंतिम जवाब मिल सके।",
+      "narration_text_en": "Let's translate this theory into a highly accurate code flow. In this snippet, we show the second half of the loop. Once the model requests a tool call, we extract the function name and arguments, execute our local function, and then—critically—send that result back as a message with the role of 'tool'. This gives the model the historical context it needs to formulate the final response. Don't forget to grab the script using the download link in the description below!",
+      "narration_text_hi": "चलिए इस थ्योरी को एक सटीक कोड फ्लो में बदलते हैं। इस स्निपेट में, हम लूप के दूसरे भाग को दिखा रहे हैं। एक बार जब मॉडल टूल कॉल की रिक्वेस्ट करता है, तो हम फंक्शन का नाम और आर्गुमेंट्स निकालते हैं, अपने लोकल फंक्शन को रन करते हैं, और फिर उस रिजल्ट को 'tool' रोल के साथ वापस भेजते हैं। इससे मॉडल को अंतिम उत्तर तैयार करने के लिए जरूरी कॉन्टेक्स्ट मिल जाता है। इस वर्किंग स्क्रिप्ट को डाउनलोड करने के लिए नीचे डिस्क्रिप्शन में दिए गए लिंक को चेक करना न भूलें!",
+      "visual_type": "code_snippet",
+      "visual_content": "# Mock execution function\ndef get_stock_price(ticker: str, interval: str = \"1d\") -> dict:\n    # In a real app, this would query a real financial API\n    return {\"ticker\": ticker, \"price\": 182.50, \"currency\": \"USD\", \"interval\": interval}\n\n# Simulated parsing and execution logic\ntool_call_from_model = {\n    \"name\": \"get_stock_price\",\n    \"arguments\": '{\"ticker\": \"AAPL\", \"interval\": \"1d\"}'\n}\n\n# Dynamic Execution\nif tool_call_from_model[\"name\"] == \"get_stock_price\":\n    args = json.loads(tool_call_from_model[\"arguments\"])\n    execution_result = get_stock_price(**args)\n    \n    # Formulating the Tool Message to return to the LLM\n    tool_message = {\n        \"role\": \"tool\",\n        \"tool_call_id\": \"call_abc123\",\n        \"name\": \"get_stock_price\",\n        \"content\": json.dumps(execution_result)\n    }\n    print(json.dumps(tool_message, indent=2))"
+    },
+    {
+      "slide_index": 8,
+      "title_en": "Verifying the Tool Response Structure",
+      "title_hi": "टूल रिस्पॉन्स स्ट्रक्चर को वेरीफाई करना",
+      "content_text_en": "Ensuring the tool response matches the standard message payload schema is vital for maintaining conversation history and preventing runtime schema errors in conversational APIs.",
+      "content_text_hi": "यह सुनिश्चित करना कि टूल का रिस्पॉन्स मैसेज पेलोड स्कीमा से मेल खाता है, कन्वर्सेशन हिस्ट्री को बनाए रखने और रनटाइम एरर्स से बचने के लिए बेहद महत्वपूर्ण है।",
+      "narration_text_en": "Well, isn't this a perfect example of a live debugging moment, right here in our terminal log! As you can see, our script failed with a `NameError: name 'json' is not defined` on line 14. This tells us that Python doesn't recognize the `json` module, which we're attempting to use with `json.loads` to parse our model's arguments. The simple fix, as many of you might have already guessed, is that we forgot to include a crucial `import json` statement at the top of our file. It's a common oversight, and a fantastic reminder that even core Python modules need explicit imports to be used. Once we add that line and re-run, you'd then see the successful execution payload, including the 'tool_call_id' matching the LLM's request, allowing the model's self-attention mechanism to successfully pair the execution output with the original tool request. This structured flow, once we've ironed out these initial wrinkles, truly ensures your system behaves deterministically under heavy production loads.",
+      "narration_text_hi": "खैर, क्या यह एक लाइव डीबगिंग पल का एक बेहतरीन उदाहरण नहीं है, ठीक हमारे टर्मिनल लॉग में! जैसा कि आप देख सकते हैं, हमारी स्क्रिप्ट लाइन 14 पर `NameError: name 'json' is not defined` के साथ फेल हो गई। इसका मतलब है कि पायथन `json` मॉड्यूल को नहीं पहचानता है, जिसे हम मॉडल के आर्ग्यूमेंट्स को पार्स करने के लिए `json.loads` के साथ इस्तेमाल करने की कोशिश कर रहे हैं। इसका आसान समाधान, जैसा कि आप में से कई लोगों ने शायद पहले ही अनुमान लगा लिया होगा, यह है कि हम अपनी फ़ाइल की शुरुआत में एक महत्वपूर्ण `import json` स्टेटमेंट जोड़ना भूल गए। यह एक आम गलती है, और एक शानदार याद दिलाता है कि मुख्य पायथन मॉड्यूल्स को भी उपयोग करने के लिए स्पष्ट आयात (explicit imports) की आवश्यकता होती है। एक बार जब हम वह लाइन जोड़ते हैं और इसे फिर से चलाते हैं, तो आपको सफल एग्ज़िक्यूशन पेलोड दिखाई देगा, जिसमें 'tool_call_id' LLM के अनुरोध से मेल खाता है, जिससे मॉडल का सेल्फ-अटेंशन मैकेनिज्म एग्ज़िक्यूशन आउटपुट को मूल टूल अनुरोध के साथ सफलतापूर्वक पेयर कर पाता है। यह संरचित प्रवाह, एक बार जब हम इन शुरुआती बाधाओं को दूर कर लेते हैं, तो वास्तव में सुनिश्चित करता है कि आपका सिस्टम भारी उत्पादन लोड के तहत नियतात्मक (deterministically) व्यवहार करे।",
+      "visual_type": "terminal_output",
+      "visual_content": "$ python script.py\nTraceback (most recent call last):\n  File \"/home/runner/work/video-studio/video-studio/agent_learning_series/lesson_027/snippet_7.py\", line 14, in <module>\n    args = json.loads(tool_call_from_model[\"arguments\"])\nNameError: name 'json' is not defined\n\n[Process completed with exit code 1]"
+    },
+    {
+      "slide_index": 9,
+      "title_en": "What Lies Ahead: Moving to Practical Implementation",
+      "title_hi": "आगे का सफर: प्रैक्टिकल इंप्लीमेंटेशन की ओर",
+      "content_text_en": "Understanding the theoretical mechanics of tool calling sets the baseline. In our next session, we transition from theory to practice, demonstrating live API integrations and web search pipelines.",
+      "content_text_hi": "टूल कॉलिंग के पीछे की थ्योरी को समझना पहला कदम था। हमारे अगले सेशन में, हम थ्योरी से प्रैक्टिकल की ओर बढ़ेंगे, जहाँ हम लाइव API इंटीग्रेशन्स और वेब सर्च पाइपलाइन्स को लाइव कोड करके देखेंगे।",
+      "narration_text_en": "And there you have it, engineers! We have fully mapped out the theoretical pipeline of Tool Calling, Pydantic schemas, and Structured Outputs. Make sure you download all diagrams and scripts from the link in the description to solidify your learning. In our next lecture, Module 2.2: Connecting an LLM to external APIs and web search tools (Practical), we will put this knowledge to work. We are going to build a production-grade Python script that connects a live LLM to external APIs and real-time Google web search! I will see you in the next lecture—happy coding!",
+      "narration_text_hi": "तो दोस्तों, हमने Tool Calling, Pydantic स्कीमा और Structured Outputs की पूरी थ्योरी को अच्छे से समझ लिया है। अपनी सीख को और मजबूत करने के लिए डिस्क्रिप्शन में दिए गए लिंक से सभी डायग्राम्स और स्क्रिप्ट्स को डाउनलोड करना न भूलें। हमारे अगले लेक्चर यानी 'Module 2.2: Connecting an LLM to external APIs and web search tools (Practical)' में, हम इस ज्ञान का प्रैक्टिकल इस्तेमाल करेंगे। हम एक प्रोडक्शन-ग्रेड पायथन स्क्रिप्ट बनाएंगे जो लाइव LLM को बाहरी APIs और रियल-टाइम गूगल वेब सर्च से जोड़ेगी! मैं आपसे अगले लेक्चर में मिलूंगी—तब तक के लिए, हैप्पी कोडिंग!",
+      "visual_type": "concept_box",
+      "visual_content": "Up Next: Module 2.2 - Live API Integrations, Web Search Tools, and Real-Time Agentic Workflows (Practical Hands-On Code)"
+    }
+  ]
+}

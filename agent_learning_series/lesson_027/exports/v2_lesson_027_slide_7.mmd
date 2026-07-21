@@ -1,0 +1,6 @@
+graph TD
+    A["Raw LLM Prediction Logits"] --> B["Grammar Constraints Filter (Context-Free Grammar)"]
+    B --> C["Mask Violating Tokens (Set Probability to 0)"]
+    C --> D["Softmax Normalization over Valid Tokens Only"]
+    D --> E["Select Next Syntactically Valid Token"]
+    E --> F["Output Loop Back to Autoregressive Step"]
