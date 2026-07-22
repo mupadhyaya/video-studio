@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:11,140
+Welcome! Today we are discussing Module 2.2: Connecting an LLM to external APIs and web search tools (Practical).
+
+2
+00:00:11,140 --> 00:00:15,080
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:15,080 --> 00:00:54,559
+Hello and welcome back to our curriculum series! Today, we are breaking through the barrier of frozen training data. If you have ever been frustrated by your LLM hallucinating out-of-date answers or failing to grab live metrics, you are experiencing the static knowledge trap. Today, I will show you how to turn your LLM into a living reasoning loop that can query weather APIs, query corporate databases, and run web searches to solve complex tasks. Let's dive deep into how tool calling and live routing actually function behind the scenes.
+
+4
+00:00:54,559 --> 00:01:42,629
+It is a common misconception that LLMs run APIs directly. In reality, the LLM acts as the brain that decides which tool to use, while your application code serves as the hands that execute it. Look at this sequence diagram. When a user asks for live Tokyo weather, the coordinator feeds the LLM both the query and the tool schemas. The LLM returns a structured JSON payload asking to call the weather API. Our Python code executes the API, retrieves 22 degrees and sunny, and returns this context back to the LLM. Only then does the LLM synthesize the final, accurate response.
+
+5
+00:01:42,629 --> 00:02:22,280
+Now let us translate this architecture into concrete, production-ready Python code. Here, we are using LangChain's tool decorator to wrap a custom HTTP client helper that fetches current data. Pay special attention to the docstring and typing in this script—this is not just documentation; it is parsed directly into the JSON schema that is sent to the LLM to explain the tool's behavior. Remember, you can check the link in the description to download this complete, fully functional script and architecture diagram to try it out on your local machine.
+
+6
+00:02:22,280 --> 00:03:38,550
+Alright, developers, let's take a look at our terminal output here. Now, while we intended to showcase a seamless run, it looks like we've stumbled into a classic 'live debugging moment' – and honestly, these are often the best learning opportunities! As you can see from the traceback, we're getting a `ModuleNotFoundError: No module named 'langchain_core'`. This is a very common issue, particularly when setting up new projects or environments. It simply means that the `langchain_core` Python package, which our script relies on, hasn't been installed yet in our environment. The fix is straightforward: we just need to head over to our terminal and execute `pip install langchain-core`. Once that's done, we can rerun the script. *Then*, we'll properly observe how the agent framework outputs those clear logs, detailing its step-by-step reasoning cycle – just as we discussed. It's these minor setup details and quick fixes that are an essential part of the software engineering journey, and knowing how to quickly diagnose and resolve them is a crucial skill.
+
+7
+00:03:38,550 --> 00:04:16,830
+Sometimes static tools aren't enough. What if a user asks about breaking news or an event that happened just hours ago? This is where professional search engines like Tavily come into play. Tavily is specifically tuned to return clean text blobs instead of heavy HTML, which keeps token costs low. Let us inspect this script where we load a search tool and connect it to a tool-calling chat interface. Again, make sure to check the description link to get this exact integration script and system design chart.
+
+8
+00:04:16,830 --> 00:05:33,770
+Whoops! Looks like we've hit a classic 'live debugging' moment right here. As you can see from the traceback, we're encountering a `ModuleNotFoundError` for 'langchain_community'. This simply means our current Python environment doesn't have the necessary `langchain_community` library installed – a common oversight when setting up new projects or environments. It's a quick fix; we just need to run `pip install langchain-community` in our terminal. And just like that, we've transformed a minor hiccup into a valuable, practical lesson in dependency management for agent development. Now, with that out of the way, let's proceed to review the step-by-step trace of our web-search agent. When asked about a fresh tech launch, you'll soon see how the agent structures the query, communicates with Tavily, parses through the snippet text containing URLs and summaries, and synthesizes an incredibly accurate explanation. This process is key to eliminating hallucinations, as the LLM relies strictly on retrieved facts rather than speculative training parameters.
+
+9
+00:05:33,770 --> 00:06:16,510
+In production, external APIs fail—it is a matter of when, not if. Network fluctuations, API down-time, or bad JSON responses will crash your system if not designed carefully. Look at this architecture diagram. To build a robust system, we must implement a dedicated Validation Layer that checks schemas, and an Exponential Retry loop for flaky network connections. If an API completely fails, our agent must catch the exception gracefully and try a fallback search tool or notify the user instead of breaking the entire execution pipeline.
+
+10
+00:06:16,510 --> 00:07:10,490
+We have achieved something remarkable today! We successfully moved past the limitations of frozen training data and gave our AI agents the power to interact with the real world safely. Remember to review the code files and systems architecture diagrams provided in the description to deepen your understanding. But what happens when an agent needs to remember these search results across days, weeks, or even multiple long conversations? That brings us to our next core concept. In our next upcoming lecture, we will transition into "Module 3.1: Cognitive Architectures: Short-term vs. Long-term Memory (Theory)", where we will explore how agents store and retrieve deep contextual knowledge over time. I will see you in that next session!
+

@@ -1,0 +1,9 @@
+graph TD
+    A["Agent Request Context"] --> B["Validation Layer"]
+    B -->|"Valid Schema Definition"| C["External Target API Connection"]
+    B -->|"Invalid JSON Structure"| D["Self-Correction & Parsing Fallback"]
+    C -->|"Network Timeout / HTTP 500"| E["Exponential Backoff Retry Loop"]
+    C -->|"Success Code 200 OK"| F["JSON Document Parser"]
+    E -->|"Max Retries Exceeded"| G["Trigger Web Search Backup Tool"]
+    F --> H["LLM Context Injector"]
+    G --> H

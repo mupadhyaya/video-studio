@@ -1,0 +1,15 @@
+sequenceDiagram
+    autonumber
+    participant User as "User Query"
+    participant Coordinator as "Agent Coordinator"
+    participant LLM as "LLM Engine"
+    participant API as "External Weather API"
+
+    User->>Coordinator: "What is the weather in Tokyo right now?"
+    Coordinator->>LLM: Pass Query + Tool JSON Schema Definition
+    LLM->>Coordinator: Return JSON: { "tool": "get_weather", "args": { "loc": "Tokyo" } }
+    Coordinator->>API: HTTP GET /weather?loc=Tokyo
+    API-->>Coordinator: Response JSON: { "temp": "22C", "condition": "Sunny" }
+    Coordinator->>LLM: Append Tool Message (22C, Sunny) to Chat History
+    LLM->>Coordinator: Output Final Natural Language Synthesis
+    Coordinator-->>User: "The weather in Tokyo is currently 22 degrees and sunny."
