@@ -1,0 +1,7 @@
+graph TD
+A["Raw Conversation Log"] --> B["Embedding Model"]
+B --> C["Vector Store Base / Indexing"]
+D["Incoming Prompt Query"] --> E["Cosine Similarity Search"]
+C --> E
+E --> F["Top K Semantic Matches"]
+F --> G["Context Enrichment Module"]

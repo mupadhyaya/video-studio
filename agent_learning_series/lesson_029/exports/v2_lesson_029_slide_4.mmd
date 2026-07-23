@@ -1,0 +1,7 @@
+graph LR
+AA["Raw User Message"] --> B["Memory Router"]
+B --> C["Sliding Window FIFO"]
+B --> D["Dynamic Summarizer"]
+C -->|Keep Last N Tokens| E["Active LLM Context"]
+D -->|Condense History| E
+E -->|Over Limit| F["Eviction Process"]

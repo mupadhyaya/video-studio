@@ -1,0 +1,9 @@
+graph TD
+A["User Query Command"] --> B["Cognitive Memory Router"]
+B -->|Local Low-Latency Cache| C["Redis / MemoryCache Store"]
+B -->|Current Session Logs| D["Rolling Context Buffer"]
+B -->|Deep Global Knowledge Search| E["Vector Semantic Store"]
+C --> F["Consolidated Context Injector"]
+D --> F
+E --> F
+F --> G["LLM Processing Engine"]
