@@ -1,0 +1,40 @@
+1
+00:00:00,000 --> 00:00:10,320
+Welcome! Today we are discussing Module 3.2: Implementing memory buffers and vector-backed knowledge (Practical).
+
+2
+00:00:10,320 --> 00:00:14,259
+Here is a quick look at where we are in our curriculum.
+
+3
+00:00:14,259 --> 00:01:04,320
+Welcome back! Today, we are bridging the gap between theoretical memory and real-world execution. In production, you can't just dump raw chat logs into an LLM context window; you will hit context limits, spike token costs, and degrade response quality. To solve this, we design a dual-pathway system: immediate sliding-window memory for short-term chat flow, and semantic vector lookup for long-term recall. If you want to deploy systems that handle multi-turn conversations without bleeding edge latencies, please check the link in the description to download the architecture diagram and script we will be reviewing today. Let's look at how these subsystems connect seamlessly.
+
+4
+00:01:04,320 --> 00:01:36,719
+Now, let's open up the codebase. We are defining a `HybridMemoryOrchestrator` class that handles incoming queries, performs parallel queries to our in-memory cache and vector store, and returns a unified context. Note how we handle database insertion asynchronously so it doesn't block the critical path of the chat response. Download this exact script from the link in the description below to implement this inside your microservices immediately.
+
+5
+00:01:36,719 --> 00:02:02,640
+Let's check the execution pipeline by looking at our active log monitor. When a query is made, notice how the dual-pathway acts: short-term retrieval executes inside 1 millisecond, while vector-backed database hits resolve in 12 milliseconds. This architecture allows you to maintain continuous high performance without bottlenecking the application server.
+
+6
+00:02:02,640 --> 00:02:36,240
+To guarantee high reliability under load, we must enforce token boundaries. In this code block, we use the `tiktoken` library to compute accurate context weights before bundling our context payloads. If the memory buffer exceeds our hard ceiling, we progressively drop the oldest historical turns first while holding onto our essential long-term semantic context. You should check the link in the description to grab this utility script for your production pipelines.
+
+7
+00:02:36,240 --> 00:03:28,390
+Whoops, looks like we've hit a classic 'live debugging' moment, which is excellent for learning! Our script didn't even get to the token overflow scenario we planned to show. The traceback clearly indicates a `ModuleNotFoundError: No module named 'tiktoken'`. This is a very common dependency issue. It simply means the `tiktoken` library, essential for our token counting and management, hasn't been installed in this environment. The fix is straightforward: just run `pip install tiktoken` in your terminal. This is a perfect reminder to always ensure your environment has all the necessary packages. Let's get that installed, re-run our script, and *then* we'll see our custom pruner tackle the actual token overflow!
+
+8
+00:03:28,390 --> 00:03:57,690
+Let's examine the precise operational execution lifecycle. When a request hits your API gateway, the orchestrator simultaneously queries your memory cache and triggers a parallel background worker to fetch vector matches from your persistent database. I highly recommend checking out the design diagram by downloading it from the link in the description so you can implement this clean concurrency pattern in your backend services.
+
+9
+00:03:57,690 --> 00:04:33,810
+A common mistake engineers make is letting old historical documents clutter vector retrieval. This is called semantic drift, and it results in irrelevant context polluting your prompts. Think of your memory store like a library card catalog: searching the entire library for everything related to 'memory' returns millions of books, but if we limit our search to 'computer science' section, we get precise hits. Implementing metadata filtering on your vector databases is the key to preventing this issue at scale.
+
+10
+00:04:33,810 --> 00:05:32,470
+By combining active RAM buffers with persistent vector-backed storage, you now have the blueprint to build incredibly intelligent, long-lived conversational agents. But remember, a smart brain is only useful if it can act. Now that we have mastered managing complex memory states, we need to empower our AI to interact with the real world safely. This brings us to our next major architectural frontier. In our upcoming lecture, 'Module 4.1: Designing Custom Tools and Safe Execution Environments (Theory)', we will explore how to build custom tool APIs and sandboxed execution environments, allowing your agent to run code and access external databases without putting your core infrastructure at risk. Make sure to download the architecture diagram and script from the link below to review what we built today. मैं आपसे अगले लेक्चर में मिलूंगी, तब तक के लिए कोडिंग करते रहिए और खुश रहिए!
+

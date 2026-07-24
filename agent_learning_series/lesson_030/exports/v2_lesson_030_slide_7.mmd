@@ -1,0 +1,20 @@
+sequenceDiagram
+    autonumber
+    Client->>Orchestrator: Send Query("How do I fix memory leaks?")
+    activate Orchestrator
+    Orchestrator->>MemoryCache: Read Short-Term Buffer
+    activate MemoryCache
+    MemoryCache-->>Orchestrator: Return Sliding Window Context
+    deactivate MemoryCache
+    Orchestrator->>VectorDB: Query Semantic Match
+    activate VectorDB
+    VectorDB-->>Orchestrator: Return Closest Historic Matches
+    deactivate VectorDB
+    Orchestrator->>LLM: Send Combined Context & User Prompt
+    activate LLM
+    LLM-->>Orchestrator: Generate Streamed Output
+    deactivate LLM
+    Orchestrator->>MemoryCache: Async Update Local Buffer
+    Orchestrator->>VectorDB: Async Embed & Write Document
+    Orchestrator-->>Client: Final Stream Response
+    deactivate Orchestrator

@@ -1,0 +1,6 @@
+graph LR
+    MemorySystem["Stateful Memory Buffer"]
+    MemorySystem --> CoreOrchestrator["Agent Cognitive Loop"]
+    CoreOrchestrator --> ToolManager["Module 4.1: Custom Tools Registry"]
+    ToolManager --> SafeSandbox["Safe Sandboxed Execution Environment"]
+    SafeSandbox --> ExtAPI["Database / API Output"]

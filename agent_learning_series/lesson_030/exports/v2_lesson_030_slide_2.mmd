@@ -1,0 +1,8 @@
+graph TD
+    UserQuery["User Query"] --> QueryRouter["Memory Orchestrator"]
+    QueryRouter --> ShortTermBuffer["Sliding Window RAM Buffer (Short-Term)"]
+    QueryRouter --> VectorIndex["Semantic Vector DB (Long-Term Recall)"]
+    ShortTermBuffer --> ContextSynthesizer["Prompt Context Synthesizer"]
+    VectorIndex --> ContextSynthesizer
+    ContextSynthesizer --> LLM["LLM Engine"]
+    LLM --> ResponseOut["Response + Update Memory Store"]
